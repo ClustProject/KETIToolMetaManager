@@ -1,0 +1,10 @@
+certifi==2021.5.30
+click @ file:///tmp/build/80754af9/click_1621604852318/work
+Flask @ file:///home/ktietz/src/ci/flask_1611932660458/work
+importlib-metadata @ file:///tmp/build/80754af9/importlib-metadata_1617877307939/work
+itsdangerous @ file:///tmp/build/80754af9/itsdangerous_1621432558163/work
+Jinja2 @ file:///tmp/build/80754af9/jinja2_1624781299557/work
+MarkupSafe @ file:///tmp/build/80754af9/markupsafe_1621523467000/work
+pymongo==3.11.4
+Werkzeug @ file:///home/ktietz/src/ci/werkzeug_1611932622770/work
+zipp @ file:///tmp/build/80754af9/zipp_1625570634446/work
