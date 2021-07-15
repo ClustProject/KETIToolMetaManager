@@ -59,11 +59,15 @@ if __name__=="__main__":
         ,db_info["USER_PWD"],db_info["HOST_ADDR"]\
         ,db_info["HOST_PORT"],db_info["DB_NAME"])
     
-    collection_name = "metadata"
-    print(mydb.getCollList())
+    colls = mydb.getCollList()
+    print(colls)
+    
+    collection_name = colls[0]
     #print(mydb.getOneData(collection_name))
     #mydb.deleteMany(collection_name,{'x': 1})
     items = mydb.getManyData(collection_name)
     for item in items:
         print(item)
+    
+    
     
