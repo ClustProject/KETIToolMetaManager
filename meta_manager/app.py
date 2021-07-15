@@ -20,10 +20,15 @@ def home():
     items = mydb.getManyData("test")
     return jsonify(ItemstoJson(items))
 
-@app.route("/getData/<name>")
+@app.route("/get_data/<name>")
 def getDataOne(name):
     item = mydb.getOneData("test") #,{'x':int(name)})
     return jsonify(ItemstoJson([item]))
+
+@app.route("/get_all_data/<table>")
+def getDataAll(table):
+    items = mydb.getManyData(table)
+    return jsonify(ItemstoJson(items))
 
 def ItemstoJson(items):
     allData   = []
