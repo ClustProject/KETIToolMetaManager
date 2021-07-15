@@ -11,7 +11,6 @@ mydb = mg.MongoCRUD(db_info['USER_ID']\
         ,db_info["USER_PWD"],db_info["HOST_ADDR"]\
         ,db_info["HOST_PORT"],db_info["DB_NAME"])
 
-
 app = Flask(__name__)
 app.config['SECRET_KEY']='myProject'
 
