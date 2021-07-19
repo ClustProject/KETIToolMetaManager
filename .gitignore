@@ -1,5 +1,6 @@
 ## setting file ##
 config.json
+influx_setting.py
 
 # Created by https://www.toptal.com/developers/gitignore/api/python,visualstudio,visualstudiocode,macos
 # Edit at https://www.toptal.com/developers/gitignore?templates=python,visualstudio,visualstudiocode,macos

@@ -7,17 +7,18 @@ class IntegrationGenerator():
         self.dataFrame = data
         #print(self.dataFrame)
         self.freq_check_length = freq_check_length 
-        print(self.dataFrame.columns)
         #print(self.dataFrame[self.dataFrame.columns[0]])
         self.partial_data_set = []
         for col in self.dataFrame.columns:
             self.partial_data_set.append(self.dataFrame[[col]])
-            
+
         self.column_meta={}
         self.column_meta['overap_duration'] = self._get_partial_data_set_start_end()
         self.column_meta['column_characteristics'] = self._get_partial_data_freqeuncy_list()
-        print(self.column_meta)
 
+    def get_column_meta(self):
+        return self.column_meta
+        
     def _get_partial_data_freqeuncy_list(self):
     
         data_length = len(self.partial_data_set)

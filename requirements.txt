@@ -9,6 +9,7 @@ Flask @ file:///home/ktietz/src/ci/flask_1611932660458/work
 googlemaps==4.4.7
 idna==3.2
 importlib-metadata @ file:///tmp/build/80754af9/importlib-metadata_1617877307939/work
+influxdb==5.3.1
 ipykernel @ file:///tmp/build/80754af9/ipykernel_1607452791405/work/dist/ipykernel-5.3.4-py3-none-any.whl
 ipython @ file:///tmp/build/80754af9/ipython_1617120888991/work
 ipython-genutils @ file:///tmp/build/80754af9/ipython_genutils_1606773439826/work
@@ -23,6 +24,7 @@ matplotlib @ file:///tmp/build/80754af9/matplotlib-suite_1613407855456/work
 mkl-fft==1.3.0
 mkl-random @ file:///tmp/build/80754af9/mkl_random_1626186066731/work
 mkl-service==2.4.0
+msgpack==1.0.2
 numexpr @ file:///tmp/build/80754af9/numexpr_1618856529730/work
 numpy @ file:///tmp/build/80754af9/numpy_and_numpy_base_1626264704411/work
 olefile==0.46
