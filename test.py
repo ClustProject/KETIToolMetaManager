@@ -54,24 +54,28 @@ if __name__=="__main__":
     print("=== integration metadata ===")
     import pandas as pd
     import numpy as np
-    r_0 = pd.date_range(start='1/1/2018', end= '1/02/2018', freq='10T')
+    # r_0 = pd.date_range(start='1/1/2018', end= '1/02/2018', freq='10T')
     
-    import random
-    original_list=['apple','orange','pineapple']
-    data_0 = {'datetime': r_0,
-            'data0':np.random.randint(0, 100, size=(len(r_0))),
-            'data1':np.random.randint(0, 100, size=(len(r_0))),
-            'data2':np.random.randint(0, 100, size=(len(r_0))),
-            'data3':random.choices (original_list, k=len(r_0))}
+    # import random
+    # original_list=['apple','orange','pineapple']
+    # data_0 = {'datetime': r_0,
+    #         'data0':np.random.randint(0, 100, size=(len(r_0))),
+    #         'data1':np.random.randint(0, 100, size=(len(r_0))),
+    #         'data2':np.random.randint(0, 100, size=(len(r_0))),
+    #         'data3':random.choices (original_list, k=len(r_0))}
 
-    df0 = pd.DataFrame (data = data_0).set_index('datetime')
-    #print(df0)
-    gener = IntegrationGenerator(df0)
+    # df0 = pd.DataFrame (data = data_0).set_index('datetime')
+    # #print(df0)
+    # gener = IntegrationGenerator(df0)
     
-    pprint(gener.get_column_meta())
+    # pprint(gener.get_column_meta())
 
     # === get sample data ===
     db_name = data['domain']+"_"+data['sub_domain']
     test = InfluxCRUD(ifs.host_, ifs.port_, ifs.user_,
                       ifs.pass_, db_name, ifs.protocol)
     print(test.get_all_db_measurements())
+    #print(test.get_df_all("4a2dcd058cae2019b14b5ff38bbbe924847d39eeebd7bd269a0291b6"))
+    sample = test.get_df_all("4a2dcd058cae2019b14b5ff38bbbe924847d39eeebd7bd269a0291b6")
+    gener = IntegrationGenerator(sample)
+    pprint(gener.get_column_meta())

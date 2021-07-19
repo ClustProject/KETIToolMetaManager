@@ -49,8 +49,9 @@ class InfluxCRUD:
             '" where time > ' + time_start + ' AND time < '+ time_end
         return self.get_query(query_string, table)
     
+    # query quote modify
     def get_df_all(self, table):
-        query_string = "select * from "+ table 
+        query_string = 'select * from "'+ table +'"'
         return self.get_query(query_string,table)
     
     def get_query(self,query,table):
