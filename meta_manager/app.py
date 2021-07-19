@@ -21,7 +21,7 @@ def home():
 
 @app.route("/get_data/<name>")
 def getDataOne(name):
-    item = mydb.getOneData("test") #,{'x':int(name)})
+    item = mydb.getOneData(name) #,{'x':int(name)})
     return jsonify(ItemstoJson([item]))
 
 @app.route("/get_all_data/<table>")

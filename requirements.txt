@@ -1,15 +1,50 @@
+backcall @ file:///home/ktietz/src/ci/backcall_1611930011877/work
+Bottleneck @ file:///tmp/build/80754af9/bottleneck_1607575130224/work
 certifi==2021.5.30
 charset-normalizer==2.0.2
 click @ file:///tmp/build/80754af9/click_1621604852318/work
+cycler==0.10.0
+decorator @ file:///tmp/build/80754af9/decorator_1621259047763/work
 Flask @ file:///home/ktietz/src/ci/flask_1611932660458/work
 googlemaps==4.4.7
 idna==3.2
 importlib-metadata @ file:///tmp/build/80754af9/importlib-metadata_1617877307939/work
+ipykernel @ file:///tmp/build/80754af9/ipykernel_1607452791405/work/dist/ipykernel-5.3.4-py3-none-any.whl
+ipython @ file:///tmp/build/80754af9/ipython_1617120888991/work
+ipython-genutils @ file:///tmp/build/80754af9/ipython_genutils_1606773439826/work
 itsdangerous @ file:///tmp/build/80754af9/itsdangerous_1621432558163/work
+jedi @ file:///tmp/build/80754af9/jedi_1606932531272/work
 Jinja2 @ file:///tmp/build/80754af9/jinja2_1624781299557/work
+jupyter-client @ file:///tmp/build/80754af9/jupyter_client_1616770841739/work
+jupyter-core @ file:///tmp/build/80754af9/jupyter_core_1612213314396/work
+kiwisolver @ file:///tmp/build/80754af9/kiwisolver_1612281846643/work
 MarkupSafe @ file:///tmp/build/80754af9/markupsafe_1621523467000/work
+matplotlib @ file:///tmp/build/80754af9/matplotlib-suite_1613407855456/work
+mkl-fft==1.3.0
+mkl-random @ file:///tmp/build/80754af9/mkl_random_1626186066731/work
+mkl-service==2.4.0
+numexpr @ file:///tmp/build/80754af9/numexpr_1618856529730/work
+numpy @ file:///tmp/build/80754af9/numpy_and_numpy_base_1626264704411/work
+olefile==0.46
+pandas==1.2.5
+parso==0.7.0
+pexpect @ file:///tmp/build/80754af9/pexpect_1605563209008/work
+pickleshare @ file:///tmp/build/80754af9/pickleshare_1606932040724/work
+Pillow @ file:///tmp/build/80754af9/pillow_1625655408865/work
+prompt-toolkit @ file:///tmp/build/80754af9/prompt-toolkit_1616415428029/work
+ptyprocess @ file:///tmp/build/80754af9/ptyprocess_1609355006118/work/dist/ptyprocess-0.7.0-py2.py3-none-any.whl
+Pygments @ file:///tmp/build/80754af9/pygments_1621606182707/work
 pymongo==3.11.4
+pyparsing @ file:///home/linux1/recipes/ci/pyparsing_1610983426697/work
+python-dateutil @ file:///tmp/build/80754af9/python-dateutil_1626374649649/work
+pytz @ file:///tmp/build/80754af9/pytz_1612215392582/work
+pyzmq==20.0.0
 requests==2.26.0
+sip==4.19.13
+six @ file:///tmp/build/80754af9/six_1623709665295/work
+tornado @ file:///tmp/build/80754af9/tornado_1606942317143/work
+traitlets @ file:///home/ktietz/src/ci/traitlets_1611929699868/work
 urllib3==1.26.6
+wcwidth @ file:///tmp/build/80754af9/wcwidth_1593447189090/work
 Werkzeug @ file:///home/ktietz/src/ci/werkzeug_1611932622770/work
 zipp @ file:///tmp/build/80754af9/zipp_1625570634446/work
