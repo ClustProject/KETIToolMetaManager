@@ -1,0 +1,14 @@
+{
+    "domain" : "Environment",
+    "sub_domain" : "Air",
+    "have_location" : "True",
+    "location" : {
+      "syntax" : "경북 상주시 북천로 63 북문동주민센터"
+    },
+    "description" : "it is the open data ..",
+    "source_agency":"Air Korea",
+    "collector":"korea government",
+    "source_type":"server",
+    "method":"csv",
+    "number_of_columns":6
+}

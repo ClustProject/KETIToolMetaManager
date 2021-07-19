@@ -63,11 +63,8 @@ if __name__=="__main__":
     print(colls)
     
     collection_name = colls[0]
-    #print(mydb.getOneData(collection_name))
-    #mydb.deleteMany(collection_name,{'x': 1})
+    
     items = mydb.getManyData(collection_name)
     for item in items:
         print(item)
-    
-    
     
