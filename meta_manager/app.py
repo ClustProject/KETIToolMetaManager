@@ -13,21 +13,47 @@ mydb = mg.MongoCRUD(db_info['USER_ID']\
 
 app = Flask(__name__)
 app.config['SECRET_KEY']='myProject'
+app.config['exp']='exploration'
+app.config['int']='integration'
+app.config['DB_KEY_LIST']=['exp','int']
 
 @app.route("/")
 def home():
     items = mydb.getManyData("test")
     return jsonify(ItemstoJson(items))
 
-@app.route("/get_data/<name>")
-def getDataOne(name):
-    item = mydb.getOneData(name) #,{'x':int(name)})
+@app.route("/<dbKey>/get_data/<table>")
+def getDataOne(dbKey,table):
+    res = switchDB(dbKey)
+    if not res is None:
+        return res
+    item = mydb.getOneData(table) #,{'x':int(name)})
     return jsonify(ItemstoJson([item]))
 
-@app.route("/get_all_data/<table>")
-def getDataAll(table):
+@app.route("/<dbKey>/get_all_data/<table>")
+def getDataAll(dbKey,table):
+    res = switchDB(dbKey)
+    if not res is None:
+        return res
     items = mydb.getManyData(table)
     return jsonify(ItemstoJson(items))
+
+@app.route("/<dbKey>/all_tables")
+def getAllExpTables(dbKey):
+    res = switchDB(dbKey)
+    if not res is None:
+        return res
+    return jsonify(mydb.getCollList())
+
+def switchDB(dbKey):
+    if dbKey not in app.config['DB_KEY_LIST']:
+        return jsonify({"error":"bad DB name"})
+    try:
+        if not mydb.getDBName==app.config[dbKey]:
+            mydb.switchDB(app.config[dbKey])
+    except KeyError:
+        return jsonify({"error":"bad DB name"})
+    return None
 
 def ItemstoJson(items):
     allData   = []

@@ -12,11 +12,20 @@ class MongoCRUD:
 
     # Connect
     def connectDB(self):
-        conn = pymongo.MongoClient("mongodb://"+self.userId+\
+        self.conn = pymongo.MongoClient("mongodb://"+self.userId+\
             ":"+self.userPwd+"@"+self.host+\
                 ":"+self.port+"/"+self.dbName)
-        return conn.get_database(self.dbName)
+        return self.conn.get_database(self.dbName)
 
+    # Switch Database
+    def switchDB(self,dbName):
+        self.dbName = dbName
+        self.db = self.conn.get_database(self.dbName)
+    
+    # Get current's DB name
+    def getDBName(self):
+        return self.db
+    
     # Read
     def getCollList(self):
         return self.db.list_collection_names()

@@ -1,5 +1,5 @@
 
-import sys, json
+import json
 from meta_generator.generator import MetaGenerator
 from meta_generator.inte_generator import IntegrationGenerator
 from influxdb_management.influx_crud import InfluxCRUD
@@ -54,28 +54,27 @@ if __name__=="__main__":
     print("=== integration metadata ===")
     import pandas as pd
     import numpy as np
-    # r_0 = pd.date_range(start='1/1/2018', end= '1/02/2018', freq='10T')
-    
-    # import random
-    # original_list=['apple','orange','pineapple']
-    # data_0 = {'datetime': r_0,
-    #         'data0':np.random.randint(0, 100, size=(len(r_0))),
-    #         'data1':np.random.randint(0, 100, size=(len(r_0))),
-    #         'data2':np.random.randint(0, 100, size=(len(r_0))),
-    #         'data3':random.choices (original_list, k=len(r_0))}
-
-    # df0 = pd.DataFrame (data = data_0).set_index('datetime')
-    # #print(df0)
-    # gener = IntegrationGenerator(df0)
-    
-    # pprint(gener.get_column_meta())
 
     # === get sample data ===
     db_name = data['domain']+"_"+data['sub_domain']
     test = InfluxCRUD(ifs.host_, ifs.port_, ifs.user_,
                       ifs.pass_, db_name, ifs.protocol)
-    print(test.get_all_db_measurements())
-    #print(test.get_df_all("4a2dcd058cae2019b14b5ff38bbbe924847d39eeebd7bd269a0291b6"))
-    sample = test.get_df_all("4a2dcd058cae2019b14b5ff38bbbe924847d39eeebd7bd269a0291b6")
+    measurements = test.get_all_db_measurements()
+    mname = measurements[0]['name']
+    sample = test.get_df_all(mname)
     gener = IntegrationGenerator(sample)
-    pprint(gener.get_column_meta())
+
+    mydb.switchDB("integration")
+    colls = mydb.getCollList()
+    collection_name = db_name
+    meta = gener.get_column_meta()
+    meta["_id"]=mname
+    #mydb.insertOne(collection_name,gener.get_column_meta())
+
+    print("=====Data=====")
+    from bson.objectid import ObjectId
+    #mydb.deleteOne(collection_name,{'_id':ObjectId('60f63badf229c8ef41279f62')})
+    items = mydb.getManyData(collection_name)
+    for item in items:
+        pprint(item)
+        print()

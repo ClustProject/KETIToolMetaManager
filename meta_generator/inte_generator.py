@@ -30,7 +30,7 @@ class IntegrationGenerator():
                 column_info = {"column_name":'', "column_frequency":'', "column_type":''}
                 column_info['column_name'] = column
                 freq = self.get_df_freq_timedelta(data)
-                column_info['column_frequency'] = freq
+                column_info['column_frequency'] = str(freq)
                 if freq is not None:
                     column_info['occurence_time'] = "Continuous"
                 else:
@@ -38,14 +38,14 @@ class IntegrationGenerator():
                 column_info['pointDependency']="Yes" #default
 
                 column_type = data[column].dtype
-                column_info['column_type'] = column_type
+                column_info['column_type'] = str(column_type)
                 if column_type == np.dtype('O') :
                     column_info['upsampling_method']= 'ffill' #default
                     column_info['downsampling_method']='ffill' #default
                     column_info['fillna_function']= 'bfill' #default
                 else:
-                    column_info['upsampling_method']=np.mean #default
-                    column_info['downsampling_method']=np.mean #default
+                    column_info['upsampling_method']=str(np.mean) #default
+                    column_info['downsampling_method']=str(np.mean) #default
                     column_info['fillna_function']= 'interpolate' #default
 
                 column_info['fillna_limit'] = 31 #default
@@ -64,8 +64,8 @@ class IntegrationGenerator():
             end = data.index[-1]
             start_list.append(start)
             end_list.append(end)
-        duration['start_time'] = max(start_list)
-        duration['end_time'] = min(end_list)
+        duration['start_time'] = str(max(start_list))
+        duration['end_time'] = str(min(end_list))
         return duration
     
     def get_df_freq_sec(self,data):
