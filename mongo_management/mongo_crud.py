@@ -1,3 +1,13 @@
+"""This module defines an customized MongoDB CRUD object.
+
+CRUD
+: Connect, Read, Update, Delete
+
+  Typical usage example:
+
+  mydb = MongoCRUD(db_info)
+  data = mydb.getCollList()
+"""
 import pymongo
 
 class MongoCRUD:
