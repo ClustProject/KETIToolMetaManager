@@ -75,6 +75,9 @@ if __name__=="__main__":
     from bson.objectid import ObjectId
     #mydb.deleteOne(collection_name,{'_id':ObjectId('60f63badf229c8ef41279f62')})
     items = mydb.getManyData(collection_name)
+    res = []
     for item in items:
         pprint(item)
+        res.append(item)
         print()
+

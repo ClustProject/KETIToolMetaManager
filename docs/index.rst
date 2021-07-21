@@ -10,8 +10,6 @@ Welcome to KETI MetaData Manager's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-   attack
-
 
 Indices and tables
 ==================

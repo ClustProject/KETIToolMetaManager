@@ -1,3 +1,4 @@
+from datetime import timedelta
 import pandas as pd
 import numpy as np
 from pandas.tseries.frequencies import to_offset
@@ -80,8 +81,10 @@ class IntegrationGenerator():
 
 
 if __name__=="__main__":
-    r_0 = pd.date_range(start='1/1/2018', end= '1/02/2018', freq='10T')
-    
+    from pprint import pprint
+    import datetime, re
+    r_0 = pd.date_range(start='1/1/2018', end= '1/05/2018', freq='1440T')
+    print(r_0)
     import random
     original_list=['apple','orange','pineapple']
     data_0 = {'datetime': r_0,
@@ -93,3 +96,26 @@ if __name__=="__main__":
     df0 = pd.DataFrame (data = data_0).set_index('datetime')
     #print(df0)
     genre = IntegrationGenerator(df0)
+    res = genre.get_column_meta()
+    
+    ## Recovery
+    pprint(res)
+    td = res['column_characteristics']['data1']['column_frequency']
+    cn = res['column_characteristics']['data1']['column_type']
+    dm = res['column_characteristics']['data1']['downsampling_method']
+    um = res['column_characteristics']['data1']['upsampling_method']
+    pprint(td)
+
+    arr = [10, 20, 30]
+    print('np.mean()')
+    #print(str(np.mean))
+    res = eval('print(np.mean(arr))')
+    print(res)
+
+    re_compile = re.compile("(\d+)\ days (\d+)\:(\d+)\:(\d+)")
+    _c = re_compile.search(td)
+    _time = (int(_c.group(1))*60*60*24) + (int(_c.group(2))*60*60) + (int(_c.group(3))*60) + (int(_c.group(4)))
+    print(_time)
+   
+    tt = datetime.timedelta(0,_time,0)
+    print(tt)
