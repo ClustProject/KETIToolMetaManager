@@ -14,6 +14,7 @@ class IntegrationGenerator():
             self.partial_data_set.append(self.dataFrame[[col]])
 
         self.column_meta={}
+        self.column_meta['number_of_columns']=len(self.dataFrame.columns)
         self.column_meta['overap_duration'] = self._get_partial_data_set_start_end()
         self.column_meta['column_characteristics'] = self._get_partial_data_freqeuncy_list()
 

@@ -19,6 +19,14 @@ class MongoCRUD:
         self.port = port
         self.dbName = dbName
         self.db = self.connectDB()
+    
+    def __init__(self, infoDict):
+        self.userId = infoDict['USER_ID']
+        self.userPwd = infoDict['USER_PWD']
+        self.host = infoDict['HOST_ADDR']
+        self.port = infoDict['HOST_PORT']
+        self.dbName = infoDict['DB_NAME']
+        self.db = self.connectDB()
 
     # Connect
     def connectDB(self):
