@@ -11,28 +11,28 @@ CRUD
 import pymongo
 
 class MongoCRUD:
-
-    def __init__(self, userId, userPwd, host, port, dbName):
-        self.userId = userId
-        self.userPwd = userPwd
-        self.host = host
-        self.port = port
-        self.dbName = dbName
-        self.db = self.connectDB()
     
-    def __init__(self, infoDict):
-        self.userId = infoDict['USER_ID']
-        self.userPwd = infoDict['USER_PWD']
-        self.host = infoDict['HOST_ADDR']
-        self.port = infoDict['HOST_PORT']
-        self.dbName = infoDict['DB_NAME']
-        self.db = self.connectDB()
+    def __init__(self, infoDict=None):
+        if(infoDict is None):
+            self.userId = "test"
+            self.userPwd = "test"
+            self.host = "localhost"
+            self.port = 27017
+            self.dbName = "test"
+            self.db = self.connectDB()
+        else:
+            self.userId = infoDict['USER_ID']
+            self.userPwd = infoDict['USER_PWD']
+            self.host = infoDict['HOST_ADDR']
+            self.port = infoDict['HOST_PORT']
+            self.dbName = infoDict['DB_NAME']
+            self.db = self.connectDB()
 
     # Connect
     def connectDB(self):
         self.conn = pymongo.MongoClient("mongodb://"+self.userId+\
             ":"+self.userPwd+"@"+self.host+\
-                ":"+self.port+"/"+self.dbName)
+                ":"+str(self.port)+"/"+self.dbName)
         return self.conn.get_database(self.dbName)
 
     # Switch Database
@@ -77,14 +77,11 @@ class MongoCRUD:
 
 if __name__=="__main__":
     import json
-
     with open('./meta_manager/config.json', 'r') as f:
         config = json.load(f)
     
     db_info = config['DB_INFO']
-    mydb = MongoCRUD(db_info['USER_ID']\
-        ,db_info["USER_PWD"],db_info["HOST_ADDR"]\
-        ,db_info["HOST_PORT"],db_info["DB_NAME"])
+    mydb = MongoCRUD(db_info)
     
     colls = mydb.getCollList()
     print(colls)
