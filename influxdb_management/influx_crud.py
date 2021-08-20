@@ -97,14 +97,14 @@ class InfluxCRUD:
 if __name__ == "__main__":
     import influx_setting as ifs
     test = InfluxCRUD(ifs.host_, ifs.port_, ifs.user_,
-                      ifs.pass_, "OUTDOOR_AIR", ifs.protocol)
+                      ifs.pass_, "INNER_AIR", ifs.protocol)
     print(test.get_all_db_measurements())
     print(test.get_all_db_list())
 
-    print(test.get_df_all("sangju"))
-    test.change_db("OUTDOOR_RIVER")
+    print(test.get_df_all("HS1"))
+    #test.change_db("OUTDOOR_RIVER")
     
-    print(test.check_start('conductivity', 'pyeongchang'))
-    print(test.get_df_all("pyeongchang"))
+    #print(test.check_start('conductivity', 'pyeongchang'))
+    #print(test.get_df_all("pyeongchang"))
     
     

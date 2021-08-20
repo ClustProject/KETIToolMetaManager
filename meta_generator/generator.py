@@ -19,25 +19,36 @@ class MetaGenerator():
     
     def generate(self, data):
         '''
-        {'main_domain': 'HealthCare', 
-        'sub_domain': 'Covid', 
-        'select_time': '자치구 기준일', 
-        'location': 'Seoul', 
-        'description': 'Covid Infected person', 
-        'source_agency': '질병청', 
-        'collector': 'kaggle', 
-        'source_type': 'CSV', 
-        'createdAt': '1627021951.7419167'}
-        '''
-        
+        {
+            "domain" : "traffic",
+            "sub_domain" : "seoul_subway",
+            "table_name" : "line3_dongdae",
+            "location" :{
+            "lat" : "None",
+            "lng" : "None",
+            "syntax" : "서울특별시 중구 장충동2가 189-2"
+            },
+            "description" : "This is public data on the Seoul Metro, which has been divided monthly since 20210501",
+            "source_agency" : "서울열린데이터광장",
+            "source" : "None",
+            "source_type" : "csv",
+            "tag" : [
+            "Traffic",
+            "Seoul",
+            "Subway",
+            "Metro"
+            ],
+            "collectionFrequency":"day",
+            #"column_characteristics":
+        },'''
         #if(data["have_location"]=="True"):
-        if("lat" in data["location"]):
-            pass
-        else:
-            pos=self.geocoding(data["location"])
-            pos["syntax"]=data["location"] #["syntax"]
+        # if("lat" in data["location"]):
+        #     pass
+        if(data["location"]["syntax"] is not None):
+            pos=self.geocoding(data["location"]["syntax"])
+            pos["syntax"]=data["location"]["syntax"] #["syntax"]
             data["location"]=pos
-        data["_id"]=self.createId(str(data).encode('utf-8'))
+        #data["_id"]=self.createId(str(data).encode('utf-8'))
         
         return data
 
@@ -62,13 +73,59 @@ if __name__=="__main__":
     #     "method":"csv",
     #     "number_of_columns":6,
     # }
-    data= {'main_domain': 'HealthCare', 
-        'sub_domain': 'Covid', 
-        'select_time': '자치구 기준일', 
-        'location': 'Seoul', 
-        'description': 'Covid Infected person', 
-        'source_agency': '질병청', 
-        'collector': 'kaggle', 
-        'source_type': 'CSV', 
-        'createdAt': '1627021951.7419167'}
-    print(gener.generate(data))
+
+    '''
+    {
+        "domain" : "traffic",
+        "sub_domain" : "seoul_subway",
+        "table_name" : "line3_dongdae",
+        "location" :{
+        "lat" : "None",
+        "lng" : "None",
+        "syntax" : "서울특별시 중구 장충동2가 189-2"
+        },
+        "description" : "This is public data on the Seoul Metro, which has been divided monthly since 20210501",
+        "source_agency" : "서울열린데이터광장",
+        "source" : "None",
+        "source_type" : "csv",
+        "tag" : [
+        "Traffic",
+        "Seoul",
+        "Subway",
+        "Metro"
+        ],
+        "collectionFrequency":"day",
+        #"column_characteristics":
+    },'''
+    # data= {'main_domain': 'HealthCare', 
+    #     'sub_domain': 'Covid', 
+    #     'select_time': '자치구 기준일', 
+    #     'location': 'Seoul', 
+    #     'description': 'Covid Infected person', 
+    #     'source_agency': '질병청', 
+    #     'collector': 'kaggle', 
+    #     'source_type': 'CSV', 
+    #     'createdAt': '1627021951.7419167'}
+    new_data = {
+        "domain" : "traffic",
+        "sub_domain" : "seoul_subway",
+        "table_name" : "line3_dongdae",
+        "location" :{
+        "lat" : "None",
+        "lng" : "None",
+        "syntax" : "서울특별시 중구 장충동2가 189-2"
+        },
+        "description" : "This is public data on the Seoul Metro, which has been divided monthly since 20210501",
+        "source_agency" : "서울열린데이터광장",
+        "source" : "None",
+        "source_type" : "csv",
+        "tag" : [
+        "Traffic",
+        "Seoul",
+        "Subway",
+        "Metro"
+        ],
+        "collectionFrequency":"day",
+        #"column_characteristics":
+    }
+    print(gener.generate(new_data))
