@@ -1,7 +1,8 @@
 import hashlib
 import googlemaps, json
-from exploration_db import exploration_data_list
-import influx_setting as ins
+from requests.api import head
+import pandas as pd
+from datetime import datetime
 
 class MetaGenerator():
     def __init__(self,config) -> None:
@@ -19,42 +20,56 @@ class MetaGenerator():
         reverse_geocode_result = self.gmaps.reverse_geocode((pos['lat'], pos['lng']),language='ko')
         return reverse_geocode_result[0]["formatted_address"]
     
-    def get_info(self,db_name,table_name):
-        test = exploration_data_list(ins,db_name,table_name)
-        #print(test)
-        return test
-    
-    def generate(self, data):
-        '''
-        {
-            "domain" : "traffic",
-            "sub_domain" : "seoul_subway",
-            "table_name" : "line3_dongdae",
-            "location" :{
-            "lat" : "None",
-            "lng" : "None",
-            "syntax" : "서울특별시 중구 장충동2가 189-2"
-            },
-            "description" : "This is public data on the Seoul Metro, \
-                which has been divided monthly since 20210501",
-            "source_agency" : "서울열린데이터광장",
-            "source" : "None",
-            "source_type" : "csv",
-            "tag" : [
-            "Traffic",
-            "Seoul",
-            "Subway",
-            "Metro"
-            ],
-            "collectionFrequency":"day",
-            #"column_characteristics":
-        },'''
-        #if(data["have_location"]=="True"):
-        # if("lat" in data["location"]):
-        #     pass
+    def get_table_info(self, influxDB, db_name, measurement_name):
+        exploration_df = pd.DataFrame()
+        influxDB.switch_database(db_name)
+        ms_list = influxDB.get_list_measurements()
+        if len(ms_list) > 0:
+            query_string = "SHOW FIELD KEYS"
+            fieldkeys = list(influxDB.query(query_string).get_points(measurement=measurement_name))
+            number_of_columns = len(fieldkeys)
+            fieldkey = fieldkeys[0]['fieldKey']
+            
+            query_string = 'SELECT FIRST("'+fieldkey+'") FROM "'+measurement_name+'"'
+            start_time = list(influxDB.query(query_string).get_points())[0]['time']
+            query_string = 'SELECT LAST("'+fieldkey+'") FROM "'+measurement_name+'"'
+            end_time = list(influxDB.query(query_string).get_points())[0]['time']
+            query_string = 'SELECT "'+fieldkey+'" from "'+measurement_name +'" LIMIT 2' 
+            df = pd.DataFrame(influxDB.query(query_string).get_points())
+                    
+            df["time"] = pd.to_datetime(df["time"], format="%Y-%m-%dT%H:%M:%SZ")
+            freq = df.time[1] - df.time[0]
+                    
+            if freq.days == 0:
+                if freq.seconds == 60:
+                    frequency = 'Minute'
+                elif freq.seconds == 3600:
+                    frequency = 'Hour'
+                elif freq.seconds < 60:
+                    frequency = 'Second'
+                else:
+                    frequency = '{} Second'.format(str(freq.seconds))
+            else:
+                if freq.days == 1:
+                    frequency = '{} Day'.format(str(freq.days))
+                elif freq.days == 7:
+                    frequency = 'Weekend'
+                elif freq.days == 31:
+                    frequency = 'Month'
+                elif freq.days == 365:
+                    frequency = 'Year'
+                else:
+                    frequency = '{} Day'.format(str(freq.days))
+            exploration_df = exploration_df.append([[db_name, measurement_name, start_time, end_time, frequency, number_of_columns]])
+        
+        exploration_df.columns = ['db_name', 'measurement_name', 'start_time', 'end_time', 'frequency', 'number_of_columns']
+        exploration_df.reset_index(drop=True, inplace = True)
+        return exploration_df
+
+    def generate(self, data, influxDB):
         db_name = data["domain"]+"_"+data["sub_domain"]
         table_name = data["table_name"]
-        info = self.get_info(db_name,table_name)
+        info = self.get_table_info(influxDB, db_name, table_name)
         if(data["location"]["syntax"] is not None and data["location"]["syntax"]!=""):
             pos=self.geocoding(data["location"]["syntax"])
             pos["syntax"]=data["location"]["syntax"] #["syntax"]
@@ -64,12 +79,11 @@ class MetaGenerator():
         
         info = info.drop(["db_name",'measurement_name'],axis=1)
         for col in info.columns:
-            print(info[col])
+            #print(info[col])
             if col == "number_of_columns":
                 data[col]=int(info[col][0])
             else:
                 data[col]=str(info[col][0])
-        #data["_id"]=self.createId(str(data).encode('utf-8'))
         
         return data
 
@@ -77,32 +91,10 @@ if __name__=="__main__":
 
     with open('./meta_generator/config.json', 'r') as f:
         config = json.load(f)
-
+    import influx_setting as ins
     gener = MetaGenerator(config)
-
-    '''
-    {
-        "domain" : "air",
-        "sub_domain" : "indoor_경로당",
-        "table_name" : "line3_dongdae",
-        "location" :{
-        "lat" : "None",
-        "lng" : "None",
-        "syntax" : ""
-        },
-        "description" : "This is weather data",
-        "source_agency" : "kweather",
-        "source" : "None",
-        "source_type" : "csv",
-        "tag" : [
-        "wheather",
-        "경로당",
-        "indoor",
-        "air"
-        ],
-        "collectionFrequency":"",
-        #"column_characteristics":
-    },'''
+    from influxdb import InfluxDBClient, DataFrameClient
+    db = InfluxDBClient(host=ins.host_, port=ins.port_, username=ins.user_, password=ins.pass_)
     new_data = {
         "domain" : "air",
         "sub_domain" : "indoor_경로당",
@@ -121,13 +113,10 @@ if __name__=="__main__":
             "경로당",
             "indoor",
             "air"
-        ],
-        #"collectionFrequency":"day",
-        #"column_characteristics":
+        ]
     }
-    metadata = gener.generate(new_data)
-    #print(metadata)
-    #import json
+    metadata = gener.generate(new_data,db)
+    
     import pprint
     pprint.pprint(metadata)
     import sys
@@ -145,10 +134,10 @@ if __name__=="__main__":
     
     collection_name = metadata["sub_domain"]
     
-    mydb.insertOne(collection_name,metadata)
-
+    #mydb.insertOne(collection_name,metadata)
+    #mydb.deleteOne(collection_name,{"table_name":"ICL1L2000234"})
     #mydb.insertOne("test",{"test":"test"})
-    print(type(metadata))
+    #print(type(metadata))
 
     colls = mydb.getCollList()
     print(colls)
