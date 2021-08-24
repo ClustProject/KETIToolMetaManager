@@ -1,15 +1,15 @@
 from flask import Flask, jsonify
+import sys
+sys.path.append("/Users/yumiseon/KETI/CLUST/CLUSTPROJECT/KETIToolMetaManager/")
 from mongo_management import mongo_crud as mg
 import json
 import logging
 
-with open('./meta_manager/config.json', 'r') as f:
+with open('./config.json', 'r') as f:
     config = json.load(f)
     
 db_info = config['DB_INFO']
-mydb = mg.MongoCRUD(db_info['USER_ID']\
-        ,db_info["USER_PWD"],db_info["HOST_ADDR"]\
-        ,db_info["HOST_PORT"],db_info["DB_NAME"])
+mydb = mg.MongoCRUD(db_info)
 
 app = Flask(__name__)
 app.config['SECRET_KEY']='myProject'
@@ -19,7 +19,7 @@ app.config['DB_KEY_LIST']=['exp','int']
 
 @app.route("/")
 def home():
-    items = mydb.getManyData("test")
+    items = mydb.getManyData("indoor_경로당")
     return jsonify(ItemstoJson(items))
 
 @app.route("/<dbKey>/get_data/<table>")
@@ -46,8 +46,8 @@ def getAllExpTables(dbKey):
     return jsonify(mydb.getCollList())
 
 def switchDB(dbKey):
-    if dbKey not in app.config['DB_KEY_LIST']:
-        return jsonify({"error":"bad DB name"})
+    # if dbKey not in app.config['DB_KEY_LIST']:
+    #     return jsonify({"error":"bad DB name"})
     try:
         if not mydb.getDBName==app.config[dbKey]:
             mydb.switchDB(app.config[dbKey])
