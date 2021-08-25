@@ -45,6 +45,9 @@ class MongoCRUD:
         return self.db
     
     # Read
+    def getDBList(self):
+        return self.conn.list_database_names()
+
     def getCollList(self):
         return self.db.list_collection_names()
 
