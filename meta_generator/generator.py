@@ -3,6 +3,8 @@ import googlemaps, json
 from requests.api import head
 import pandas as pd
 from datetime import datetime
+from pandas.tseries.frequencies import to_offset
+
 
 class MetaGenerator():
     def __init__(self,config) -> None:
@@ -20,6 +22,13 @@ class MetaGenerator():
         reverse_geocode_result = self.gmaps.reverse_geocode((pos['lat'], pos['lng']),language='ko')
         return reverse_geocode_result[0]["formatted_address"]
     
+    def get_table_freqeuncy(self,data,freq_check_length=5):
+        #freq = self.get_df_freq_timedelta(data)
+        freq = to_offset(pd.infer_freq(data[:freq_check_length]["time"]))
+        freq_timedelta = pd.to_timedelta(freq, errors='coerce')
+        return str(freq_timedelta)
+        #return str(freq)
+
     def get_table_info(self, influxDB, db_name, measurement_name):
         exploration_df = pd.DataFrame()
         influxDB.switch_database(db_name)
@@ -34,32 +43,13 @@ class MetaGenerator():
             start_time = list(influxDB.query(query_string).get_points())[0]['time']
             query_string = 'SELECT LAST("'+fieldkey+'") FROM "'+measurement_name+'"'
             end_time = list(influxDB.query(query_string).get_points())[0]['time']
-            query_string = 'SELECT "'+fieldkey+'" from "'+measurement_name +'" LIMIT 2' 
+            query_string = 'SELECT "'+fieldkey+'" from "'+measurement_name +'" LIMIT 20' 
             df = pd.DataFrame(influxDB.query(query_string).get_points())
                     
             df["time"] = pd.to_datetime(df["time"], format="%Y-%m-%dT%H:%M:%SZ")
-            freq = df.time[1] - df.time[0]
+            # freq = df.time[1] - df.time[0]
                     
-            if freq.days == 0:
-                if freq.seconds == 60:
-                    frequency = 'Minute'
-                elif freq.seconds == 3600:
-                    frequency = 'Hour'
-                elif freq.seconds < 60:
-                    frequency = 'Second'
-                else:
-                    frequency = '{} Second'.format(str(freq.seconds))
-            else:
-                if freq.days == 1:
-                    frequency = '{} Day'.format(str(freq.days))
-                elif freq.days == 7:
-                    frequency = 'Weekend'
-                elif freq.days == 31:
-                    frequency = 'Month'
-                elif freq.days == 365:
-                    frequency = 'Year'
-                else:
-                    frequency = '{} Day'.format(str(freq.days))
+            frequency = self.get_table_freqeuncy(df)
             exploration_df = exploration_df.append([[db_name, measurement_name, start_time, end_time, frequency, number_of_columns]])
         
         exploration_df.columns = ['db_name', 'measurement_name', 'start_time', 'end_time', 'frequency', 'number_of_columns']

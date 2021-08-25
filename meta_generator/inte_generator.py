@@ -79,6 +79,10 @@ class IntegrationGenerator():
         freq = to_offset(pd.infer_freq(data[:self.freq_check_length].index))
         freq_timedelta = pd.to_timedelta(freq, errors='coerce')
         return freq_timedelta
+    
+
+        
+    
 
 
 if __name__=="__main__":
@@ -120,3 +124,6 @@ if __name__=="__main__":
    
     tt = datetime.timedelta(0,_time,0)
     print(tt)
+
+    print()
+    print(genre._get_table_freqeuncy(df0))
