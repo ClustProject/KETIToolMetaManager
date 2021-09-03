@@ -8,13 +8,13 @@ from influxdb import InfluxDBClient, DataFrameClient
 
 if __name__=="__main__":
     import pprint
-    with open('./config.json', 'r') as f:
+    with open('KETIToolMetaManager/config.json', 'r') as f:
         config = json.load(f)
 
     gener = MetaGenerator(config['GENERATOR_INFO'])
     ins = config['INFLUX_DB_INFO']
     db = InfluxDBClient(host=ins["host_"], port=ins["port_"], username=ins["user_"], password=ins["pass_"])
-    common_name = "ICL1L20002"
+    
     new_data = {
         "domain" : "air",
         "sub_domain" : "indoor_경로당",
@@ -40,14 +40,12 @@ if __name__=="__main__":
     mydb = MongoCRUD(db_info)
 
     collection_name = new_data["sub_domain"]
-    locations = [
-        
-    ]
+    locations = config["locations"]
     
     count = 0
-    
     elements=[]
     print(len(locations))
+    common_name = "ICL1L20002"
     for i in range(34,34+len(locations)):
         new_data["table_name"]=common_name+str(i)
         #mydb.deleteOne(collection_name,{"table_name":new_data["table_name"]})
