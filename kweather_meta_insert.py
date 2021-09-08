@@ -1,10 +1,7 @@
 import json
 from meta_generator.generator import MetaGenerator
-from meta_generator.inte_generator import IntegrationGenerator
-from influxdb_management.influx_crud import InfluxCRUD
-from influxdb_management import influx_setting as ins
 from mongo_management.mongo_crud import MongoCRUD
-from influxdb import InfluxDBClient, DataFrameClient
+from influxdb import InfluxDBClient
 
 if __name__=="__main__":
     import pprint
@@ -24,7 +21,7 @@ if __name__=="__main__":
         "lng" : "None",
         "syntax" : ""
         },
-        "description" : "This is weather data, ",
+        "description" : "This is weather data from kweather ",
         "source_agency" : "kweather",
         "source" : "None",
         "source_type" : "csv",
@@ -55,7 +52,7 @@ if __name__=="__main__":
         #pprint.pprint(metadata)
         elements.append(metadata.copy())
     #print(elements)
-    #mydb.insertMany(collection_name,elements)
+    mydb.insertMany(collection_name,elements)
         
     colls = mydb.getCollList()
     print(colls)

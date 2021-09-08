@@ -30,9 +30,14 @@ class MongoCRUD:
 
     # Connect
     def connectDB(self):
-        self.conn = pymongo.MongoClient("mongodb://"+self.userId+\
-            ":"+self.userPwd+"@"+self.host+\
-                ":"+str(self.port)+"/"+self.dbName)
+        # self.conn = pymongo.MongoClient("mongodb://"+self.userId+\
+        #     ":"+self.userPwd+"@"+self.host+\
+        #         ":"+str(self.port)+"/"+self.dbName)
+        self.conn= pymongo.MongoClient(host=self.host,
+                         port=int(self.port),
+                         username=self.userId,
+                         password=self.userPwd,
+                        authSource="admin")
         return self.conn.get_database(self.dbName)
 
     # Switch Database
@@ -80,15 +85,17 @@ class MongoCRUD:
 
 if __name__=="__main__":
     import json
-    with open('./meta_manager/config.json', 'r') as f:
+    with open('./config.json', 'r') as f:
         config = json.load(f)
     
-    db_info = config['DB_INFO']
+    db_info = config['MONGO_DB_INFO']
     mydb = MongoCRUD(db_info)
     
+    dbs = mydb.getDBList()
+    print(dbs)
+
     colls = mydb.getCollList()
     print(colls)
-    
     collection_name = colls[0]
     
     items = mydb.getManyData(collection_name)
