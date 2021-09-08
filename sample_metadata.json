@@ -1,14 +1,20 @@
 {
-    "domain" : "Environment",
-    "sub_domain" : "Air",
-    "have_location" : "True",
-    "location" : {
-      "syntax" : "경북 상주시 북천로 63 북문동주민센터"
-    },
-    "description" : "it is the open data ..",
-    "source_agency":"Air Korea",
-    "collector":"korea government",
-    "source_type":"server",
-    "method":"csv",
-    "number_of_columns":6
+  "_id":"--", 
+  "domain": "air", 
+  "sub_domain": "indoor_경로당", 
+  "table_name": "serial01", 
+  "location": {
+    "lat": 33.123456, 
+    "lng": 44.123456, 
+    "syntax": "서울특별시 마포구"
+  },
+  "description": "This is weather data", 
+  "source_agency": "air korea", 
+  "source": "None", 
+  "source_type": "csv", 
+  "tag": ["wheather", "경로당", "indoor", "air"], 
+  "start_time": "2021-02-04T12:01:00Z", 
+  "end_time": "2021-06-28T23:08:00Z", 
+  "frequency": "0 days 00:01:00", 
+  "number_of_columns": 20
 }
