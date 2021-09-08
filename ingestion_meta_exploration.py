@@ -1,5 +1,6 @@
 import sys, os
 import pandas as pd
+from pymongo import collection
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))))
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 from KETIToolMetaManager.mongo_management.mongo_crud import MongoCRUD
@@ -35,13 +36,34 @@ def get_meta_table(db_info):
     
     return exploration_js
 
+def get_meta_some_tables(db_info,db_ms_names):
+    '''{
+        db_name : {collection : [ms_names]}
+    }'''
+    mydb = MongoCRUD(db_info)
+    db_list = mydb.getDBList()
+    result = {}
+    for db in db_ms_names.keys():
+        if db not in db_list:
+            continue
+        mydb.switchDB(db)
+        result[db]={}
+        for coll in db_ms_names[db].keys():
+            result[db][coll]={}
+            for ms in db_ms_names[db][coll]:
+                data = mydb.getOneData(coll,{"table_name":ms})
+                data = {"start_time":data["start_time"],"end_time":data["end_time"]}
+                result[db][coll][ms]=data
+    return result
+                
+
 if __name__=="__main__":
     import json
     # with open('KETIPreDataIngestion/KETI_setting/config.json', 'r') as f:
     #     config = json.load(f)
     from KETIPreDataIngestion.KETI_setting import influx_setting_KETI as isk
     
-    exploration_df = get_meta_table(isk.DB_INFO)
-    print(exploration_df)
+    # exploration_df = get_meta_table(isk.DB_INFO)
+    # print(exploration_df)
     #print(exploration_df.columns)
-    
+    get_meta_some_tables(isk.DB_INFO,{"air":{"indoor_경로당":['ICL1L2000234','ICL1L2000235']}})
