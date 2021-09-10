@@ -19,7 +19,7 @@ class MetaGenerator():
         return geocode_result[0]['geometry']['location']
     
     def reverse_geocoding(self,pos):
-        reverse_geocode_result = self.gmaps.reverse_geocode((pos['lat'], pos['lng']),language='ko')
+        reverse_geocode_result = self.gmaps.reverse_geocode((float(pos["lat"]), float(pos["lng"])),language='ko')
         return reverse_geocode_result[0]["formatted_address"]
     
     def get_table_freqeuncy(self,data,freq_check_length=5):
@@ -66,6 +66,9 @@ class MetaGenerator():
             pos["lat"]=float(pos["lat"])
             pos["lng"]=float(pos["lng"])
             data["location"]=pos
+        elif(data["location"]["lat"] is not None and data["location"]["lat"]!="" and data["location"]["lng"] is not None and data["location"]["lng"]!=""):
+            pos=self.reverse_geocoding(data["location"])
+            data["location"]['syntax']=pos
         
         info = info.drop(["db_name",'measurement_name'],axis=1)
         for col in info.columns:
