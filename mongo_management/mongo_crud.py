@@ -86,6 +86,8 @@ class MongoCRUD:
     def deleteMany(self,collection,condition):
         return self.db[collection].delete_many(condition)
 
+    def deleteDB(self, db_name):
+        return self.conn.drop_database(db_name)
 
 if __name__=="__main__":
     import json
@@ -106,3 +108,6 @@ if __name__=="__main__":
     for item in items:
         print(item)
     
+    #mydb.deleteDB("air")
+    dbs = mydb.getDBList()
+    print(dbs)

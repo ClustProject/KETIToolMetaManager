@@ -60,17 +60,18 @@ class MetaGenerator():
         db_name = data["domain"]+"_"+data["sub_domain"]
         table_name = data["table_name"]
         info = self.get_table_info(influxDB, db_name, table_name)
-        if(data["location"]["syntax"] is not None and data["location"]["syntax"]!=""):
-            pos=self.geocoding(data["location"]["syntax"])
-            pos["syntax"]=data["location"]["syntax"] #["syntax"]
-            pos["lat"]=float(pos["lat"])
-            pos["lng"]=float(pos["lng"])
-            data["location"]=pos
-        elif(data["location"]["lat"] is not None and data["location"]["lat"]!="" and data["location"]["lng"] is not None and data["location"]["lng"]!=""):
-            pos=self.reverse_geocoding(data["location"])
-            data["location"]['syntax']=pos
-        else:
-            del data["location"]
+        if("location" in data):
+            if(data["location"]["syntax"] is not None and data["location"]["syntax"]!=""):
+                pos=self.geocoding(data["location"]["syntax"])
+                pos["syntax"]=data["location"]["syntax"] #["syntax"]
+                pos["lat"]=float(pos["lat"])
+                pos["lng"]=float(pos["lng"])
+                data["location"]=pos
+            elif(data["location"]["lat"] is not None and data["location"]["lat"]!="" and data["location"]["lng"] is not None and data["location"]["lng"]!=""):
+                pos=self.reverse_geocoding(data["location"])
+                data["location"]['syntax']=pos
+            else:
+                del data["location"]
         
         info = info.drop(["db_name",'measurement_name'],axis=1)
         for col in info.columns:

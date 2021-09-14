@@ -1,6 +1,6 @@
 import functools
 from time import monotonic
-
+import json
 from flask import(
     Blueprint, flash, g, redirect, render_template, request, session, url_for, jsonify
 )
@@ -46,10 +46,14 @@ def register():
     if request.method == 'POST':
         generator = MetaGenerator(current_app.config["GENERATOR_INFO"])
         new_data = request.get_json()
+        
         collection_name = new_data["sub_domain"]
         metadata = generator.generate(new_data.copy(),get_influx_db())
-        return metadata
-        #mongodb.insertOne(collection_name,metadata)
+        
+        mongodb.switchDB(metadata["domain"])
+        mongodb.insertOne(collection_name, metadata)
+        return "OK"
+       
     elif request.method == 'GET':
         db_name = request.args["domain"]
         collection_name = request.args["sub_domain"]
@@ -58,6 +62,27 @@ def register():
         return jsonify(ItemstoJson(items))
 
     return "AA"
+
+@bp.route('/metadatas', methods=('GET','POST'))
+def register_all():
+    mongodb = get_mongo_db()
+    if request.method == 'POST':
+        generator = MetaGenerator(current_app.config["GENERATOR_INFO"])
+        new_datas = request.get_json()["data"]
+        elements = {}
+        for new_data in new_datas:
+            collection_name = new_data["sub_domain"]
+            metadata = generator.generate(new_data.copy(),get_influx_db())
+            if(collection_name in elements):
+                elements[collection_name].append(metadata)
+            else:
+                elements[collection_name]=[metadata]
+            #elements.append(metadata)
+        for collection_name in elements.keys():
+            print(collection_name)
+            mongodb.insertMany(collection_name,elements[collection_name])
+
+        return "OK"
 
 def ItemstoJson(items):
     allData   = []
