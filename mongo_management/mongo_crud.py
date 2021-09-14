@@ -9,6 +9,7 @@ CRUD
   data = mydb.getCollList()
 """
 import pymongo
+from pymongo import collection
 
 class MongoCRUD:
     
@@ -49,6 +50,9 @@ class MongoCRUD:
         self.dbName = dbName
         self.db = self.conn.get_database(self.dbName)
     
+    def create_unique_index(self,collection):
+        self.db[collection].create_index('table_name', unique=True)
+
     # Get current's DB name
     def getDBName(self):
         return self.db

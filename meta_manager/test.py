@@ -49,7 +49,23 @@ def make_one(data):
 if __name__=="__main__":
     
     data = {
-        
+     "domain": "OUTDOOR", 
+    "sub_domain": "AIR_CLEAN", 
+    "table_name": "seoul", 
+    "location": {
+      "lat": "", 
+      "lng": "", 
+      "syntax": "서울 마포구 포은로 6길 10 망원1동주민센터 옥상"
+    },
+    "description": "This is outdoor air data ", 
+    "source_agency": "AirKorea", 
+    "source": "Server", 
+    "source_type": "XLS", 
+    "tag": ["outdoor", "air", "seoul"], 
+    "start_time": "", 
+    "end_time": "", 
+    "frequency": "", 
+    "number_of_columns": ""
     }  
 
     # manual location (covid, kweather, INNER_AIR)
@@ -64,4 +80,5 @@ if __name__=="__main__":
     #print(elements)
     mydb.switchDB(data["domain"])
     #mydb.deleteDB("bio")
+    mydb.create_unique_index(data["sub_domain"])
     #mydb.insertMany(data["sub_domain"],elements)
