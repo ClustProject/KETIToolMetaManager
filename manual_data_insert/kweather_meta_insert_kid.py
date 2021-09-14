@@ -1,7 +1,9 @@
 import json
+from influxdb import InfluxDBClient
+import sys,os
+sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 from meta_generator.generator import MetaGenerator
 from mongo_management.mongo_crud import MongoCRUD
-from influxdb import InfluxDBClient
 
 if __name__=="__main__":
     import pprint

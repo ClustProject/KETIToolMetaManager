@@ -40,6 +40,10 @@ class MongoCRUD:
                         authSource="admin")
         return self.conn.get_database(self.dbName)
 
+    # Disconnect
+    def close(self):
+        self.conn.close()
+
     # Switch Database
     def switchDB(self,dbName):
         self.dbName = dbName

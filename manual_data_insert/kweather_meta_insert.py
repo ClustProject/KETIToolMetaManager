@@ -1,11 +1,13 @@
 import json
+from influxdb import InfluxDBClient
+import sys,os
+sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 from meta_generator.generator import MetaGenerator
 from mongo_management.mongo_crud import MongoCRUD
-from influxdb import InfluxDBClient
 
 if __name__=="__main__":
     import pprint
-    with open('KETIToolMetaManager/config.json', 'r') as f:
+    with open(os.path.dirname(os.path.realpath(__file__))+'/config.json', 'r') as f:
         config = json.load(f)
 
     gener = MetaGenerator(config['GENERATOR_INFO'])
@@ -52,7 +54,7 @@ if __name__=="__main__":
         #pprint.pprint(metadata)
         elements.append(metadata.copy())
     #print(elements)
-    mydb.insertMany(collection_name,elements)
+    #mydb.insertMany(collection_name,elements)
         
     colls = mydb.getCollList()
     print(colls)

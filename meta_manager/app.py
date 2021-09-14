@@ -1,14 +1,15 @@
 from flask import Flask, jsonify
 import sys
-sys.path.append("/Users/yumiseon/KETI/CLUST/CLUSTPROJECT/KETIToolMetaManager/")
-from mongo_management import mongo_crud as mg
+#sys.path.append("/Users/yumiseon/KETI/CLUST/CLUSTPROJECT/KETIToolMetaManager/")
+#print(sys.path)
+from KETIToolMetaManager.mongo_management import mongo_crud as mg
 import json
 import logging
 
 with open('./config.json', 'r') as f:
     config = json.load(f)
-    
-db_info = config['DB_INFO']
+
+db_info = config['MONGO_DB_INFO']
 mydb = mg.MongoCRUD(db_info)
 
 app = Flask(__name__)
