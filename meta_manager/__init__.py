@@ -1,10 +1,20 @@
 #from . import app
 #app.log_setup()
-from flask import Flask
-import os 
+from flask import Flask, g
+import logging
 import json
 # /home/teamgold/KETI/CLUST/CLUSTPROJECT/instance
+
+def log_setup():
+    formatter = logging.Formatter('%(asctime)s - %(message)s')
+    termlog_handler = logging.StreamHandler()
+    termlog_handler.setFormatter(formatter)
+    logger = logging.getLogger()
+    logger.addHandler(termlog_handler)
+    logger.setLevel(logging.INFO)
+
 def create_app(config=None):
+    log_setup()
     app = Flask(__name__,instance_relative_config=True)
 
     app.config.from_mapping(
@@ -21,6 +31,11 @@ def create_app(config=None):
     
     from . import db
     db.init_app(app)
-    
-    print(app.config)
+    #print(getattr(g, 'db', '111'))
+    #print(db.get_db())
+    #print(app.config)
+    from . import meta_data
+    app.register_blueprint(meta_data.bp)
+
+
     return app
