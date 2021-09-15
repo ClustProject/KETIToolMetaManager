@@ -33,9 +33,12 @@ class MetaGenerator():
         exploration_df = pd.DataFrame()
         influxDB.switch_database(db_name)
         ms_list = influxDB.get_list_measurements()
-        if len(ms_list) > 0:
+        if len(ms_list) > 0 :
             query_string = "SHOW FIELD KEYS"
             fieldkeys = list(influxDB.query(query_string).get_points(measurement=measurement_name))
+            
+            # if the measurement doesn't exist 
+            if(len(fieldkeys)<=0) : return None
             number_of_columns = len(fieldkeys)
             fieldkey = fieldkeys[0]['fieldKey']
             
@@ -47,19 +50,21 @@ class MetaGenerator():
             df = pd.DataFrame(influxDB.query(query_string).get_points())
                     
             df["time"] = pd.to_datetime(df["time"], format="%Y-%m-%dT%H:%M:%SZ")
-            # freq = df.time[1] - df.time[0]
-                    
             frequency = self.get_table_freqeuncy(df)
             exploration_df = exploration_df.append([[db_name, measurement_name, start_time, end_time, frequency, number_of_columns]])
         
-        exploration_df.columns = ['db_name', 'measurement_name', 'start_time', 'end_time', 'frequency', 'number_of_columns']
-        exploration_df.reset_index(drop=True, inplace = True)
-        return exploration_df
+            exploration_df.columns = ['db_name', 'measurement_name', 'start_time', 'end_time', 'frequency', 'number_of_columns']
+            exploration_df.reset_index(drop=True, inplace = True)
+            return exploration_df
+        else:
+            # if the measurement doesn't exist 
+            return None
 
     def generate(self, data, influxDB):
         db_name = data["domain"]+"_"+data["sub_domain"]
         table_name = data["table_name"]
         info = self.get_table_info(influxDB, db_name, table_name)
+        if(info is None): return None
         if("location" in data):
             if(data["location"]["syntax"] is not None and data["location"]["syntax"]!=""):
                 pos=self.geocoding(data["location"]["syntax"])

@@ -5,6 +5,11 @@ the modules
 - generating metadata using CLUST rules 
 - writing and reading metadata on mongodb
 
+function names
+- location_* : make location syntax using table_name
+- make* : make metadata 
+- write* : wrtie data to mongodb
+- read* : read data from mongodb
 """
 import sys,os
 # add a directory path of this file in python's path
@@ -65,6 +70,17 @@ def make(data, type=0, locations=None):
                 0 - use manual input for location syntax or lat,lng (detault) 
                 1 - use data["table_name"] (=influxdb measurement name) for location syntax
                 2 - use the suffix of data["table_name"] for location syntax
+        
+        locations : dictionary (option)
+                for mapping measurement with location information
+                ex) {
+                        "table1":{
+                            "lat":127,"lng":36
+                        },
+                        "table2":{
+                            "syntax":"seoul"
+                        }
+                    }
 
     Returns:
         elements : a list that have all metadata we will saves
@@ -75,10 +91,8 @@ def make(data, type=0, locations=None):
     if {"name": db_name} in influxdb.get_list_database():
         influxdb.switch_database(db_name)
         ms_list = influxdb.get_list_measurements()
-        print(ms_list)
         
         for ms in ms_list:
-            print("=================")
             data["table_name"]=ms["name"]
             if(type==0 and locations is not None):
                 data["location"] = locations[data["table_name"]]
@@ -86,24 +100,51 @@ def make(data, type=0, locations=None):
             if(type==2): data = loacation_with_suffix_table(data.copy())
             
             metadata = gener.generate(data.copy(),influxdb)
-            print(metadata)
             elements.append(metadata)
     return elements
 
 def make_one(data):
     """
-    this function make a list that only have a metadata generated using a argument "data"
+    this function make a list that only have a metadata generated 
+    using a argument "data" without modifying table_name
     it uses a manual input for location syntax or lat,lng (detault) 
 
     Args:
         data: dictionary
 
     Returns:
-        elements : a list that have a metadata we will saves
+        elements : a list that have a metadata we will save if the measurement exists
+        if not, it returns None
     """
-    db_name = data["domain"]+"_"+data["sub_domain"]
     metadata = gener.generate(data.copy(),influxdb)
+    if(metadata is None) : return None
     return [metadata]
+
+def write_metadata_to_mongo(db_name,collection_name,elements,unique_col_name="table_name"):
+    """
+    this function writes all metadata in mongodb
+
+    Args:
+        db_name: string
+        collection_name: string
+        elements: list
+        unique_col_name: string (unique index column name)
+
+    Returns:
+        status message 
+        return 'errmsg': 'E11000 duplicate key error collection: .. ' 
+                if the table name is already exists
+    """
+    try:
+        mydb.switchDB(db_name)
+        return mydb.insertMany(collection_name,elements,unique_col_name)
+    except Exception as e:
+        return e
+
+def run_and_save(data,type=0,locations=None):
+    if(type==-1): elements = make_one(data)
+    else : elements = make(data,type,locations)
+    return write_metadata_to_mongo(data["domain"],data["sub_domain"],elements,unique_col_name="table_name")
 
 def read_all_db_coll_list():
     """
@@ -121,8 +162,6 @@ def read_all_db_coll_list():
             
             for coll_name in mydb.getCollList():
                 result[db_name].append(coll_name)
-    import pprint
-    pprint.pprint(result)
     return result
 
 def read_coll_list(db_name):
@@ -131,6 +170,7 @@ def read_coll_list(db_name):
     
     Returns:
         result : a list
+        if db name is not in a clust catecory return wrong message
     """
     if db_name not in exclude_db and db_name in include_db:
         mydb.switchDB(db_name)
@@ -143,6 +183,7 @@ def read_db_coll(db_name,collection_name):
     
     Returns:
         result : a list of all metadatas
+        if db name is not in a clust catecory return wrong message
     """
     if db_name not in exclude_db and db_name in include_db:
         mydb.switchDB(db_name)
@@ -178,49 +219,114 @@ def make_all_unique_index(unique_index_col):
 '''
 
 if __name__=="__main__":
+    import pprint
+    # case -1 : each measurement has a manual location (OUTDOOR_WEATHER, OUTDOOR_AIR)
+    #elements = make_one(data)
+    data = {
+                "domain": "OUTDOOR", 
+                "sub_domain": "AIR", 
+                "table_name": "sangju", 
+                "location": {
+                    "lat": "", 
+                    "lng": "", 
+                    "syntax": "경북 상주시 북천로 63 북문동주민센터"
+                },
+                "description": "This is outdoor air data ", 
+                "source_agency": "AirKorea", 
+                "source": "Server", 
+                "source_type": "API", 
+                "tag": ["outdoor", "air", "sangju"], 
+            } 
+
+    print("===========case -1===========")
+    elements = make_one(data)
+    pprint.pprint(elements)
+    # with save
+    #print(run_and_save(data,-1))
+
+    # case 0 : same location info for all measurements (covid, kweather, INNER_AIR)
+    data = {
+                "domain": "INNER", 
+                "sub_domain": "AIR", 
+                "table_name": "HS1", 
+                "location": {
+                    "lat": "", 
+                    "lng": "", 
+                    "syntax": "경북 상주시"
+                },
+                "description": "This is farm air data ", 
+                "source_agency": "gluesys", 
+                "source": "InfluxDB", 
+                "source_type": "", 
+                "tag": ["farm", "air", "sangju"], 
+                "start_time": "", 
+                "end_time": "", 
+                "frequency": "", 
+                "number_of_columns": ""
+            }  
+
+    print("===========case 0===========")
+    elements = make(data) # default type=0
+    pprint.pprint(elements)
+    # with save
+    # print(run_and_save(data))
+    
+    # case 1 : table_name is location syntax (energy_solar, energy_windpower)
+    data = {
+        "domain": "energy", 
+        "sub_domain": "solar", 
+        "table_name": "jeju", 
+        "location": {
+        "lat": "", 
+        "lng": "",
+        "syntax": "제주도"
+        },
+        "description": "This is solar energy data in jeju.", 
+        "source_agency": "한국전력거래소", 
+        "source": "", 
+        "source_type": "csv", 
+        "tag": ["energy", "solar", "jeju"]
+    }
+
+    print("===========case 1===========")
+    elements = make(data,1)
+    pprint.pprint(elements)
+    # with save
+    # print(run_and_save(data,1))
+
+    # case 2 : table_name's suffix is location syntax (traffic_subway)
     
     data = {
-    "domain": "OUTDOOR", 
-    "sub_domain": "WEATHER_CLEAN", 
-    "table_name": "sangju", 
-    "location": {
-      "lat": "", 
-      "lng": "", 
-      "syntax": "경상북도 상주시 남산2길 322 상주지역기상서비스센터"
-    },
-    "description": "This is weater data ", 
-    "source_agency": "AirKorea", 
-    "source": "Server", 
-    "source_type": "CSV", 
-    "tag": ["weather", "outdoor", "sangju"], 
-    "start_time": "", 
-    "end_time": "", 
-    "frequency": "", 
-    "number_of_columns": ""
-    }  
+        "domain": "traffic", 
+        "sub_domain": "seoul_subway", 
+        "table_name": "line2_euljiro3ga", 
+        "location": {
+        "lat": "", 
+        "lng": "", 
+        "syntax": ""
+        },
+        "description": "This is subway data in seoul.", 
+        "source_agency": "서울 열린데이터 광장", 
+        "source": "", 
+        "source_type": "csv", 
+        "tag": ["traffic", "life", "subway", "seoul"]
+    }
 
-    # manual location (covid, kweather, INNER_AIR)
-    #elements = make(data)
-    # manual location for only one table (OUTDOOR_WEATHER, OUTDOOR_AIR)
-    #elements = make_one(data)
-    # location_with_table (energy_solar, energy_windpower)
-    #elements = make(data,1)
-    # location_with_suffix_table (traffic_subway)
-    # elements = make(data,2)
+    print("===========case 2===========")
+    elements = make(data,2)
+    pprint.pprint(elements)
+    # with save
+    # print(run_and_save(data,2))
 
-    #print(elements)
-    #mydb.switchDB(data["domain"])
-    #mydb.deleteDB("OUTDOOR")
-    #mydb.create_unique_index(data["sub_domain"],"table_name")
-    #mydb.deleteCollection(data["sub_domain"])
-    #mydb.insertMany(data["sub_domain"],elements,"table_name")
 
-    #print(make_all_unique_index("table_name"))
+    print("===========read===========")
     print("===all db and collections===")
     res = read_all_db_coll_list()
-    print("===all collection list on a db")
+    pprint.pprint(res)
+    print("===all collection list on a db===")
     res = read_coll_list("bio")
-    print(res)
-    res = read_db_coll("bios","covid")
-    print(res)
+    pprint.pprint(res)
+    print("===all metadata list on a collection===")
+    res = read_db_coll("bio","covid")
+    pprint.pprint(res)
     

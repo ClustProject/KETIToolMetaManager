@@ -78,7 +78,7 @@ class MongoCRUD:
                 self.create_unique_index(collection,unique_col_name)
                 return self.db[collection].insert_one(data)
         except Exception as e :
-            print(e)
+            return e
     
     def insertMany(self, collection, data, unique_col_name=None):
         try:
@@ -88,7 +88,7 @@ class MongoCRUD:
                 self.create_unique_index(collection,unique_col_name)
                 return self.db[collection].insert_many(data)
         except Exception as e :
-            print(e)
+            return e
     
     def updateOne(self,collection,ori_data,new_data):
         return self.db[collection].update_one(ori_data, new_data)
