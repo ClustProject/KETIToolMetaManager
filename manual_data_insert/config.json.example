@@ -1,19 +1,19 @@
 {
     "MONGO_DB_INFO":{
-        "USER_ID":"...",
-        "USER_PWD":"...",
-        "HOST_ADDR":"...",
-        "HOST_PORT":"...",
-        "DB_NAME":"..."
+        "USER_ID":"",
+        "USER_PWD":"",
+        "HOST_ADDR":"monogdb ip address",
+        "HOST_PORT":"mongodb port number",
+        "DB_NAME":"database name"
     },
     "GENERATOR_INFO":{
-        "MAP_API_KEY" : "..."
+        "MAP_API_KEY" : "google map api key"
     },
     "INFLUX_DB_INFO":{
-        "host_":"...",
-        "port_":"...",
-        "user_":"...",
-        "pass_":"...",
-        "protocol":"..."
+        "host_":"influxdb ip address",
+        "port_":"influxdb port number",
+        "user_":"",
+        "pass_":"",
+        "protocol":"line"
     }
 }
