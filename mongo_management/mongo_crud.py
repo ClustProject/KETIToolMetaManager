@@ -9,7 +9,6 @@ CRUD
   data = mydb.getCollList()
 """
 import pymongo
-from pymongo import collection
 
 class MongoCRUD:
     
@@ -50,8 +49,8 @@ class MongoCRUD:
         self.dbName = dbName
         self.db = self.conn.get_database(self.dbName)
     
-    def create_unique_index(self,collection):
-        self.db[collection].create_index('table_name', unique=True)
+    def create_unique_index(self,collection, unique_col_name):
+        self.db[collection].create_index(unique_col_name, unique=True)
 
     # Get current's DB name
     def getDBName(self):
@@ -71,11 +70,25 @@ class MongoCRUD:
         return self.db[collection].find(condition)
 
     # Update
-    def insertOne(self, collection, data):
-        return self.db[collection].insert_one(data)
+    def insertOne(self, collection, data, unique_col_name=None):
+        try:
+            if unique_col_name==None:
+                return self.db[collection].insert_one(data)
+            else :
+                self.create_unique_index(collection,unique_col_name)
+                return self.db[collection].insert_one(data)
+        except Exception as e :
+            print(e)
     
-    def insertMany(self, collection, data):
-        return self.db[collection].insert_many(data)
+    def insertMany(self, collection, data, unique_col_name=None):
+        try:
+            if unique_col_name==None:
+                return self.db[collection].insert_many(data)
+            else:
+                self.create_unique_index(collection,unique_col_name)
+                return self.db[collection].insert_many(data)
+        except Exception as e :
+            print(e)
     
     def updateOne(self,collection,ori_data,new_data):
         return self.db[collection].update_one(ori_data, new_data)
@@ -92,6 +105,10 @@ class MongoCRUD:
 
     def deleteDB(self, db_name):
         return self.conn.drop_database(db_name)
+    
+    def deleteCollection(self, collection):
+        return self.db[collection].drop()
+
 
 if __name__=="__main__":
     import json
