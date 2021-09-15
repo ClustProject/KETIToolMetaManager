@@ -69,7 +69,7 @@ class MongoCRUD:
     def getManyData(self, collection, condition=None):
         return self.db[collection].find(condition)
 
-    # Update
+    # Insert
     def insertOne(self, collection, data, unique_col_name=None):
         try:
             if unique_col_name==None:
@@ -90,6 +90,15 @@ class MongoCRUD:
         except Exception as e :
             return e
     
+    # Update
+    def updateKey(self,collection,select_condition,update_data):
+        # 조건에 해당하는 첫번째 Document만 변경 
+        return self.db[collection].update_one(select_condition, { '$set': update_data })
+    
+    def updateManyKey(self,collection,select_condition,update_data):
+        # 조건에 해당하는 모두를 변경 
+        return self.db[collection].update_many(select_condition, { '$set': update_data })
+
     def updateOne(self,collection,ori_data,new_data):
         return self.db[collection].update_one(ori_data, new_data)
     
@@ -109,7 +118,13 @@ class MongoCRUD:
     def deleteCollection(self, collection):
         return self.db[collection].drop()
 
-
+    # print
+    def printDatas(self, db_name, collection_name):
+        mydb.switchDB(db_name)
+        items = mydb.getManyData(collection_name)
+        for item in items:
+            print(item)
+    
 if __name__=="__main__":
     import json
     with open('./config.json', 'r') as f:
@@ -121,14 +136,22 @@ if __name__=="__main__":
     dbs = mydb.getDBList()
     print(dbs)
 
-    colls = mydb.getCollList()
-    print(colls)
-    collection_name = colls[0]
+    data = {
+        "name" : "test",
+        "age" : 30,
+        "favorite" : "chocolate"
+    }
+    mydb.deleteDB("test")
+    # mydb.switchDB("test")
+    # mydb.insertOne("test",data)
+    # colls = mydb.getCollList()
+    # print(colls)
     
-    items = mydb.getManyData(collection_name)
-    for item in items:
-        print(item)
+    # mydb.printDatas("test","test")
+    # #mydb.insertOne("test",data)
+    # #mydb.updateKey("test",{ 'name': 'test'},{ 'age': 12,"favorite" : "cheese","hobby":"basketball"} )
+    # mydb.updateManyKey("test",{ 'name': 'test'},{ 'age': 12,"favorite" : "milk","hobby":"basketball"} )
+    # print("after update")
+    # mydb.printDatas("test","test")
     
-    #mydb.deleteDB("air")
-    dbs = mydb.getDBList()
-    print(dbs)
+    

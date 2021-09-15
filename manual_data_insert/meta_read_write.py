@@ -3,7 +3,7 @@ meta_read_write
 ===
 the modules 
 - generating metadata using CLUST rules 
-- writing and reading metadata on mongodb
+- writing, updating and reading metadata on mongodb
 
 function names
 - location_* : make location syntax using table_name
@@ -29,17 +29,18 @@ ins = config['INFLUX_DB_INFO']
 influxdb = InfluxDBClient(host=ins["host_"], port=ins["port_"], username=ins["user_"], password=ins["pass_"])
 mydb = MongoCRUD(config['MONGO_DB_INFO'])
 
+unique_index_name = "table_name"
 exclude_db = ["config","local","admin"]
 include_db = ["air", "farm", "factory", "bio", "life", "energy", \
             "weather", "city", "traffic", "culture", "economy", "INNER","OUTDOOR"]
 
 def location_with_table(data):
-    data["location"]["syntax"] = data["table_name"]
+    data["location"]["syntax"] = data[unique_index_name]
     return data
 
 def loacation_with_suffix_table(data):
-    idx = data["table_name"].find("_")
-    data["location"]["syntax"] = data["table_name"][idx+1:]
+    idx = data[unique_index_name].find("_")
+    data["location"]["syntax"] = data[unique_index_name][idx+1:]
     return data
 
 def make(data, type=0, locations=None):
@@ -120,7 +121,7 @@ def make_one(data):
     if(metadata is None) : return None
     return [metadata]
 
-def write_metadata_to_mongo(db_name,collection_name,elements,unique_col_name="table_name"):
+def write_metadata_to_mongo(db_name,collection_name,elements,unique_col_name=unique_index_name):
     """
     this function writes all metadata in mongodb
 
@@ -142,9 +143,36 @@ def write_metadata_to_mongo(db_name,collection_name,elements,unique_col_name="ta
         return e
 
 def run_and_save(data,type=0,locations=None):
+    """
+    make a list of metadata and save it to mongo db
+
+    Args:
+        data : dictionary
+        type : int (-1,0,1,2)
+        location : dictionary (option for type=0)
+
+    Returns:
+        status message 
+        return 'errmsg': 'E11000 duplicate key error collection: .. ' 
+                if the table name is already exists
+    """
     if(type==-1): elements = make_one(data)
     else : elements = make(data,type,locations)
-    return write_metadata_to_mongo(data["domain"],data["sub_domain"],elements,unique_col_name="table_name")
+    return write_metadata_to_mongo(data["domain"],data["sub_domain"],elements,unique_col_name=unique_index_name)
+
+def update_metadata(db_name,collection, table_name, update_data):
+    """
+    update metadata
+
+    Args:
+        db_name : string
+        collection : string
+        table_name : string
+        update_data : dictionary ex) {"age":30, "hobby":"piano"}
+    """
+    mydb.switchDB(db_name)
+    select_condition = {unique_index_name:table_name}
+    mydb.updateKey(collection,select_condition,update_data)
 
 def read_all_db_coll_list():
     """
