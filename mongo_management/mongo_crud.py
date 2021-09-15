@@ -98,6 +98,14 @@ class MongoCRUD:
     def updateManyKey(self,collection,select_condition,update_data):
         # 조건에 해당하는 모두를 변경 
         return self.db[collection].update_many(select_condition, { '$set': update_data })
+    
+    def updateArrayKey():
+        return "hello"
+        # db["my_collection"].update(
+        # { "_id": ObjectId(document_id) },
+        # { "$set": { 'documents.'+str(doc_index)+'.content' : new_content_B}}
+        # )
+        #return self.db[collection].update_one(select_condition,{ "$set": { 'documents.'+str(doc_index)+'.content' : new_content_B})
 
     def updateOne(self,collection,ori_data,new_data):
         return self.db[collection].update_one(ori_data, new_data)
@@ -137,21 +145,24 @@ if __name__=="__main__":
     print(dbs)
 
     data = {
-        "name" : "test",
-        "age" : 30,
-        "favorite" : "chocolate"
+        "name" : "Donghan",
+        "age" : 24,
+        "favorite" : "chocolate",
+        "tag" : ["love","outgoing","shy"]
     }
-    mydb.deleteDB("test")
-    # mydb.switchDB("test")
-    # mydb.insertOne("test",data)
+    #mydb.deleteDB("test")
+    mydb.switchDB("test")
+    #mydb.insertOne("test",data)
     # colls = mydb.getCollList()
     # print(colls)
     
-    # mydb.printDatas("test","test")
+    mydb.printDatas("test","test")
     # #mydb.insertOne("test",data)
-    # #mydb.updateKey("test",{ 'name': 'test'},{ 'age': 12,"favorite" : "cheese","hobby":"basketball"} )
+    mydb.updateKey("test",{ 'name': 'Donghan'},{"tag":["cold"] })
     # mydb.updateManyKey("test",{ 'name': 'test'},{ 'age': 12,"favorite" : "milk","hobby":"basketball"} )
     # print("after update")
-    # mydb.printDatas("test","test")
+    mydb.printDatas("test","test")
+
+    
     
     
