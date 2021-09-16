@@ -93,19 +93,28 @@ class MongoCRUD:
     # Update
     def updateKey(self,collection,select_condition,update_data):
         # 조건에 해당하는 첫번째 Document만 변경 
+        # $set:{'midExamDetails.$.Marks': 97}
         return self.db[collection].update_one(select_condition, { '$set': update_data })
     
     def updateManyKey(self,collection,select_condition,update_data):
         # 조건에 해당하는 모두를 변경 
         return self.db[collection].update_many(select_condition, { '$set': update_data })
     
-    def updateArrayKey():
-        return "hello"
-        # db["my_collection"].update(
-        # { "_id": ObjectId(document_id) },
-        # { "$set": { 'documents.'+str(doc_index)+'.content' : new_content_B}}
-        # )
-        #return self.db[collection].update_one(select_condition,{ "$set": { 'documents.'+str(doc_index)+'.content' : new_content_B})
+    def updateKeyToArray(self,collection,select_condition,update_data):
+        # { $addToSet: { tags: "accessories" }
+        return self.db[collection].update_many(select_condition, { '$addToSet': update_data })
+
+    def updateManyKeyToArray(self,collection,select_condition,update_data):
+        # { "tags": [ "camera", "electronics", "accessories" ] }
+        # { $addToSet: { tags: { $each: [ "camera", "electronics", "accessories" ] } } }
+        for key in update_data :
+            val = update_data[key]
+            if(type(val) is list):
+                new_val = {"$each":val}
+                update_data[key] = new_val
+        print(update_data)
+        return self.db[collection].update_many(select_condition, { '$addToSet': update_data })
+
 
     def updateOne(self,collection,ori_data,new_data):
         return self.db[collection].update_one(ori_data, new_data)
@@ -145,10 +154,14 @@ if __name__=="__main__":
     print(dbs)
 
     data = {
-        "name" : "Donghan",
-        "age" : 24,
-        "favorite" : "chocolate",
-        "tag" : ["love","outgoing","shy"]
+        "name" : "ION",
+        "age" : 45,
+        "favorite" : "ON",
+        "tag" : ["love","outgoing"],
+        "loca":{
+            "syn":"test",
+            "lat":30
+        }
     }
     #mydb.deleteDB("test")
     mydb.switchDB("test")
@@ -158,9 +171,18 @@ if __name__=="__main__":
     
     mydb.printDatas("test","test")
     # #mydb.insertOne("test",data)
-    mydb.updateKey("test",{ 'name': 'Donghan'},{"tag":["cold"] })
+    # {'midExamDetails.$.Marks': 97}
+    mydb.updateKey("test",{ 'name': 'ION','loca.syn':'test'},{"loca.syn":"USA" })
+    #mydb.updateKey("test",{ 'name': 'Donghee'},{ 'tag.1' : "Hot"})
+    #mydb.updateKey("test",{ 'name': 'Donghee'},{ 'tag.6' : "Hot2"})
+    #mydb.updateKeyToArray("test",{ 'name': 'Donghee'},{ 'tag' : "Cool2"})
+    #mydb.updateKeyToArray("test",{ 'name': 'Donghee'},{ 'tag' : { "$each": [ "camera", "electronics", "accessories" ] }})
+
+    mydb.updateManyKeyToArray("test",{ 'name': 'ION'},{ 'tag' : [ "camera", "electronics", "accessories" ] })
+    # { "$each": [ "camera", "electronics", "accessories" ] }
+    # { 'tag.1.content' : "Hot"}
     # mydb.updateManyKey("test",{ 'name': 'test'},{ 'age': 12,"favorite" : "milk","hobby":"basketball"} )
-    # print("after update")
+    print("after update")
     mydb.printDatas("test","test")
 
     
