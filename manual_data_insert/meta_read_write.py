@@ -205,10 +205,13 @@ def update_many_metadata(db_name,collection,select_condition,update_data):
     Args:
         db_name : string
         collection : string
-        select_condition : dictionary ex) {"location.syntax":"sangju", "source":"csv"}
+        select_condition : dictionary ex) {"location.syntax":"sangju", "source_type":"csv"}
         update_data : dictionary ex) {"number_of_columns":30,"location.syntax":"sangju", "tag":["hot"]}
     """
     mydb.switchDB(db_name)
+    if "tag" in update_data:
+        mydb.updateManyKeyToArray(collection,select_condition,{"tag":update_data["tag"]})
+        del update_data["tag"]
     return mydb.updateManyKey(collection,select_condition,update_data)
 
 def read_all_db_coll_list():
@@ -329,7 +332,7 @@ if __name__=="__main__":
     elements = make(data) # default type=0
     pprint.pprint(elements)
     # with save
-    #print(run_and_save(data))
+    # print(run_and_save(data))
     
     # case 1 : table_name is location syntax (energy_solar, energy_windpower)
     data = {
@@ -390,7 +393,9 @@ if __name__=="__main__":
     pprint.pprint(res)
     
     # update functions
-    #res = update_metadata("bio","covid","seoul_infected_person",{"source_type":"xls","tag":["sad"]})
-    #res = update_metadata("bio","covid","seoul_infected_person",{"tag":"sad2"})
-    res = read_db_coll("bio","covid")
-    pprint.pprint(res)
+    print("===========update===========")
+    # res = update_metadata("bio","covid","seoul_infected_person",{"source_type":"xls","tag":["sad"]})
+    # res = update_metadata("bio","covid","seoul_infected_person",{"tag":"sad2"})
+    # res = update_many_metadata("bio","covid",{"source_type":"csv"},{"source_type":"xls","tag":"pendemic"})
+    # res = read_db_coll("bio","covid")
+    # pprint.pprint(res)
