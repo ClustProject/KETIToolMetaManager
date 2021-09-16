@@ -86,7 +86,6 @@ def make(data, type=0, locations=None):
     Returns:
         elements : a list that have all metadata we will saves
     """
-
     db_name = data["domain"]+"_"+data["sub_domain"]
     elements = []
     if {"name": db_name} in influxdb.get_list_database():
@@ -162,17 +161,54 @@ def run_and_save(data,type=0,locations=None):
 
 def update_metadata(db_name,collection, table_name, update_data):
     """
-    update metadata
+    update metadata where table_name is same with the parameter "table_name"
+    modify value if key already exists,
+    append value if key not already exists.
+    if key is "tag" : it will be updated using update_tag function
 
     Args:
         db_name : string
         collection : string
         table_name : string
-        update_data : dictionary ex) {"age":30, "hobby":"piano"}
+        update_data : dictionary ex) {"frequency":30,"location.syntax":"sangju", "tag":["hot"]}
     """
     mydb.switchDB(db_name)
     select_condition = {unique_index_name:table_name}
-    mydb.updateKey(collection,select_condition,update_data)
+    if "tag" in update_data:
+        update_tag(db_name,collection,table_name,update_data["tag"])
+        del update_data["tag"]
+    return mydb.updateKey(collection,select_condition,update_data)
+
+def update_tag(db_name,collection,table_name,update_data):
+    """
+    update only array type key(tag) where table_name is same with the parameter "table_name"
+    append value if key not already exists in the array.
+
+    Args:
+        db_name : string
+        collection : string
+        table_name : string
+        update_data : string or list ex) "food" or ["food","medicine"] 
+    """
+    mydb.switchDB(db_name)
+    select_condition = {unique_index_name:table_name}
+    if(type(update_data) is list):
+        return mydb.updateManyKeyToArray(collection,select_condition,{"tag":update_data})
+    else:
+        return mydb.updateKeyToArray(collection,select_condition,{"tag":update_data})
+
+def update_many_metadata(db_name,collection,select_condition,update_data):
+    """
+    update all metadata where is matching with select_condition
+
+    Args:
+        db_name : string
+        collection : string
+        select_condition : dictionary ex) {"location.syntax":"sangju", "source":"csv"}
+        update_data : dictionary ex) {"number_of_columns":30,"location.syntax":"sangju", "tag":["hot"]}
+    """
+    mydb.switchDB(db_name)
+    return mydb.updateManyKey(collection,select_condition,update_data)
 
 def read_all_db_coll_list():
     """
@@ -273,30 +309,26 @@ if __name__=="__main__":
 
     # case 0 : same location info for all measurements (covid, kweather, INNER_AIR)
     data = {
-                "domain": "INNER", 
-                "sub_domain": "AIR", 
-                "table_name": "HS1", 
+                "domain": "bio", 
+                "sub_domain": "covid", 
+                "table_name": "seoul_infected_person", 
                 "location": {
-                    "lat": "", 
-                    "lng": "", 
-                    "syntax": "경북 상주시"
+                "lat": "", 
+                "lng": "",
+                "syntax": "서울특별시"
                 },
-                "description": "This is farm air data ", 
-                "source_agency": "gluesys", 
-                "source": "InfluxDB", 
-                "source_type": "", 
-                "tag": ["farm", "air", "sangju"], 
-                "start_time": "", 
-                "end_time": "", 
-                "frequency": "", 
-                "number_of_columns": ""
+                "description": "This is data from people infected with Covid-19 in Seoul.", 
+                "source_agency": "서울 열린데이터 광장", 
+                "source": "", 
+                "source_type": "csv", 
+                "tag": ["covid", "seoul", "bio", "health", "life", "infected"], 
             }  
 
     print("===========case 0===========")
     elements = make(data) # default type=0
     pprint.pprint(elements)
     # with save
-    # print(run_and_save(data))
+    #print(run_and_save(data))
     
     # case 1 : table_name is location syntax (energy_solar, energy_windpower)
     data = {
@@ -344,7 +376,7 @@ if __name__=="__main__":
     # with save
     # print(run_and_save(data,2))
 
-
+    # read functions
     print("===========read===========")
     print("===all db and collections===")
     res = read_all_db_coll_list()
@@ -356,3 +388,8 @@ if __name__=="__main__":
     res = read_db_coll("bio","covid")
     pprint.pprint(res)
     
+    # update functions
+    #res = update_metadata("bio","covid","seoul_infected_person",{"source_type":"xls","tag":["sad"]})
+    #res = update_metadata("bio","covid","seoul_infected_person",{"tag":"sad2"})
+    res = read_db_coll("bio","covid")
+    pprint.pprint(res)

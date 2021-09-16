@@ -115,7 +115,6 @@ class MongoCRUD:
         print(update_data)
         return self.db[collection].update_many(select_condition, { '$addToSet': update_data })
 
-
     def updateOne(self,collection,ori_data,new_data):
         return self.db[collection].update_one(ori_data, new_data)
     

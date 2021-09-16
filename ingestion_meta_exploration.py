@@ -7,17 +7,17 @@ from KETIToolMetaManager.mongo_management.mongo_crud import MongoCRUD
 
 def get_meta_table(db_info):
     main_domian_list =  ['air', 'farm', 'factory', 'bio', 'life', 'energy',\
-         'weather', 'city', 'traffic', 'culture', 'economy']
+         'weather', 'city', 'traffic', 'culture', 'economy','INNER','OUTDOOR']
     mydb = MongoCRUD(db_info)
     db_list = mydb.getDBList()
-    print(db_list)
+    #print(db_list)
     exploration_df = pd.DataFrame()
 
     for db_name in db_list :
         if db_name in main_domian_list:
             mydb.switchDB(db_name)
             colls = mydb.getCollList()
-            print(colls)
+            #print(colls)
             for coll in colls:
                 items = mydb.getManyData(coll)
                 for item in items:
