@@ -9,6 +9,7 @@ function names
 - location_* : make location syntax using table_name
 - make* : make metadata 
 - write* : wrtie data to mongodb
+- update* : modify or append infomation of some metadata
 - read* : read data from mongodb
 """
 import sys,os
