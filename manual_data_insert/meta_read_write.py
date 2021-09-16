@@ -249,7 +249,6 @@ def make_all_unique_index(unique_index_col):
 if __name__=="__main__":
     import pprint
     # case -1 : each measurement has a manual location (OUTDOOR_WEATHER, OUTDOOR_AIR)
-    #elements = make_one(data)
     data = {
                 "domain": "OUTDOOR", 
                 "sub_domain": "AIR", 
@@ -323,7 +322,6 @@ if __name__=="__main__":
     # print(run_and_save(data,1))
 
     # case 2 : table_name's suffix is location syntax (traffic_subway)
-    
     data = {
         "domain": "traffic", 
         "sub_domain": "seoul_subway", 

@@ -23,11 +23,13 @@ class MetaGenerator():
         return reverse_geocode_result[0]["formatted_address"]
     
     def get_table_freqeuncy(self,data,freq_check_length=5):
-        #freq = self.get_df_freq_timedelta(data)
         freq = to_offset(pd.infer_freq(data[:freq_check_length]["time"]))
+        if(freq==None): 
+            freq1 = data["time"][1]-data["time"][0]
+            freq2 = data["time"][len(data["time"])-1]-data["time"][len(data["time"])-2]
+            freq = freq2 if(freq1>freq2) else freq1
         freq_timedelta = pd.to_timedelta(freq, errors='coerce')
         return str(freq_timedelta)
-        #return str(freq)
 
     def get_table_info(self, influxDB, db_name, measurement_name):
         exploration_df = pd.DataFrame()

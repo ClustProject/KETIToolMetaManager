@@ -54,7 +54,7 @@ if __name__=="__main__":
         #pprint.pprint(metadata)
         elements.append(metadata.copy())
     #print(elements)
-    mydb.insertMany(collection_name,elements)
+    #mydb.insertMany(collection_name,elements)
         
     colls = mydb.getCollList()
     print(colls)
