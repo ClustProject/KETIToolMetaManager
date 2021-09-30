@@ -69,6 +69,12 @@ class MongoCRUD:
     def getManyData(self, collection, condition=None):
         return self.db[collection].find(condition)
 
+    def checkField(self, collection,table_name, field):
+        #{"field_to_check_for": {"$exists": True}}
+        condition = {"table_name":table_name,field:{"$exists":True}} 
+        res = list(self.db[collection].find(condition))
+        return len(res)
+
     # Insert
     def insertOne(self, collection, data, unique_col_name=None):
         try:
@@ -150,7 +156,7 @@ if __name__=="__main__":
     mydb = MongoCRUD(db_info)
     
     dbs = mydb.getDBList()
-    print(dbs)
+    #print(dbs)
 
     data = {
         "name" : "ION",
@@ -159,15 +165,20 @@ if __name__=="__main__":
         "tag" : ["love","outgoing"],
         "loca":{
             "syn":"test",
-            "lat":30
-        }
+            "lat":32
+        },
+        "table_name":"test7",
+        "domain":"test"
     }
     #mydb.deleteDB("test")
-    mydb.switchDB("test")
-    #mydb.insertOne("test",data)
+    mydb.switchDB("test2")
+    #mydb.insertOne("test2",data)
     # colls = mydb.getCollList()
     # print(colls)
-    
+    #mydb.printDatas("test2","test2")
+    check = mydb.checkField("test2", "test2","name")
+    print(check)
+    '''
     mydb.printDatas("test","test")
     # #mydb.insertOne("test",data)
     # {'midExamDetails.$.Marks': 97}
@@ -182,7 +193,7 @@ if __name__=="__main__":
     # { 'tag.1.content' : "Hot"}
     # mydb.updateManyKey("test",{ 'name': 'test'},{ 'age': 12,"favorite" : "milk","hobby":"basketball"} )
     print("after update")
-    mydb.printDatas("test","test")
+    mydb.printDatas("test","test")'''
 
     
     
