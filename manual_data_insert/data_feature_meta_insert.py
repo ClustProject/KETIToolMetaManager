@@ -13,7 +13,7 @@ class MetaDataUpdate():
             self.columns = list(self.data.columns)
     
     def data_meta_all(self):
-        # 한개씩 DB-MS 뽑기 -> keti setting & ibd.BasicDatasetRead(ins, "air_indoor_경로당", "ICL1L2000283")
+        # 한개씩 DB-MS 뽑기 -> keti setting & ibd.BasicDatasetRead(ins, "air_indoor_경로당", "ICL1L2000281")
         # for 문 돌려서 아래 함수들 실행
         pass
     
@@ -37,6 +37,7 @@ class MetaDataUpdate():
             print("Success!")
         else:
             feature_dict = self.meta_json("describe", des_dict)
+            print(feature_dict)
             res = mrw.update_metadata(self.domain, self.subdomain, self.msname,feature_dict)
             print("Success!")
         
@@ -99,7 +100,7 @@ if __name__ == "__main__":
     
     domain = "air"  # DataServer 에서 버튼 클릭으로 받는 값
     sub_domain = "indoor_경로당"
-    measurement = "ICL1L2000283"
+    measurement = "ICL1L2000280"
     
     test1 = ibd.BasicDatasetRead(ins, domain +"_"+sub_domain, measurement) # DataServer 에서 Meta 추가 코드에 넣어서 사용
     rud283 = test1.get_data()
@@ -116,8 +117,8 @@ if __name__ == "__main__":
     res = mrw.read_all_db_coll_list()
     pprint.pprint(res)
     print("===all collection list on a db===")
-    res = mrw.read_coll_list("bio")
+    res = mrw.read_coll_list(domain)
     pprint.pprint(res)
     print("===all metadata list on a collection===")
-    res = mrw.read_db_coll("bio","covid")
+    res = mrw.read_db_coll(domain,sub_domain)
     pprint.pprint(res)
