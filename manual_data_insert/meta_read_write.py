@@ -15,20 +15,27 @@ function names
 import sys,os
 # add a directory path of this file in python's path
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
+sys.path.append(".")
 
 import json
 from influxdb import InfluxDBClient
 from meta_generator.generator import MetaGenerator
 from mongo_management.mongo_crud import MongoCRUD
+from KETIPreDataIngestion.KETI_setting import influx_setting_KETI as ins
 
-with open(os.path.dirname(os.path.realpath(__file__))+'/config.json', 'r') as f:
-        config = json.load(f)
+# with open(os.path.dirname(os.path.realpath(__file__))+'/config.json', 'r') as f:
+#         config = json.load(f)
 
 # initialize MetaGenerator, InfluxDB, MongoDB as global values using config
-gener = MetaGenerator(config['GENERATOR_INFO'])
-ins = config['INFLUX_DB_INFO']
-influxdb = InfluxDBClient(host=ins["host_"], port=ins["port_"], username=ins["user_"], password=ins["pass_"])
-mydb = MongoCRUD(config['MONGO_DB_INFO'])
+#gener = MetaGenerator(config['GENERATOR_INFO'])
+try:
+    gener = MetaGenerator(ins.GENERATOR_INFO)
+except AttributeError:
+    gener = MetaGenerator()
+#ins = config['INFLUX_DB_INFO']
+#influxdb = InfluxDBClient(host=ins["host_"], port=ins["port_"], username=ins["user_"], password=ins["pass_"])
+influxdb = InfluxDBClient(host=ins.host_, port=ins.port_, username=ins.user_, password=ins.pass_)
+mydb = MongoCRUD(ins.DB_INFO)
 
 unique_index_name = "table_name"
 exclude_db = ["config","local","admin"]
@@ -304,6 +311,7 @@ def make_all_unique_index(unique_index_col):
 '''
 
 if __name__=="__main__":
+    '''
     import pprint
     # case -1 : each measurement has a manual location (OUTDOOR_WEATHER, OUTDOOR_AIR)
     data = {
@@ -416,3 +424,7 @@ if __name__=="__main__":
     # res = update_many_metadata("bio","covid",{"source_type":"csv"},{"source_type":"xls","tag":"pendemic"})
     # res = read_db_coll("bio","covid")
     # pprint.pprint(res)
+'''
+    # check functions
+    print("===========check===========")
+    print(check_field("bio","covid","seoul_infected_person","domain"))
