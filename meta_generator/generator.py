@@ -7,9 +7,10 @@ from pandas.tseries.frequencies import to_offset
 
 
 class MetaGenerator():
-    def __init__(self,config) -> None:
-        self.api_key = config['MAP_API_KEY']
-        self.gmaps = googlemaps.Client(key=self.api_key)
+    def __init__(self,config=None) -> None:
+        if config is not None:
+            self.api_key = config['MAP_API_KEY']
+            self.gmaps = googlemaps.Client(key=self.api_key)
         
     def createId(self,content):
         return hashlib.sha224(content).hexdigest()
