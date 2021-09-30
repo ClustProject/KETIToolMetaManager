@@ -160,6 +160,23 @@ def run_and_save(data,type=0,locations=None):
     else : elements = make(data,type,locations)
     return write_metadata_to_mongo(data["domain"],data["sub_domain"],elements,unique_col_name=unique_index_name)
 
+def check_field(db_name,collection,table_name,field):
+    """
+    check if a field exists in a specific document
+
+    Args:
+        db_name : string
+        collection : string
+        table_name : string
+        filed : string
+
+    Returns:
+        Boolean
+    """
+    mydb.switchDB(db_name)
+    res = mydb.checkField(collection,table_name, field)
+    return True if res>0 else False
+
 def update_metadata(db_name,collection, table_name, update_data):
     """
     update metadata where table_name is same with the parameter "table_name"
