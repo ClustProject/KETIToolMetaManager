@@ -313,7 +313,7 @@ def make_all_unique_index(unique_index_col):
 if __name__=="__main__":
     '''
     import pprint
-    # case -1 : each measurement has a manual location (OUTDOOR_WEATHER, OUTDOOR_AIR)
+    # case -1 : each measurement has a manual location (OUTDOOR_WEATHER, OUTDOOR_AIR, kweather,)
     data = {
                 "domain": "OUTDOOR", 
                 "sub_domain": "AIR", 
@@ -336,7 +336,7 @@ if __name__=="__main__":
     # with save
     #print(run_and_save(data,-1))
 
-    # case 0 : same location info for all measurements (covid, kweather, INNER_AIR)
+    # case 0 : same location info for all measurements (covid, INNER_AIR)
     data = {
                 "domain": "bio", 
                 "sub_domain": "covid", 
