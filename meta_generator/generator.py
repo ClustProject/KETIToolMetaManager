@@ -1,3 +1,10 @@
+"""
+generator
+===
+the modules 
+- generate metadata
+
+"""
 import hashlib
 import googlemaps, json
 from requests.api import head
@@ -7,13 +14,15 @@ from pandas.tseries.frequencies import to_offset
 
 
 class MetaGenerator():
+    """
+    make metadata using influxDB and googlemaps
+
+    '__init__' : get googlemap api key for geocoding or reverse_geocoding
+    """
     def __init__(self,config=None) -> None:
         if config is not None:
             self.api_key = config['MAP_API_KEY']
             self.gmaps = googlemaps.Client(key=self.api_key)
-        
-    def createId(self,content):
-        return hashlib.sha224(content).hexdigest()
     
     def geocoding(self,address):
         geocode_result = self.gmaps.geocode((address), language='ko')
@@ -64,6 +73,16 @@ class MetaGenerator():
             return None
 
     def generate(self, data, influxDB):
+        """
+        make a metadata using parameters
+
+        Args:
+            data : dictionary
+            influxDB : Object(InfluxDBClient)
+
+        Returns:
+            dictionary that have a location info (both syntax and lat&lng)
+        """
         db_name = data["domain"]+"_"+data["sub_domain"]
         table_name = data["table_name"]
         info = self.get_table_info(influxDB, db_name, table_name)

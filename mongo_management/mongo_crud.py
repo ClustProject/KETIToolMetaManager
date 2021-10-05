@@ -141,7 +141,7 @@ class MongoCRUD:
         return self.db[collection].drop()
 
     # print
-    def printDatas(self, db_name, collection_name):
+    def printData(self, db_name, collection_name):
         mydb.switchDB(db_name)
         items = mydb.getManyData(collection_name)
         for item in items:
@@ -175,11 +175,11 @@ if __name__=="__main__":
     #mydb.insertOne("test2",data)
     # colls = mydb.getCollList()
     # print(colls)
-    #mydb.printDatas("test2","test2")
+    #mydb.printData("test2","test2")
     check = mydb.checkField("test2", "test2","name")
     print(check)
     '''
-    mydb.printDatas("test","test")
+    mydb.printData("test","test")
     # #mydb.insertOne("test",data)
     # {'midExamDetails.$.Marks': 97}
     mydb.updateKey("test",{ 'name': 'ION','loca.syn':'test'},{"loca.syn":"USA" })
@@ -193,7 +193,7 @@ if __name__=="__main__":
     # { 'tag.1.content' : "Hot"}
     # mydb.updateManyKey("test",{ 'name': 'test'},{ 'age': 12,"favorite" : "milk","hobby":"basketball"} )
     print("after update")
-    mydb.printDatas("test","test")'''
+    mydb.printData("test","test")'''
 
     
     
