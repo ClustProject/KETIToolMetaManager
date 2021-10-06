@@ -23,6 +23,7 @@ class MetaGenerator():
         if config is not None:
             self.api_key = config['MAP_API_KEY']
             self.gmaps = googlemaps.Client(key=self.api_key)
+            print(self.gmaps)
     
     def geocoding(self,address):
         geocode_result = self.gmaps.geocode((address), language='ko')
@@ -63,9 +64,9 @@ class MetaGenerator():
                     
             df["time"] = pd.to_datetime(df["time"], format="%Y-%m-%dT%H:%M:%SZ")
             frequency = self.get_table_freqeuncy(df)
-            exploration_df = exploration_df.append([[db_name, measurement_name, start_time, end_time, frequency, number_of_columns]])
+            exploration_df = exploration_df.append([[start_time, end_time, frequency, number_of_columns]])
         
-            exploration_df.columns = ['db_name', 'measurement_name', 'start_time', 'end_time', 'frequency', 'number_of_columns']
+            exploration_df.columns = ['start_time', 'end_time', 'frequency', 'number_of_columns']
             exploration_df.reset_index(drop=True, inplace = True)
             return exploration_df
         else:
@@ -100,7 +101,6 @@ class MetaGenerator():
             else:
                 del data["location"]
         
-        info = info.drop(["db_name",'measurement_name'],axis=1)
         for col in info.columns:
             #print(info[col])
             if col == "number_of_columns":
