@@ -1,5 +1,4 @@
 {
-   "outdoor":{
       "Feature Information":{
          "시각":{
             "description":"Observation Time",
@@ -84,7 +83,7 @@
                   24,
                   27,
                   30,
-                  80,
+                  80
                ],
                "label":[
                   "매우추움",
@@ -404,4 +403,3 @@
          }
       }
    }
-}

@@ -1,5 +1,4 @@
 {
-   "Indoor":{
       "Feature Information":{
          "tm":{
             "description":"Observation Time",
@@ -364,4 +363,3 @@
          }
       }
    }
-}
