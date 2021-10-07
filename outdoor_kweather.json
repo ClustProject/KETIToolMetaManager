@@ -1,20 +1,21 @@
 {
-      "Feature Information":{
-         "시각":{
-            "description":"Observation Time",
-            "tag":[
-               "outdoor",
-               "time"
-            ]
-         },
-         "시리얼":{
-            "description":"Serial Number",
-            "tag":[
-               "outdoor",
-               "serial",
-               "number"
-            ]
-         },
+   "시각":{
+      "description":"Observation Time",
+      "tag":[
+         "outdoor",
+         "time"
+      ]
+   },
+   "시리얼":{
+      "description":"Serial Number",
+      "tag":[
+         "outdoor",
+         "serial",
+         "number"
+      ]
+   },
+      
+   "Feature Information":{
          "PM25_보정전":{
             "description":"Original particulate matter 2.5",
             "tag":[
