@@ -1,25 +1,38 @@
 {
-   "시각":{
+   "tm":{
       "description":"Observation Time",
       "tag":[
-         "outdoor",
+         "indoor",
          "time"
       ]
    },
-   "시리얼":{
+   "serial":{
       "description":"Serial Number",
       "tag":[
-         "outdoor",
+         "indoor",
          "serial",
          "number"
       ]
    },
    "Feature Information":{
-      "PM25_보정전":{
+      "in_pm01_raw":{
+         "description":"Original particulate matter 01",
+         "tag":[
+            "indoor",
+            "극초미세먼지",
+            "원본값",
+            "환경 오염 물질"
+         ],
+         "unit":"㎍/m³",
+         "min":0,
+         "max":1000
+      },
+      "in_pm25_raw":{
          "description":"Original particulate matter 2.5",
          "tag":[
-            "outdoor",
+            "indoor",
             "초미세먼지",
+            "원본값",
             "환경 오염 물질"
          ],
          "lebel_information":{
@@ -41,11 +54,12 @@
          "min":0,
          "max":1000
       },
-      "PM10_보정전":{
+      "in_pm10_raw":{
          "description":"Original particulate matter 10",
          "tag":[
-            "outdoor",
+            "indoor",
             "미세먼지",
+            "원본값",
             "환경 오염 물질"
          ],
          "lebel_information":{
@@ -67,10 +81,10 @@
          "min":0,
          "max":1000
       },
-      "온도":{
+      "in_temp":{
          "description":"Temperature",
          "tag":[
-            "outdoor",
+            "indoor",
             "Temperature",
             "온도"
          ],
@@ -99,10 +113,10 @@
          "min":-40,
          "max":80
       },
-      "습도":{
+      "in_humi":{
          "description":"Humidity",
          "tag":[
-            "outdoor",
+            "indoor",
             "Humidity",
             "습도"
          ],
@@ -131,10 +145,62 @@
          "min":0,
          "max":100
       },
-      "소음":{
+      "in_co2":{
+         "description":"Carbon Dioxide",
+         "tag":[
+            "indoor",
+            "이산화탄소",
+            "환경 오염 물질"
+         ],
+         "lebel_information":{
+            "level":[
+               0,
+               500,
+               1000,
+               1500,
+               10000
+            ],
+            "label":[
+               "좋음",
+               "보통",
+               "나쁨",
+               "매우나쁨"
+            ]
+         },
+         "unit":"ppm",
+         "min":0,
+         "max":10000
+      },
+      "in_voc":{
+         "description":"Volatile Organic Compounds.",
+         "tag":[
+            "indoor",
+            "휘발성유기화합물",
+            "환경 오염 물질"
+         ],
+         "lebel_information":{
+            "level":[
+               0,
+               200,
+               400,
+               1000,
+               60000
+            ],
+            "label":[
+               "좋음",
+               "보통",
+               "나쁨",
+               "매우나쁨"
+            ]
+         },
+         "unit":"ppb",
+         "min":0,
+         "max":60000
+      },
+      "in_noise":{
          "description":"Noise",
          "tag":[
-            "outdoor",
+            "indoor",
             "소음"
          ],
          "lebel_information":{
@@ -160,11 +226,12 @@
          "min":35,
          "max":90
       },
-      "pm10":{
+      "in_pm10":{
          "description":"Correction particulate matter 10",
          "tag":[
-            "outdoor",
-            "미세먼지보정값",
+            "indoor",
+            "미세먼지",
+            "보정값",
             "환경 오염 물질"
          ],
          "lebel_information":{
@@ -186,11 +253,12 @@
          "min":0,
          "max":1000
       },
-      "pm25":{
+      "in_pm25":{
          "description": "Correction particulate matter 2.5",
          "tag":[
-            "outdoor",
-            "초미세먼지보정값",
+            "indoor",
+            "초미세먼지",
+            "보정값",
             "환경 오염 물질"
          ],
          "lebel_information":{
@@ -211,42 +279,24 @@
          "unit":"㎍/m³",
          "min":0,
          "max":1000
-      },
-      "자외선":{
-         "description":"Ultraviolet Rays",
+      },         
+      "in_pm01":{
+         "description":"Correction particulate matter 01",
          "tag":[
-            "outdoor",
-            "자외선"
+            "indoor",
+            "극초미세먼지",
+            "보정값",
+            "환경 오염 물질"
          ],
-         "unit":"UVI",
+         "unit":"㎍/m³",
          "min":0,
-         "max":16
+         "max":1000
       },
-      "조도":{
-         "description":" Illumination",
+      "in_cici_pm10":{
+         "description":"Consolidation Indoor Comfort Index of PM10",
          "tag":[
-            "outdoor",
-            "조도"
-         ],
-         "unit":"lx",
-         "min":0,
-         "max":120000
-      },
-      "흑구온도":{
-         "description":"Black bulb thermometer",
-         "tag":[
-            "outdoor",
-            "흑구온도"
-         ],
-         "unit":"°C",
-         "min":-40,
-         "max":80
-      },
-      "coci_pm10":{
-         "description":"Consolidation outdoor Comfort Index of PM10",
-         "tag":[
-            "outdoor",
-            "통합실외쾌적지수",
+            "indoor",
+            "통합실내쾌적지수",
             "미세먼지"
          ],
          "lebel_information":{
@@ -267,11 +317,11 @@
          "min":0,
          "max":100
       },
-      "coci_pm25":{
-         "description":"Consolidation outdoor Comfort Index of PM2.5",
+      "in_cici_pm25":{
+         "description":"Consolidation Indoor Comfort Index of PM2.5",
          "tag":[
-            "outdoor",
-            "통합실외쾌적지수",
+            "indoor",
+            "통합실내쾌적지수",
             "초미세먼지"
          ],
          "lebel_information":{
@@ -292,11 +342,61 @@
          "min":0,
          "max":100
       },
-      "coci_temp":{
-         "description":"Consolidation outdoor Comfort Index of Temperature",
+      "in_cici_co2":{
+         "description":"Consolidation Indoor Comfort Index of CO2",
          "tag":[
-            "outdoor",
-            "통합실외쾌적지수",
+            "indoor",
+            "통합실내쾌적지수",
+            "이산화탄소"
+         ],
+         "lebel_information":{
+            "level":[
+               0,
+               50,
+               80,
+               90,
+               100
+            ],
+            "label":[
+               "매우나쁨",
+               "나쁨",
+               "보통",
+               "좋음"
+            ]
+         },
+         "min":0,
+         "max":100
+      },
+      "in_cici_voc":{
+         "description":"Consolidation Indoor Comfort Index of VOC",
+         "tag":[
+            "indoor",
+            "통합실내쾌적지수",
+            "휘발성유기화합물"
+         ],
+         "lebel_information":{
+            "level":[
+               0,
+               50,
+               80,
+               90,
+               100
+            ],
+            "label":[
+               "매우나쁨",
+               "나쁨",
+               "보통",
+               "좋음"
+            ]
+         },
+         "min":0,
+         "max":100
+      },
+      "in_cici_temp":{
+         "description":"Consolidation Indoor Comfort Index of Temperature",
+         "tag":[
+            "indoor",
+            "통합실내쾌적지수",
             "온도"
          ],
          "lebel_information":{
@@ -317,11 +417,11 @@
          "min":0,
          "max":100
       },
-      "coci_humi":{
-         "description":"Consolidation outdoor Comfort Index of Humidity",
+      "in_cici_humi":{
+         "description":"Consolidation Indoor Comfort Index of Humidity",
          "tag":[
-            "outdoor",
-            "통합실외쾌적지수",
+            "indoor",
+            "통합실내쾌적지수",
             "습도"
          ],
          "lebel_information":{
@@ -342,11 +442,12 @@
          "min":0,
          "max":100
       },
-      "coci":{
-         "description":"Consolidation outdoor Comfort Index",
+      "in_cici_noise":{
+         "description":"Consolidation Indoor Comfort Index of Noise",
          "tag":[
-            "outdoor",
-            "통합실외쾌적지수"
+            "indoor",
+            "통합실내쾌적지수",
+            "소음"
          ],
          "lebel_information":{
             "level":[
@@ -366,11 +467,11 @@
          "min":0,
          "max":100
       },
-      "coai":{
-         "description":"Consolidation outdoor Air pollution Index",
+      "in_cici":{
+         "description":"Consolidation Indoor Comfort Index",
          "tag":[
-            "outdoor",
-            "통합실외공기오염지수"
+            "indoor",
+            "통합실내쾌적지수"
          ],
          "lebel_information":{
             "level":[
@@ -390,125 +491,29 @@
          "min":0,
          "max":100
       },
-      "nh3":{
-         "description":"Ammonia",
+      "in_ciai":{
+         "description":"Consolidation Indoor Air pollution Index",
          "tag":[
-            "outdoor",
-            "암모니아"
+            "indoor",
+            "통합실내공기오염지수"
          ],
-         "unit":"ppm",
+         "lebel_information":{
+            "level":[
+               0,
+               50,
+               80,
+               90,
+               100
+            ],
+            "label":[
+               "매우나쁨",
+               "나쁨",
+               "보통",
+               "좋음"
+            ]
+         },
          "min":0,
          "max":100
-      },
-      "h2s":{
-         "description":"hydrogen sulfide",
-         "tag":[
-            "outdoor",
-            "황화수소"
-         ],
-         "unit":"ppm",
-         "min":0,
-         "max":100
-      },
-      "o3":{
-         "description":" Ozone",
-         "tag":[
-            "outdoor",
-            "오존"
-         ],
-         "unit":"ppm",
-         "min":0,
-         "max":2
-      },
-      "co":{
-         "description":"Carbon Monoxide",
-         "tag":[
-            "outdoor",
-            "일산화탄소"
-         ],
-         "unit":"ppm",
-         "min":0,
-         "max":12.5
-      },
-      "no2":{
-         "description":"Nitrogen Dioxide",
-         "tag":[
-            "outdoor",
-            "이산화질소"
-         ],
-         "unit":"ppm",
-         "min":0,
-         "max":2
-      },
-      "so2":{
-         "description":"Sulfur Dioxide",
-         "tag":[
-            "outdoor",
-            "이산화황"
-         ],
-         "unit":"ppm",
-         "min":0,
-         "max":2
-      },
-      "진동x":{
-         "description":"Vibration value in the x-axis direction",
-         "tag":[
-            "outdoor",
-            "x축진동"
-         ],
-         "unit":"g",
-         "min":0,
-         "max":16
-      },
-      "진동y":{
-         "description":"Vibration value in the y-axis direction",
-         "tag":[
-            "outdoor",
-            "y축진동"
-         ],
-         "unit":"g",
-         "min":0,
-         "max":16
-      },
-      "진동z":{
-         "description":"Vibration value in the z-axis direction",
-         "tag":[
-            "outdoor",
-            "z축진동"
-         ],
-         "unit":"g",
-         "min":0,
-         "max":16
-      },
-      "진동x최대":{
-         "description":"Maximum vibration value in the x-axis direction.",
-         "tag":[
-            "outdoor",
-            "x축진동최대값"
-         ],
-         "unit":"g",
-         "min":0,
-         "max":16
-      },
-      "진동y최대":{
-         "description":"Maximum vibration value in the y-axis direction.",
-         "tag":[
-            "outdoor",
-            "y축진동최대값"
-         ],
-         "unit":"g",
-         "min":0,
-         "max":16
-      },
-      "진동z최대":{
-         "description":"Maximum vibration value in the z-axis direction.",
-         "tag":[
-            "outdoor",
-            "z축진동최대값"
-         ],
-         "unit":"g",
-         "min":0,
-         "max":16
       }
    }
 }

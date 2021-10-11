@@ -3,6 +3,7 @@ import datetime
 from pytimekr import pytimekr
 import meta_read_write as mrw
 import json
+import os
 
 class MetaDataUpdate():
     def __init__(self, data="all", domain="all", sub_domain="all", measurement="all"):
@@ -13,7 +14,6 @@ class MetaDataUpdate():
         self.data_cut = pd.DataFrame()
         if type(self.data) != str:
             self.columns = list(self.data.columns)
-            print(self.columns)
     
     def data_meta_all(self):
         # 한개씩 DB-MS 뽑기 -> keti setting & ibd.BasicDatasetRead(ins, "air_indoor_경로당", "ICL1L2000281")
@@ -92,26 +92,22 @@ class MetaDataUpdate():
 
     def data_level_label_count_meta(self):
         if "indoor" in self.subdomain:
-            with open("[20211008] indoor_kweather.json", "r", encoding="utf-8") as f:
+            with open(os.path.dirname(os.path.realpath(__file__))+"/[20211008] indoor_kweather.json", "r", encoding="utf-8") as f:
                 feature_json_file = json.load(f)
         else:
-            with open("[20211008] outdoor_kweather.json", "r", encoding="utf-8") as f:
+            with open(os.path.dirname(os.path.realpath(__file__))+"/[20211008] outdoor_kweather.json", "r", encoding="utf-8") as f:
                 feature_json_file = json.load(f)
 
         Feature_Information = {}
         for feature in feature_json_file["Feature Information"]:
             if "lebel_information" not in feature_json_file["Feature Information"][feature].keys():
-                Feature_Information[feature] = {"label_information":{"There is not a Label Information"}}
+                #Feature_Information[feature] = {"label_information":{"There is not a Label Information"}}
+                Feature_Information[feature] = {"label_information":{"level":"There is not a Label Information"}}
             else:
-                # data 에서 feature 추출 할때 "in_" 꼭 붙여주기
-                self.data_cut[feature] = pd.cut(x=self.data["in_"+feature], 
+                self.data_cut[feature] = pd.cut(x=self.data[feature], 
                                      bins=feature_json_file["Feature Information"][feature]["lebel_information"]["level"],
                                     labels=feature_json_file["Feature Information"][feature]["lebel_information"]["label"])
-                
-                print(self.data_cut.groupby(feature).size())
-                #list(df.groupby(feature).size())
-                #print(feature_json_file["Feature Information"][feature]["lebel_information"]["level"])
-                #print(feature_json_file["Feature Information"][feature]["lebel_information"]["label"])
+
                 Feature_Information[feature] = {"label_information":
                                                {"level":feature_json_file["Feature Information"][feature]["lebel_information"]["level"],
                                                 "label":feature_json_file["Feature Information"][feature]["lebel_information"]["label"], 
@@ -147,7 +143,7 @@ if __name__ == "__main__":
     
     domain = "air"  # DataServer 에서 버튼 클릭으로 받는 값
     sub_domain = "indoor_경로당"
-    measurement = "ICL1L2000280"
+    measurement = "ICL1L2000279"
     
     test1 = ibd.BasicDatasetRead(ins, domain +"_"+sub_domain, measurement) # DataServer 에서 Meta 추가 코드에 넣어서 사용
     rud283 = test1.get_data()
@@ -155,6 +151,7 @@ if __name__ == "__main__":
     ##des = rud_features.data_feature_describe_meta()
     ##day = rud_features.data_weekday_weekend_meta()
     #rud_features.describe_meta_insert()
+    #rud_features.data_level_label_count_meta_insert()
 
     # read functions
     import pprint
@@ -162,10 +159,10 @@ if __name__ == "__main__":
     print("===========read===========")
     print("===all db and collections===")
     res = mrw.read_all_db_coll_list()
-    pprint.pprint(res)
+    #pprint.pprint(res)
     print("===all collection list on a db===")
     res = mrw.read_coll_list(domain)
-    pprint.pprint(res)
+    #pprint.pprint(res)
     print("===all metadata list on a collection===")
     res = mrw.read_db_coll(domain,sub_domain)
     pprint.pprint(res)
