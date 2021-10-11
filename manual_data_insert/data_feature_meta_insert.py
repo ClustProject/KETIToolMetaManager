@@ -166,3 +166,17 @@ if __name__ == "__main__":
     print("===all metadata list on a collection===")
     res = mrw.read_db_coll(domain,sub_domain)
     pprint.pprint(res)
+    pprint(res.type())
+
+'''
+    data: {
+					labels: data_js["data_meta"]["Feature"][feature]["label_information"]["label"],
+					datasets: [{
+						label: 'Label',
+						data: data_js["data_meta"]["Feature"][feature]["label_information"]["levelcount"],
+						borderColor: "rgba(255, 201, 14, 1)",
+						backgroundColor: "rgba(255, 201, 14, 0.5)",
+						fill: false
+					}]
+				}
+'''
