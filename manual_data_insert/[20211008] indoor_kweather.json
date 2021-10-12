@@ -1,19 +1,5 @@
 {
-   "tm":{
-      "description":"Observation Time",
-      "tag":[
-         "indoor",
-         "time"
-      ]
-   },
-   "serial":{
-      "description":"Serial Number",
-      "tag":[
-         "indoor",
-         "serial",
-         "number"
-      ]
-   },
+  "DB Information":" dfsdf",
    "Feature Information":{
       "in_pm01_raw":{
          "description":"Original particulate matter 01",
