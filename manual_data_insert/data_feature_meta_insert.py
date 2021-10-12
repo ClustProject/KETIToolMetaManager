@@ -15,11 +15,13 @@ class MetaDataUpdate():
         if type(self.data) != str:
             self.columns = list(self.data.columns)
     
+    # Data Insert all
     def data_meta_all(self):
         # 한개씩 DB-MS 뽑기 -> keti setting & ibd.BasicDatasetRead(ins, "air_indoor_경로당", "ICL1L2000281")
         # for 문 돌려서 아래 함수들 실행
         pass
     
+    # Meta Data Create (통)
     def meta_json(self, key1, meta):
         column_dict={}
         feature_dict={}
@@ -28,10 +30,12 @@ class MetaDataUpdate():
         feature_dict["Feature"] = column_dict
         return feature_dict
 
+    # Data Feature Describe Create
     def data_feature_describe_meta(self):
         describe_dict = self.data.describe().to_dict()
         return describe_dict
 
+    # Data Feature Describe Insert
     def describe_meta_insert(self):
         des_dict = self.data_feature_describe_meta()
         if (mrw.check_field(self.domain, self.subdomain, self.msname, "Feature")) & (mrw.check_field(self.domain, self.subdomain, self.msname, "Feature.{}".format(self.columns[0]))):
@@ -44,13 +48,14 @@ class MetaDataUpdate():
             res = mrw.update_metadata(self.domain, self.subdomain, self.msname,feature_dict)
             print("Success!")
         
-        
+    # Data Day Create    
     def transform_day(self):
         days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
         day_list = [days[x] for x in self.data.index.weekday]
         self.data["Day"] = day_list
         return self.data
     
+    # Data Public Holiday Create
     def transform_public_holiday(self):
         years = range(self.data.index.min().year, self.data.index.max().year+1)
         holi_list = []
@@ -61,6 +66,7 @@ class MetaDataUpdate():
 
         return self.data
     
+    # Data Holiday Create
     def transform_holiday(self):
         self.data = self.transform_day()
         self.data = self.transform_public_holiday()
@@ -76,21 +82,24 @@ class MetaDataUpdate():
             self.data["HoliDay"][sun] = "Holiday"
         
         return self.data
-            
+
+    # Data Weekend, Weekday Meta Create (by Holiday column - transform_holiday)        
     def data_weekday_weekend_meta(self):
         self.data = self.transform_holiday()
         week_dict = self.data.groupby("HoliDay").mean().to_dict()
         
         return week_dict
     
+    # Data WorkingTime Meta Create 
     def data_workingtime_othertime_meta(self):
         self.data = self.transform_holiday()
         #week_dict = self.data.groupby("HoliDay").mean().to_dict()
-        
+        # holiday + 잠자는 시간 - Other Time 으로 추가
         #return week_dict
         pass
 
-    def data_level_label_count_meta(self):
+    # Data Label Information Meta Create
+    def data_label_information_meta(self):
         if "indoor" in self.subdomain:
             with open(os.path.dirname(os.path.realpath(__file__))+"/[20211008] indoor_kweather.json", "r", encoding="utf-8") as f:
                 feature_json_file = json.load(f)
@@ -116,8 +125,9 @@ class MetaDataUpdate():
 
         return Feature_Information
 
-    def data_level_label_count_meta_insert(self):
-        Feature_Information = self.data_level_label_count_meta()
+    # Data Label Information Meta Insert (by data_label_information_meta)
+    def data_label_information_meta_insert(self):
+        Feature_Information = self.data_label_information_meta()
         if (mrw.check_field(self.domain, self.subdomain, self.msname, "Feature")) & (mrw.check_field(self.domain, self.subdomain, self.msname, "Feature.{}".format(self.columns[0]))):
             for column in self.columns:
                 res = mrw.update_metadata(self.domain, self.subdomain, self.msname,{"Feature."+column+".label_information":Feature_Information[column]})
@@ -151,7 +161,7 @@ if __name__ == "__main__":
     ##des = rud_features.data_feature_describe_meta()
     ##day = rud_features.data_weekday_weekend_meta()
     #rud_features.describe_meta_insert()
-    #rud_features.data_level_label_count_meta_insert()
+    #rud_features.data_label_information_meta_insert()
 
     # read functions
     import pprint
