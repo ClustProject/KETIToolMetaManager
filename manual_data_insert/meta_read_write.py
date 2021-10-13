@@ -12,6 +12,7 @@ function names
 - update* : modify or append infomation of some metadata
 - read* : read data from mongodb
 """
+from pprint import pp
 import sys,os
 # add a directory path of this file in python's path
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
@@ -285,6 +286,21 @@ def read_db_coll(db_name,collection_name):
         return "There is no collection named "+collection_name+" in "+db_name
     return "Wrong DB name"
 
+def read_db_coll_table(db_name,collection_name,table_name):
+    """
+    retrun a metadata in a collection on a db
+    
+    Returns:
+        result : a dictionary
+        if db name is not in a clust catecory return wrong message
+    """
+    if db_name not in exclude_db and db_name in include_db:
+        mydb.switchDB(db_name)
+        for coll in mydb.getCollList():
+            if(coll==collection_name):
+                return mydb.getOneData(collection_name,{"table_name":table_name})
+    return "Wrong DB name"
+
 def ItemstoJson(items):
     allData   = []
     for item in items:       
@@ -416,6 +432,9 @@ if __name__=="__main__":
     print("===all metadata list on a collection===")
     res = read_db_coll("bio","covid")
     pprint.pprint(res)
+    print("===one metadata on a collection===")
+    res = read_db_coll_table("traffic","seoul_subway","line2_euljiro3ga")
+    pprint.pprint(res)
     
     # update functions
     print("===========update===========")
@@ -428,3 +447,9 @@ if __name__=="__main__":
     # check functions
     print("===========check===========")
     print(check_field("bio","covid","seoul_infected_person","domain"))
+
+
+    # delete functions
+    print("===========delete===========")
+
+    
