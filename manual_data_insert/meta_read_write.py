@@ -41,7 +41,7 @@ mydb = MongoCRUD(ins.DB_INFO)
 unique_index_name = "table_name"
 exclude_db = ["config","local","admin"]
 include_db = ["air", "farm", "factory", "bio", "life", "energy", \
-            "weather", "city", "traffic", "culture", "economy", "INNER","OUTDOOR"]
+            "weather", "city", "traffic", "culture", "economy", "INNER","OUTDOOR", "test"]
 
 def location_with_table(data):
     data["location"]["syntax"] = data[unique_index_name]
@@ -308,6 +308,18 @@ def ItemstoJson(items):
         allData.append(item)
     return allData
 
+def delete_db_coll_table(db_name,collection_name,table_name):
+    """
+    delete a metadata in a collection on a db
+    
+    """
+    if db_name not in exclude_db and db_name in include_db:
+        mydb.switchDB(db_name)
+        for coll in mydb.getCollList():
+            if(coll==collection_name):
+                mydb.deleteOne(collection_name,{"table_name":table_name})
+                return "OK"
+    else: return "Wrong DB name"
 '''
 def make_all_unique_index(unique_index_col):
     db_list = mydb.getDBList()
@@ -430,7 +442,7 @@ if __name__=="__main__":
     res = read_coll_list("bio")
     pprint.pprint(res)
     print("===all metadata list on a collection===")
-    res = read_db_coll("bio","covid")
+    res = read_db_coll("test","test")
     pprint.pprint(res)
     print("===one metadata on a collection===")
     res = read_db_coll_table("traffic","seoul_subway","line2_euljiro3ga")
@@ -451,5 +463,6 @@ if __name__=="__main__":
 
     # delete functions
     print("===========delete===========")
+    res = delete_db_coll_table("test","test","test")
 
     
