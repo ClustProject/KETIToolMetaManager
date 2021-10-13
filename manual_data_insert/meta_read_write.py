@@ -23,15 +23,15 @@ from meta_generator.generator import MetaGenerator
 from mongo_management.mongo_crud import MongoCRUD
 from KETIPreDataIngestion.KETI_setting import influx_setting_KETI as ins
 
-with open(os.path.dirname(os.path.realpath(__file__))+'/config.json', 'r') as f:
-        config = json.load(f)
+# with open(os.path.dirname(os.path.realpath(__file__))+'/config.json', 'r') as f:
+#         config = json.load(f)
 
 # initialize MetaGenerator, InfluxDB, MongoDB as global values using config
-gener = MetaGenerator(config['GENERATOR_INFO'])
-# try:
-#     gener = MetaGenerator(ins.GENERATOR_INFO)
-# except AttributeError:
-#     gener = MetaGenerator()
+#gener = MetaGenerator(config['GENERATOR_INFO'])
+try:
+    gener = MetaGenerator(ins.GENERATOR_INFO)
+except AttributeError:
+    gener = MetaGenerator()
 #ins = config['INFLUX_DB_INFO']
 #influxdb = InfluxDBClient(host=ins["host_"], port=ins["port_"], username=ins["user_"], password=ins["pass_"])
 influxdb = InfluxDBClient(host=ins.host_, port=ins.port_, username=ins.user_, password=ins.pass_)
