@@ -320,6 +320,20 @@ def delete_db_coll_table(db_name,collection_name,table_name):
                 mydb.deleteOne(collection_name,{"table_name":table_name})
                 return "OK"
     else: return "Wrong DB name"
+
+def delete_one_key(db_name,collection_name,table_name,key):
+    """
+    delete a key(feature) in a table on a collection
+    
+    """
+    if db_name not in exclude_db and db_name in include_db:
+        mydb.switchDB(db_name)
+        for coll in mydb.getCollList():
+            if(coll==collection_name):
+                mydb.deleteOneKey(collection_name,table_name,key)
+                return "OK"
+    else : return "Wrong DB name"
+
 '''
 def make_all_unique_index(unique_index_col):
     db_list = mydb.getDBList()
@@ -464,5 +478,6 @@ if __name__=="__main__":
     # delete functions
     print("===========delete===========")
     res = delete_db_coll_table("test","test","test")
+    print(res)
 
     

@@ -140,6 +140,12 @@ class MongoCRUD:
     def deleteCollection(self, collection):
         return self.db[collection].drop()
 
+    def deleteOneKey(self, collection, table_name, key):
+        return self.db[collection].update({"table_name":table_name}, { '$unset' : { key : 1} })
+    
+    def deleteOneKeyAllTable(self, collection, key):
+        return self.db[collection].updateMany({}, { '$unset' : { key : 1} })
+
     # print
     def printData(self, db_name, collection_name):
         mydb.switchDB(db_name)

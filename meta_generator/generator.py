@@ -23,8 +23,7 @@ class MetaGenerator():
         if config is not None:
             self.api_key = config['MAP_API_KEY']
             self.gmaps = googlemaps.Client(key=self.api_key)
-            print(self.gmaps)
-    
+            
     def geocoding(self,address):
         geocode_result = self.gmaps.geocode((address), language='ko')
         return geocode_result[0]['geometry']['location']
