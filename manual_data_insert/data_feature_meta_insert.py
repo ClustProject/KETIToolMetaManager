@@ -100,6 +100,7 @@ class MetaDataUpdate():
 
     # Data Label Information Meta Create
     def data_label_information_meta(self):
+        # with open json file -> 위즈온텍 meta 저장 모듈이랑 연결
         if "indoor" in self.subdomain:
             with open(os.path.dirname(os.path.realpath(__file__))+"/[20211008] indoor_kweather.json", "r", encoding="utf-8") as f:
                 feature_json_file = json.load(f)
@@ -146,14 +147,15 @@ if __name__ == "__main__":
 
     import sys
     ##sys.path.append("/home/hwangjisoo/바탕화면/Clust/KETIPreDataIngestion/data_influx")
-    #sys.path.append("/home/hwangjisoo/바탕화면/Clust")
-    sys.path.append("C:\\Users\\wuk34\\바탕 화면\\Clust")
+    sys.path.append("/home/hwangjisoo/바탕화면/Clust")
+    print(sys.path)
+    #sys.path.append("C:\\Users\\wuk34\\바탕 화면\\Clust")
     from KETIPreDataIngestion.KETI_setting import influx_setting_KETI as ins
     from KETIPreDataIngestion.data_influx import ingestion_basic_dataset as ibd
     
     domain = "air"  # DataServer 에서 버튼 클릭으로 받는 값
     sub_domain = "indoor_경로당"
-    measurement = "ICL1L2000279"
+    measurement = "ICL1L2000234"
     
     test1 = ibd.BasicDatasetRead(ins, domain +"_"+sub_domain, measurement) # DataServer 에서 Meta 추가 코드에 넣어서 사용
     rud283 = test1.get_data()
@@ -175,18 +177,7 @@ if __name__ == "__main__":
     #pprint.pprint(res)
     print("===all metadata list on a collection===")
     res = mrw.read_db_coll(domain,sub_domain)
+    # pprint.pprint(res)
+    # pprint(res.type())
+    res = mrw.read_db_coll_table(domain, sub_domain, measurement)
     pprint.pprint(res)
-    pprint(res.type())
-
-'''
-    data: {
-					labels: data_js["data_meta"]["Feature"][feature]["label_information"]["label"],
-					datasets: [{
-						label: 'Label',
-						data: data_js["data_meta"]["Feature"][feature]["label_information"]["levelcount"],
-						borderColor: "rgba(255, 201, 14, 1)",
-						backgroundColor: "rgba(255, 201, 14, 0.5)",
-						fill: false
-					}]
-				}
-'''
