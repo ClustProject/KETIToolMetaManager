@@ -100,7 +100,7 @@ class MetaDataUpdate():
 
     # Data Label Information Meta Create
     def data_label_information_meta(self):
-        # with open json file -> 위즈온텍 meta 저장 모듈이랑 연결
+        # with open json file -> 위즈온텍 meta 저장 모듈이랑 연결 -> db_meta 에 저장해야함
         if "indoor" in self.subdomain:
             with open(os.path.dirname(os.path.realpath(__file__))+"/[20211008] indoor_kweather.json", "r", encoding="utf-8") as f:
                 feature_json_file = json.load(f)
