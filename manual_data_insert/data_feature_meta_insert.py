@@ -4,13 +4,14 @@ from pytimekr import pytimekr
 import meta_read_write as mrw
 import json
 import os
+import wiz_mongo_meta_api as wiz
 
 class MetaDataUpdate():
-    def __init__(self, data="all", domain="all", sub_domain="all", measurement="all"):
+    def __init__(self, domain="all", sub_domain="all", measurement="all" , data="all"):
         self.data = data
         self.domain = domain
         self.subdomain = sub_domain
-        self.msname = measurement
+        self.tablename = measurement
         self.data_cut = pd.DataFrame()
         if type(self.data) != str:
             self.columns = list(self.data.columns)
@@ -38,14 +39,14 @@ class MetaDataUpdate():
     # Data Feature Describe Insert
     def describe_meta_insert(self):
         des_dict = self.data_feature_describe_meta()
-        if (mrw.check_field(self.domain, self.subdomain, self.msname, "Feature")) & (mrw.check_field(self.domain, self.subdomain, self.msname, "Feature.{}".format(self.columns[0]))):
+        if (mrw.check_field(self.domain, self.subdomain, self.tablename, "Feature")) & (mrw.check_field(self.domain, self.subdomain, self.tablename, "Feature.{}".format(self.columns[0]))):
             for column in self.columns:
-                res = mrw.update_metadata(self.domain, self.subdomain, self.msname,{"Feature."+column+".describe":des_dict[column]})
+                res = mrw.update_metadata(self.domain, self.subdomain, self.tablename,{"Feature."+column+".describe":des_dict[column]})
             print("Success!")
         else:
             feature_dict = self.meta_json("describe", des_dict)
             print(feature_dict)
-            res = mrw.update_metadata(self.domain, self.subdomain, self.msname,feature_dict)
+            res = mrw.update_metadata(self.domain, self.subdomain, self.tablename,feature_dict)
             print("Success!")
         
     # Data Day Create    
@@ -98,86 +99,98 @@ class MetaDataUpdate():
         #return week_dict
         pass
 
-    # Data Label Information Meta Create
-    def data_label_information_meta(self):
-        # with open json file -> 위즈온텍 meta 저장 모듈이랑 연결 -> db_meta 에 저장해야함
+    # KWeather DataBase Info Meta Save
+    def kw_database_info_meta_save(self, mode):
         if "indoor" in self.subdomain:
             with open(os.path.dirname(os.path.realpath(__file__))+"/[20211008] indoor_kweather.json", "r", encoding="utf-8") as f:
                 feature_json_file = json.load(f)
         else:
             with open(os.path.dirname(os.path.realpath(__file__))+"/[20211008] outdoor_kweather.json", "r", encoding="utf-8") as f:
                 feature_json_file = json.load(f)
+        
+        feature_json_file["table_name"] = self.tablename
 
-        Feature_Information = {}
-        for feature in feature_json_file["Feature Information"]:
-            if "lebel_information" not in feature_json_file["Feature Information"][feature].keys():
-                #Feature_Information[feature] = {"label_information":{"There is not a Label Information"}}
-                Feature_Information[feature] = {"label_information":{"level":"There is not a Label Information"}}
+        wizapi = wiz.WizApiMongoMeta(self.domain, self.subdomain, self.tablename) # table name = db_information
+        wizapi.post_database_collection_document(mode, feature_json_file)
+
+    # Data Label Information Meta Create
+    def data_label_information_meta(self):
+        db_doc = wiz.WizApiMongoMeta(self.domain, self.subdomain, "db_information")
+        db_info_doc = db_doc.get_database_collection_document()
+    
+        feature_information = {}
+        for feature in db_info_doc["db_feature_information"]:
+            if "label_information" not in db_info_doc["db_feature_information"][feature].keys():
+                feature_information[feature] = {"label_information":{"labelcount":0}}
             else:
                 self.data_cut[feature] = pd.cut(x=self.data[feature], 
-                                     bins=feature_json_file["Feature Information"][feature]["lebel_information"]["level"],
-                                    labels=feature_json_file["Feature Information"][feature]["lebel_information"]["label"])
+                                     bins=db_info_doc["db_feature_information"][feature]["label_information"]["level"],
+                                    labels=db_info_doc["db_feature_information"][feature]["label_information"]["label"])
 
-                Feature_Information[feature] = {"label_information":
-                                               {"level":feature_json_file["Feature Information"][feature]["lebel_information"]["level"],
-                                                "label":feature_json_file["Feature Information"][feature]["lebel_information"]["label"], 
-                                                "levelcount":list(self.data_cut.groupby(feature).size())
-                                               }}
+                labelcount = dict(self.data_cut.groupby(feature).size())
+                label_dict = {}
+                label_ls = []
+                
+                for n in range(len(labelcount)):
+                    label_dict["value"] = int(labelcount[list(labelcount.keys())[n]])
+                    label_dict["name"] = list(labelcount.keys())[n]
+                    label_ls.append(label_dict.copy())
 
-        return Feature_Information
+                feature_information[feature] = {"label_information":{"labelcount":label_ls}}
 
-    # Data Label Information Meta Insert (by data_label_information_meta)
+        return feature_information
+
+    # Kweather Data Label Information Meta Save (by data_label_information_meta)
+    def data_label_information_meta_save(self, mode):
+        feature_information = self.data_label_information_meta()
+        table_doc = wiz.WizApiMongoMeta(self.domain, self.subdomain, self.tablename)
+        table_info_doc = table_doc.get_database_collection_document()
+        
+        table_info_doc["feature_information"] = feature_information
+
+        table_doc.post_database_collection_document(mode, table_info_doc)
+
+    # Other Data Label Information Meta Insert (by data_label_information_meta & 새롭게 Data Meta Document 를 생성할때 사용)
     def data_label_information_meta_insert(self):
-        Feature_Information = self.data_label_information_meta()
-        if (mrw.check_field(self.domain, self.subdomain, self.msname, "Feature")) & (mrw.check_field(self.domain, self.subdomain, self.msname, "Feature.{}".format(self.columns[0]))):
-            for column in self.columns:
-                res = mrw.update_metadata(self.domain, self.subdomain, self.msname,{"Feature."+column+".label_information":Feature_Information[column]})
-            print("Success!")
-        else:
-            feature_dict = self.meta_json("label_information", Feature_Information)
-            print(feature_dict)
-            res = mrw.update_metadata(self.domain, self.subdomain, self.msname, feature_dict)
-            print("Success!")
+        pass
 
 
 
 
 if __name__ == "__main__":
 
-
+    from pprint import pprint
     import sys
-    ##sys.path.append("/home/hwangjisoo/바탕화면/Clust/KETIPreDataIngestion/data_influx")
     sys.path.append("/home/hwangjisoo/바탕화면/Clust")
-    print(sys.path)
     #sys.path.append("C:\\Users\\wuk34\\바탕 화면\\Clust")
     from KETIPreDataIngestion.KETI_setting import influx_setting_KETI as ins
     from KETIPreDataIngestion.data_influx import ingestion_basic_dataset as ibd
     
+    ## ----------------------Kweather DataBase Info Save----------------------
+    # domain = "air"  
+    # sub_domain = "indoor_경로당"
+    # measurement = "db_information"
+
+    # rud_features = MetaDataUpdate(domain = domain, sub_domain=sub_domain, measurement=measurement)
+    # json = rud_features.kw_database_info_meta_save("insert")
+
+    ## ----------------------Kweather Label Count Create----------------------
+    # domain = "air" 
+    # sub_domain = "indoor_경로당"
+    # measurement = "ICL1L2000234"
+    
+    # data_by_influxdb = ibd.BasicDatasetRead(ins, domain +"_"+sub_domain, measurement) # DataServer 에서 Meta 추가 코드에 넣어서 사용
+    # data = data_by_influxdb.get_data()
+    # rud_features = MetaDataUpdate(domain = domain, sub_domain=sub_domain, measurement=measurement, data=data)
+    # feature_info = rud_features.data_label_information_meta()
+    # pprint(feature_info)
+
+    ## ----------------------Kweather Label Count - Document Save----------------------
     domain = "air"  # DataServer 에서 버튼 클릭으로 받는 값
     sub_domain = "indoor_경로당"
-    measurement = "ICL1L2000234"
+    measurement = "ICL1L2000236"
     
-    test1 = ibd.BasicDatasetRead(ins, domain +"_"+sub_domain, measurement) # DataServer 에서 Meta 추가 코드에 넣어서 사용
-    rud283 = test1.get_data()
-    rud_features = MetaDataUpdate(data = rud283, domain = domain, sub_domain=sub_domain, measurement=measurement)
-    ##des = rud_features.data_feature_describe_meta()
-    ##day = rud_features.data_weekday_weekend_meta()
-    #rud_features.describe_meta_insert()
-    #rud_features.data_label_information_meta_insert()
-
-    # read functions
-    import pprint
-
-    print("===========read===========")
-    print("===all db and collections===")
-    res = mrw.read_all_db_coll_list()
-    #pprint.pprint(res)
-    print("===all collection list on a db===")
-    res = mrw.read_coll_list(domain)
-    #pprint.pprint(res)
-    print("===all metadata list on a collection===")
-    res = mrw.read_db_coll(domain,sub_domain)
-    # pprint.pprint(res)
-    # pprint(res.type())
-    res = mrw.read_db_coll_table(domain, sub_domain, measurement)
-    pprint.pprint(res)
+    data_by_influxdb = ibd.BasicDatasetRead(ins, domain +"_"+sub_domain, measurement) # DataServer 에서 Meta 추가 코드에 넣어서 사용
+    data = data_by_influxdb.get_data()
+    meta = MetaDataUpdate(domain = domain, sub_domain=sub_domain, measurement=measurement, data=data)
+    meta.data_label_information_meta_save("save")

@@ -1,6 +1,6 @@
 {
-  "DB Information":"This is Kweather Data in 경로당",
-   "Feature Information":{
+   "db_information":"This is Kweather Data",
+   "db_feature_information":{
       "in_pm01_raw":{
          "description":"Original particulate matter 01",
          "tag":[
@@ -21,7 +21,7 @@
             "원본값",
             "환경 오염 물질"
          ],
-         "lebel_information":{
+         "label_information":{
             "level":[
                0,
                15,
@@ -48,7 +48,7 @@
             "원본값",
             "환경 오염 물질"
          ],
-         "lebel_information":{
+         "label_information":{
             "level":[
                0,
                30,
@@ -74,7 +74,7 @@
             "Temperature",
             "온도"
          ],
-         "lebel_information":{
+         "label_information":{
             "level":[
                -40,
                14,
@@ -106,7 +106,7 @@
             "Humidity",
             "습도"
          ],
-         "lebel_information":{
+         "label_information":{
             "level":[
                0,
                20,
@@ -138,7 +138,7 @@
             "이산화탄소",
             "환경 오염 물질"
          ],
-         "lebel_information":{
+         "label_information":{
             "level":[
                0,
                500,
@@ -164,7 +164,7 @@
             "휘발성유기화합물",
             "환경 오염 물질"
          ],
-         "lebel_information":{
+         "label_information":{
             "level":[
                0,
                200,
@@ -189,7 +189,7 @@
             "indoor",
             "소음"
          ],
-         "lebel_information":{
+         "label_information":{
             "level":[
                35,
                40,
@@ -220,7 +220,7 @@
             "보정값",
             "환경 오염 물질"
          ],
-         "lebel_information":{
+         "label_information":{
             "level":[
                0,
                30,
@@ -247,7 +247,7 @@
             "보정값",
             "환경 오염 물질"
          ],
-         "lebel_information":{
+         "label_information":{
             "level":[
                0,
                15,
@@ -285,7 +285,7 @@
             "통합실내쾌적지수",
             "미세먼지"
          ],
-         "lebel_information":{
+         "label_information":{
             "level":[
                0,
                50,
@@ -310,7 +310,7 @@
             "통합실내쾌적지수",
             "초미세먼지"
          ],
-         "lebel_information":{
+         "label_information":{
             "level":[
                0,
                50,
@@ -335,7 +335,7 @@
             "통합실내쾌적지수",
             "이산화탄소"
          ],
-         "lebel_information":{
+         "label_information":{
             "level":[
                0,
                50,
@@ -360,7 +360,7 @@
             "통합실내쾌적지수",
             "휘발성유기화합물"
          ],
-         "lebel_information":{
+         "label_information":{
             "level":[
                0,
                50,
@@ -385,7 +385,7 @@
             "통합실내쾌적지수",
             "온도"
          ],
-         "lebel_information":{
+         "label_information":{
             "level":[
                0,
                50,
@@ -410,7 +410,7 @@
             "통합실내쾌적지수",
             "습도"
          ],
-         "lebel_information":{
+         "label_information":{
             "level":[
                0,
                50,
@@ -435,7 +435,7 @@
             "통합실내쾌적지수",
             "소음"
          ],
-         "lebel_information":{
+         "label_information":{
             "level":[
                0,
                50,
@@ -459,7 +459,7 @@
             "indoor",
             "통합실내쾌적지수"
          ],
-         "lebel_information":{
+         "label_information":{
             "level":[
                0,
                50,
@@ -483,7 +483,7 @@
             "indoor",
             "통합실내공기오염지수"
          ],
-         "lebel_information":{
+         "label_information":{
             "level":[
                0,
                50,
