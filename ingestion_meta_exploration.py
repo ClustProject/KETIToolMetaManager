@@ -10,26 +10,26 @@ def get_meta_table(db_info):
          'weather', 'city', 'traffic', 'culture', 'economy','INNER','OUTDOOR']
     mydb = MongoCRUD(db_info)
     db_list = mydb.getDBList()
-    #print(db_list)
     exploration_df = pd.DataFrame()
 
     for db_name in db_list :
         if db_name in main_domian_list:
             mydb.switchDB(db_name)
             colls = mydb.getCollList()
-            #print(colls)
             for coll in colls:
                 items = mydb.getManyData(coll)
                 for item in items:
-                    influx_db_name = item['domain']+"_"+item["sub_domain"]
-                    measurement_name = item['table_name']
-                    start_time = item['start_time']
-                    end_time = item['end_time']
-                    frequency = item['frequency']
-                    number_of_columns = item['number_of_columns']
+                    try:
+                        influx_db_name = item['domain']+"_"+item["sub_domain"]
+                        measurement_name = item['table_name']
+                        start_time = item['start_time']
+                        end_time = item['end_time']
+                        frequency = item['frequency']
+                        number_of_columns = item['number_of_columns']
+                        exploration_df = exploration_df.append([[influx_db_name, measurement_name, start_time, end_time, frequency, number_of_columns]])
+                    except KeyError as e:
+                        print("KeyError:", e)
                     
-                    exploration_df = exploration_df.append([[influx_db_name, measurement_name, start_time, end_time, frequency, number_of_columns]])
-    
     exploration_df.columns = ['db_name', 'measurement_name', 'start_time', 'end_time', 'frequency', 'number_of_columns']
     exploration_df.reset_index(drop=True, inplace = True)
     exploration_js = exploration_df.to_json(orient = 'records')
