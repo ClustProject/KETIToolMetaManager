@@ -1,10 +1,14 @@
 import pandas as pd
 import datetime
 from pytimekr import pytimekr
-import meta_read_write as mrw
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
+sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))))
+from KETIToolMetaManager.manual_data_insert import meta_read_write as mrw
 import json
 import os
-import wiz_mongo_meta_api as wiz
+from KETIToolMetaManager.manual_data_insert import wiz_mongo_meta_api as wiz
 
 class MetaDataUpdate():
     def __init__(self, domain="all", sub_domain="all", measurement="all" , data="all"):
@@ -99,8 +103,8 @@ class MetaDataUpdate():
         #return week_dict
         pass
 
-    # KWeather DataBase Info Meta Save
-    def kw_database_info_meta_save(self, mode):
+    # KWeather DataBase Info Meta Insert or Save
+    def kw_database_info_meta_insert_save(self, mode):
         if "indoor" in self.subdomain:
             with open(os.path.dirname(os.path.realpath(__file__))+"/[20211008] indoor_kweather.json", "r", encoding="utf-8") as f:
                 feature_json_file = json.load(f)
@@ -108,9 +112,9 @@ class MetaDataUpdate():
             with open(os.path.dirname(os.path.realpath(__file__))+"/[20211008] outdoor_kweather.json", "r", encoding="utf-8") as f:
                 feature_json_file = json.load(f)
         
-        feature_json_file["table_name"] = self.tablename
+        feature_json_file["table_name"] = "db_information"
 
-        wizapi = wiz.WizApiMongoMeta(self.domain, self.subdomain, self.tablename) # table name = db_information
+        wizapi = wiz.WizApiMongoMeta(self.domain, self.subdomain, "db_information") # table name = db_information
         wizapi.post_database_collection_document(mode, feature_json_file)
 
     # Data Label Information Meta Create
@@ -140,21 +144,46 @@ class MetaDataUpdate():
 
         return feature_information
 
-    # Kweather Data Label Information Meta Save (by data_label_information_meta)
-    def data_label_information_meta_save(self, mode):
+    # Data Label Information Meta Save or Update (by data_label_information_meta)
+    def data_label_information_meta_save_update(self, mode):
         feature_information = self.data_label_information_meta()
         table_doc = wiz.WizApiMongoMeta(self.domain, self.subdomain, self.tablename)
-        table_info_doc = table_doc.get_database_collection_document()
         
-        table_info_doc["feature_information"] = feature_information
+        if mode == "save":
+            table_info_doc = table_doc.get_database_collection_document()
+            table_info_doc["feature_information"] = feature_information
+            table_doc.post_database_collection_document(mode, table_info_doc)
 
-        table_doc.post_database_collection_document(mode, table_info_doc)
+        elif mode == "update":
+            pass # 위즈온텍 분당 mongodb에 label information 추가할때 쓰기
 
-    # Other Data Label Information Meta Insert (by data_label_information_meta & 새롭게 Data Meta Document 를 생성할때 사용)
-    def data_label_information_meta_insert(self):
-        pass
+        else:
+            print("The mode is incorrect.")
+            
+
+    # Data Label Information Meta Insert (by data_label_information_meta & 새롭게 Data Meta Document 를 생성할때 사용)
+    def data_label_information_meta_insert(self, meta):
+        feature_information = self.data_label_information_meta()
+        table_doc = wiz.WizApiMongoMeta(self.domain, self.subdomain, self.tablename)
+
+        meta["feature_information"] = feature_information
+        table_doc.post_database_collection_document("insert", meta)
 
 
+    # Meta Save or Update - Basic Method
+    def data_meta_basic_save_update_insert(self, mode, meta, meta_name=None):
+        table_doc = wiz.WizApiMongoMeta(self.domain, self.subdomain, self.tablename)
+        
+        if mode == "save":
+            table_info_doc = table_doc.get_database_collection_document()
+            table_info_doc[meta_name] = meta
+            table_doc.post_database_collection_document(mode, table_info_doc)
+
+        elif (mode == "update") | (mode == "insert"):
+            table_doc.post_database_collection_document(mode, meta)
+
+        else:
+            print("The mode is incorrect.")
 
 
 if __name__ == "__main__":
@@ -164,7 +193,7 @@ if __name__ == "__main__":
     sys.path.append("/home/hwangjisoo/바탕화면/Clust")
     #sys.path.append("C:\\Users\\wuk34\\바탕 화면\\Clust")
     from KETIPreDataIngestion.KETI_setting import influx_setting_KETI as ins
-    from KETIPreDataIngestion.data_influx import ingestion_basic_dataset as ibd
+    from KETIPreDataIngestion.data_influx import influx_Client
     
     ## ----------------------Kweather DataBase Info Save----------------------
     # domain = "air"  
@@ -190,7 +219,7 @@ if __name__ == "__main__":
     sub_domain = "indoor_경로당"
     measurement = "ICL1L2000236"
     
-    data_by_influxdb = ibd.BasicDatasetRead(ins, domain +"_"+sub_domain, measurement) # DataServer 에서 Meta 추가 코드에 넣어서 사용
-    data = data_by_influxdb.get_data()
+    data_by_influxdb = influx_Client.influxClient(ins) # DataServer 에서 Meta 추가 코드에 넣어서 사용
+    data = data_by_influxdb.get_data(domain +"_"+sub_domain, measurement)
     meta = MetaDataUpdate(domain = domain, sub_domain=sub_domain, measurement=measurement, data=data)
     meta.data_label_information_meta_save("save")

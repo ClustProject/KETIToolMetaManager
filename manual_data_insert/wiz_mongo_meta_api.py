@@ -28,8 +28,6 @@ class WizApiMongoMeta():
 
     # post - database/collection/document insert, save
     def post_database_collection_document(self, mode, data):
-        print(mode)
-        print(data)
 
         url = "http://localhost:5000/rest/1.0/mongodb/document/{}/{}?mode={}".format(self.domain, self.subdomain, mode)
         headers = {'Content-Type': 'application/json'}
