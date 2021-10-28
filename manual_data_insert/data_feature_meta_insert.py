@@ -113,6 +113,8 @@ class MetaDataUpdate():
                 feature_json_file = json.load(f)
         
         feature_json_file["table_name"] = "db_information"
+        feature_json_file["domain"] = self.domain
+        feature_json_file["sub_domain"] = self.subdomain
 
         wizapi = wiz.WizApiMongoMeta(self.domain, self.subdomain, "db_information") # table name = db_information
         wizapi.post_database_collection_document(mode, feature_json_file)
@@ -162,12 +164,12 @@ class MetaDataUpdate():
             
 
     # Data Label Information Meta Insert (by data_label_information_meta & 새롭게 Data Meta Document 를 생성할때 사용)
-    def data_label_information_meta_insert(self, meta):
+    def data_label_information_meta_insert(self, meta, mode = "insert"):
         feature_information = self.data_label_information_meta()
         table_doc = wiz.WizApiMongoMeta(self.domain, self.subdomain, self.tablename)
 
         meta["feature_information"] = feature_information
-        table_doc.post_database_collection_document("insert", meta)
+        table_doc.post_database_collection_document(mode, meta)
 
 
     # Meta Save or Update - Basic Method
