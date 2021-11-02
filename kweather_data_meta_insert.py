@@ -7,10 +7,12 @@ from KETIPreDataIngestion.KETI_setting import influx_setting_KETI as ins
 
 def kweather_data_read(sub_domain):
     count = 0
-    dirname = "C:\\Users\\wuk34\\바탕 화면\\케이웨더 데이터 2차\\{}".format(sub_domain)
-    #dirname = "C:\\Users\\82102\\Desktop\\케이웨더 데이터 2차\\{}".format(sub_domain)
+    #dirname = "C:\\Users\\wuk34\\바탕 화면\\케이웨더 데이터 2차\\{}".format(sub_domain) # Indoor
+    #dirname = "C:\\Users\\82102\\Desktop\\케이웨더 데이터 2차\\{}".format(sub_domain) # Indoor
+    dirname = "C:\\Users\\82102\\Desktop\\케이웨더 데이터 2차\\SDOT\\{}".format(sub_domain) # Outdoor
     domain = "air"
-    subdomain = "indoor_{}".format(sub_domain)
+    #subdomain = "outdoor_{}".format(sub_domain)
+    subdomain = "outdoor"
     filenames = os.listdir(dirname)
 
     # DB Meta Insert
@@ -20,6 +22,8 @@ def kweather_data_read(sub_domain):
     for filename in filenames:
         table_name = filename.split(".")[0]
         data_by_influxdb = influx_Client.influxClient(ins)
+
+
         data = data_by_influxdb.get_data(domain+"_"+subdomain, table_name)
 
         meta_insert = dfmi.MetaDataUpdate(domain, subdomain, table_name, data)
@@ -33,12 +37,12 @@ def kweather_data_read(sub_domain):
                         "source_agency": "air korea", 
                         "source": "None", 
                         "source_type": "csv", 
-                        "tag": ["wheather", "indoor", "air"], 
+                        "tag": ["weather", "outdoor", "air"], 
                         "frequency": "0 days 00:01:00"
                         }
         meta_json_file["sub_domain"] = subdomain
         meta_json_file["table_name"] = table_name
-        meta_json_file["tag"].append(subdomain.split("_")[1])
+        #meta_json_file["tag"].append(subdomain.split("_")[1])
 
         meta_insert.data_label_information_meta_insert(meta_json_file, "save") # insert 로 입력 시 mode = "insert", save 입력시 mode = "save"
 
@@ -51,4 +55,14 @@ def kweather_data_read(sub_domain):
 
 if __name__ == "__main__":
 
-    kweather_data_read("초등학교")
+    kweather_data_read("3")
+    # SDOT - air_outdoor 입력시 sub_domain 변경!!!!!!
+
+'''
+1. Indoor -> Outdoor 변경 시 변경할 것
+    - dirname 입력방식
+    - sub_domain (입력 파라미터)
+    - subdomain (저장되는 sub domain 명칭)
+    - meta_json_file 의 tag 명칭
+    - meta_json_file["tag"].append(subdomain.split("_")[1]) : air_outdoor 일 경우 이 부분은 주석 처리
+'''
