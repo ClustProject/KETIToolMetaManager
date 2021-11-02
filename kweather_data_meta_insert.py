@@ -8,11 +8,12 @@ from KETIPreDataIngestion.KETI_setting import influx_setting_KETI as ins
 def kweather_data_read(sub_domain):
     count = 0
     #dirname = "C:\\Users\\wuk34\\바탕 화면\\케이웨더 데이터 2차\\{}".format(sub_domain) # Indoor
-    #dirname = "C:\\Users\\82102\\Desktop\\케이웨더 데이터 2차\\{}".format(sub_domain) # Indoor
-    dirname = "C:\\Users\\82102\\Desktop\\케이웨더 데이터 2차\\SDOT\\{}".format(sub_domain) # Outdoor
+    dirname = "C:\\Users\\82102\\Desktop\\케이웨더 데이터 2차\\{}".format(sub_domain) # Indoor
+    #dirname = "C:\\Users\\82102\\Desktop\\케이웨더 데이터 2차\\SDOT\\{}".format(sub_domain) # Outdoor
+    #dirname = "C:\\Users\\82102\\Desktop\\케이웨더 데이터 2차\\에어코리아\\2" # Outdoor
     domain = "air"
-    #subdomain = "outdoor_{}".format(sub_domain)
-    subdomain = "outdoor"
+    subdomain = "indoor_{}".format(sub_domain)
+    #subdomain = "outdoor"
     filenames = os.listdir(dirname)
 
     # DB Meta Insert
@@ -37,12 +38,17 @@ def kweather_data_read(sub_domain):
                         "source_agency": "air korea", 
                         "source": "None", 
                         "source_type": "csv", 
-                        "tag": ["weather", "outdoor", "air"], 
+                        "tag": ["weather", "indoor", "air"], 
                         "frequency": "0 days 00:01:00"
                         }
+
+
+
+
+
         meta_json_file["sub_domain"] = subdomain
         meta_json_file["table_name"] = table_name
-        #meta_json_file["tag"].append(subdomain.split("_")[1])
+        meta_json_file["tag"].append(subdomain.split("_")[1])
 
         meta_insert.data_label_information_meta_insert(meta_json_file, "save") # insert 로 입력 시 mode = "insert", save 입력시 mode = "save"
 
@@ -55,7 +61,7 @@ def kweather_data_read(sub_domain):
 
 if __name__ == "__main__":
 
-    kweather_data_read("3")
+    kweather_data_read("고등학교")
     # SDOT - air_outdoor 입력시 sub_domain 변경!!!!!!
 
 '''
