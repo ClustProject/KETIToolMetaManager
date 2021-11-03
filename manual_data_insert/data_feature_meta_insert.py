@@ -217,11 +217,38 @@ if __name__ == "__main__":
     # pprint(feature_info)
 
     ## ----------------------Kweather Label Count - Document Save----------------------
-    domain = "air"  # DataServer 에서 버튼 클릭으로 받는 값
-    sub_domain = "indoor_경로당"
-    measurement = "ICL1L2000236"
+    # domain = "air"  # DataServer 에서 버튼 클릭으로 받는 값
+    # sub_domain = "indoor_경로당"
+    # measurement = "ICL1L2000236"
     
-    data_by_influxdb = influx_Client.influxClient(ins) # DataServer 에서 Meta 추가 코드에 넣어서 사용
-    data = data_by_influxdb.get_data(domain +"_"+sub_domain, measurement)
-    meta = MetaDataUpdate(domain = domain, sub_domain=sub_domain, measurement=measurement, data=data)
-    meta.data_label_information_meta_save("save")
+    # data_by_influxdb = influx_Client.influxClient(ins) # DataServer 에서 Meta 추가 코드에 넣어서 사용
+    # data = data_by_influxdb.get_data(domain +"_"+sub_domain, measurement)
+    # meta = MetaDataUpdate(domain = domain, sub_domain=sub_domain, measurement=measurement, data=data)
+    # meta.data_label_information_meta_save("save")
+
+    ## ----------------------Meta Json - Document Save----------------------
+    domain = "farm"
+    sub_domain = "outdoor_weather"
+    measurement = "seoul" # "HS2", "KDS1", "KDS2"
+
+    meta_json =  {
+                "table_name": "seoul",
+                "location": {
+                "lat": 37.5711068,
+                "lng": 126.966437,
+                "syntax": "서울특별시 종로구 송월길 52 서울기상관측소"
+                },
+                "description": "This is weater data ",
+                "source_agency": "AirKorea",
+                "source": "Server",
+                "source_type": "API",
+                "tag": [
+                "weather",
+                "outdoor",
+                "seoul"
+                ],
+                "frequency": "0 days 01:00:00"
+            }
+
+    meta = MetaDataUpdate(domain = domain, sub_domain=sub_domain, measurement=measurement)
+    meta.data_meta_basic_save_update_insert("update", meta_json)
