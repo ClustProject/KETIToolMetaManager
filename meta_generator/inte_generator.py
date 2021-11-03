@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 from pandas.tseries.frequencies import to_offset
 
+#TODO JW 수정하거나 없애야함
 class IntegrationGenerator():
     def __init__(self,data, freq_check_length = 5) -> None:
         self.dataFrame = data
@@ -70,18 +71,6 @@ class IntegrationGenerator():
         duration['end_time'] = str(min(end_list))
         return duration
     
-    def get_df_freq_sec(self,data):
-        freq = to_offset(pd.infer_freq(data[:self.freq_check_length].index))
-        freq_sec = pd.to_timedelta(freq, errors='coerce').total_seconds()
-        return freq_sec
-
-    def get_df_freq_timedelta(self,data):
-        freq = to_offset(pd.infer_freq(data[:self.freq_check_length].index))
-        freq_timedelta = pd.to_timedelta(freq, errors='coerce')
-        return freq_timedelta
-    
-
-        
     
 
 
