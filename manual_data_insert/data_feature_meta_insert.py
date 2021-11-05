@@ -9,17 +9,30 @@ from KETIToolMetaManager.manual_data_insert import meta_read_write as mrw
 import json
 import os
 from KETIToolMetaManager.manual_data_insert import wiz_mongo_meta_api as wiz
+from KETIPreDataIngestion.KETI_setting import influx_setting_KETI as ins
+from KETIPreDataIngestion.data_influx import influx_Client
 
 class MetaDataUpdate():
-    def __init__(self, domain="all", sub_domain="all", measurement="all" , data="all"):
-        self.data = data
+    def __init__(self, domain="all", sub_domain="all", measurement="all" , data=None):
+        self.data_nopreprocessing = data
         self.domain = domain
         self.subdomain = sub_domain
         self.tablename = measurement
         self.data_cut = pd.DataFrame()
-        if type(self.data) != str:
+        
+        if self.data_nopreprocessing != "all":
+            data_client = influx_Client.influxClient(ins)
+            self.data_nopreprocessing = data_client.get_data(self.domain+"_"+self.subdomain, self.tablename)
+
+            # preprocessing
+            from KETIPrePartialDataPreprocessing import data_preprocessing
+            refine_param = {'removeDuplication':True, 'staticFrequency':True} 
+            outlier_param= {'certainOutlierToNaN':True, 'uncertainOutlierToNaN':True, 'data_type':'air'}
+            imputation_param ={ "imputation_method":[{"min":0,"max":5,"method":"linear"}],"totalNanLimit":30}
+            self.data = data_preprocessing.ByAllMethod(self.data_nopreprocessing, refine_param, outlier_param, imputation_param)["imputed_data"]
+
             self.columns = list(self.data.columns)
-    
+
     # Data Insert all
     def data_meta_all(self):
         # 한개씩 DB-MS 뽑기 -> keti setting & ibd.BasicDatasetRead(ins, "air_indoor_경로당", "ICL1L2000281")
@@ -227,28 +240,36 @@ if __name__ == "__main__":
     # meta.data_label_information_meta_save("save")
 
     ## ----------------------Meta Json - Document Save----------------------
-    domain = "farm"
-    sub_domain = "outdoor_weather"
-    measurement = "seoul" # "HS2", "KDS1", "KDS2"
+    # domain = "farm"
+    # sub_domain = "outdoor_weather"
+    # measurement = "seoul" # "HS2", "KDS1", "KDS2"
 
-    meta_json =  {
-                "table_name": "seoul",
-                "location": {
-                "lat": 37.5711068,
-                "lng": 126.966437,
-                "syntax": "서울특별시 종로구 송월길 52 서울기상관측소"
-                },
-                "description": "This is weater data ",
-                "source_agency": "AirKorea",
-                "source": "Server",
-                "source_type": "API",
-                "tag": [
-                "weather",
-                "outdoor",
-                "seoul"
-                ],
-                "frequency": "0 days 01:00:00"
-            }
+    # meta_json =  {
+    #             "table_name": "seoul",
+    #             "location": {
+    #             "lat": 37.5711068,
+    #             "lng": 126.966437,
+    #             "syntax": "서울특별시 종로구 송월길 52 서울기상관측소"
+    #             },
+    #             "description": "This is weater data ",
+    #             "source_agency": "AirKorea",
+    #             "source": "Server",
+    #             "source_type": "API",
+    #             "tag": [
+    #             "weather",
+    #             "outdoor",
+    #             "seoul"
+    #             ],
+    #             "frequency": "0 days 01:00:00"
+    #         }
 
-    meta = MetaDataUpdate(domain = domain, sub_domain=sub_domain, measurement=measurement)
-    meta.data_meta_basic_save_update_insert("update", meta_json)
+    # meta = MetaDataUpdate(domain = domain, sub_domain=sub_domain, measurement=measurement)
+    # meta.data_meta_basic_save_update_insert("update", meta_json)
+
+    ## ----------------------Describe Dict Create----------------------
+    domain="air"
+    subdomain="indoor_경로당"
+    ms = "ICL1L2000283"
+    test = MetaDataUpdate(domain, subdomain, ms)
+    t = test.data_feature_describe_meta()
+    print(t)
