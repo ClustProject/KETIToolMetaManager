@@ -12,7 +12,6 @@ function names
 - update* : modify or append infomation of some metadata
 - read* : read data from mongodb
 """
-from pprint import pp
 import sys,os
 # add a directory path of this file in python's path
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
