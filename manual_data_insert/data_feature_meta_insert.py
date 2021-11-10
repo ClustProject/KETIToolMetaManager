@@ -40,73 +40,75 @@ class MetaDataUpdate():
         pass
     
     # Meta Data Create (통)
-    def meta_json(self, key1, meta):
+    def meta_json(self, key1, key2, meta): 
         column_dict={}
         feature_dict={}
         for column in self.columns:
-            column_dict[column] = {key1:meta[column]}
-        feature_dict["Feature"] = column_dict
-        return feature_dict
+            feature_dict[key1] = {key2:meta[column]}
+            column_dict[column] = feature_dict
+        return column_dict
 
     # Data Feature Describe Create
-    def data_feature_describe_meta(self):
+    def data_feature_describe_create(self):
         describe_dict = self.data.describe().to_dict()
         return describe_dict
 
     # Data Feature Describe Insert
-    def describe_meta_insert(self):
-        des_dict = self.data_feature_describe_meta()
-        if (mrw.check_field(self.domain, self.subdomain, self.tablename, "Feature")) & (mrw.check_field(self.domain, self.subdomain, self.tablename, "Feature.{}".format(self.columns[0]))):
-            for column in self.columns:
-                res = mrw.update_metadata(self.domain, self.subdomain, self.tablename,{"Feature."+column+".describe":des_dict[column]})
-            print("Success!")
-        else:
-            feature_dict = self.meta_json("describe", des_dict)
-            print(feature_dict)
-            res = mrw.update_metadata(self.domain, self.subdomain, self.tablename,feature_dict)
-            print("Success!")
+    def describe_meta(self):
+        print(self.data)
+        des_dict = self.data_feature_describe_create()
+        key1 = "statistics"
+        key2 = "average"
+        feature_dict = self.meta_json(key1, key2, des_dict)
+        final_dict = {"table_name":self.tablename, "feature_information":feature_dict}
+        #self.data_meta_basic_save_update_insert(mode, final_dict)
+        return final_dict
         
     # Data Day Create    
-    def transform_day(self):
+    def transform_day_create(self):
         days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
         day_list = [days[x] for x in self.data.index.weekday]
         self.data["Day"] = day_list
         return self.data
     
     # Data Public Holiday Create
-    def transform_public_holiday(self):
+    def transform_holiday_create(self):
+        self.data = self.transform_day_create()
         years = range(self.data.index.min().year, self.data.index.max().year+1)
         holi_list = []
         for year in years:
             holi_list += [x.strftime("%Y-%m-%d") for x in pytimekr.holidays(year)]
-        holidays = ["Holiday" if x.strftime("%Y-%m-%d") in holi_list else "Weekday" for x in self.data.index]
+        
+        weekend_list = set([x.strftime("%Y-%m-%d") for x in d[(d.Day == "Sat") | (d.Day == "Sun")].index.tz_convert(None)])
+        final_holi_list = holi_list + [x for x in weekend_list]
+
+        holidays = ["holiday" if x.strftime("%Y-%m-%d") in final_holi_list else "notHoliday" for x in self.data.index]
         self.data["HoliDay"] = holidays
 
         return self.data
-    
-    # Data Holiday Create
-    def transform_holiday(self):
-        self.data = self.transform_day()
-        self.data = self.transform_public_holiday()
-        
-        sat_list = self.data.index[self.data.Day == "Sat"].tolist()
-        sun_list = self.data.index[self.data.Day == "Sun"].tolist()
-        
-        pd.set_option('mode.chained_assignment',  None)
-        
-        for sat in sat_list:
-            self.data["HoliDay"][sat] = "Holiday"
-        for sun in sun_list:
-            self.data["HoliDay"][sun] = "Holiday"
-        
-        return self.data
+       
+    def data_holiday_notholiday_meta(self, meta = None):
+        self.data = self.transform_holiday_create()
+        holi_dict = self.data.groupby("HoliDay").mean().to_dict()
 
-    # Data Weekend, Weekday Meta Create (by Holiday column - transform_holiday)        
-    def data_weekday_weekend_meta(self):
-        self.data = self.transform_holiday()
-        week_dict = self.data.groupby("HoliDay").mean().to_dict()
+        if meta != None:
+            pass
+        else:
+            feature_dict = {}
+            for n in holi_dict:
+                x = list(holi_dict[n].keys())[0]
+                y = list(holi_dict[n].keys())[1]
+                feature_dict[n] ={"statistics":{
+                    "day_related_statistics":{
+                        "holiday":{
+                            "label":[x, y],
+                            "average":[holi_dict[n][x], holi_dict[n][y]]}
+                    }}}
+            final_dict = {"table_name":self.tablename, "feature_information":feature_dict}
+        print(final_dict)
         
-        return week_dict
+        return final_dict # 독립적으로 함수를 쓸땐 삭제요망
+        #self.data_meta_basic_save_update_insert(mode, final_dict) # 독립적으로 함수를 쓸때 사용
     
     # Data WorkingTime Meta Create 
     def data_workingtime_othertime_meta(self):
@@ -268,8 +270,36 @@ if __name__ == "__main__":
 
     ## ----------------------Describe Dict Create----------------------
     domain="air"
-    subdomain="indoor_경로당"
-    ms = "ICL1L2000283"
-    test = MetaDataUpdate(domain, subdomain, ms)
-    t = test.data_feature_describe_meta()
-    print(t)
+    subdomain="indoor_초등학교"
+ #   ms = "ICL1L2000283"
+    dirname = "/home/hwangjisoo/바탕화면/케이웨더 데이터 2차/{}/{}".format(subdomain.split("_")[0], subdomain.split("_")[1])
+    mss = os.listdir(dirname)
+    count = 0
+    for ms in mss:
+        ms = ms.split(".")[0]
+        print(ms)
+        average = MetaDataUpdate(domain, subdomain, ms)
+        average.describe_meta_insert("update")
+        count+=1
+        print(count)
+
+        """
+            # Data Holiday Create
+            # def transform_holiday(self):
+            #     self.data = self.transform_day()
+            #     self.data = self.transform_public_holiday()
+                
+            #     sat_list = self.data.index[self.data.Day == "Sat"].tolist()
+            #     sun_list = self.data.index[self.data.Day == "Sun"].tolist()
+                
+            #     pd.set_option('mode.chained_assignment',  None)
+                
+            #     for sat in sat_list:
+            #         self.data["HoliDay"][sat] = "holiday"
+            #     for sun in sun_list:
+            #         self.data["HoliDay"][sun] = "holiday"
+                
+            #     return self.data
+
+            # Data Weekend, Weekday Meta Create & Insert (by Holiday column - transform_holiday)     
+        """
