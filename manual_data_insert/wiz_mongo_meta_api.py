@@ -37,11 +37,14 @@ class WizApiMongoMeta():
 
 if __name__ == "__main__":
     from pprint import pprint
-    test = WizApiMongoMeta("air", "indoor_경로당", "db_information")
+    test = WizApiMongoMeta("air", "indoor_초등학교", "ICW0W2000031")
     doc = test.get_database_collection_document()
     
-    print("======DataBase Collection Document======")
+    print("======Data Collection Document======")
     pprint(doc)
+    
+    # print("======DataBase Collection Document======")
+    # pprint(doc)
     #test.post_database_collection_document("insert")
 
     '''
