@@ -44,13 +44,26 @@ class MetaDataUpdate():
     def data_describe_holiday_working_meta_insert(self, mode):
         """
         데이터의 통계적 값과 휴일, 일하는 시간에 따른 분석 결과를 한번에 Meta 데이터로 생성하는 함수
+
+        - 데이터 시간 정보의 주기가 1시간 이하일 때 사용
         """
         describe_meta = self.data_describe_meta()
         holiday_meta = self.data_holiday_notholiday_meta(describe_meta)
         working_meta = self.data_working_notworking_meta(holiday_meta)
 
         self.data_meta_basic_save_update_insert(mode, working_meta)
-        #return working_meta
+
+    def data_describe_holiday_meta_insert(self, mode):
+        """
+        데이터의 통계적 값과 휴일에 따른 분석 결과를 한번에 Meta 데이터로 생성하는 함수
+
+        - 데이터 시간 정보의 주기가 일별일 때 사용
+        """
+        describe_meta = self.data_describe_meta()
+        holiday_meta = self.data_holiday_notholiday_meta(describe_meta)
+
+        self.data_meta_basic_save_update_insert(mode, holiday_meta)
+
 
     # Data Feature Describe Create
     def data_feature_describe_create(self):
@@ -134,14 +147,27 @@ class MetaDataUpdate():
         
         holi_feature_dict = {}
         for n in holi_dict: # 먼저 holiday info dictionary를 만들어 둔다.
-            x = list(holi_dict[n].keys())[0]
-            y = list(holi_dict[n].keys())[1]
-            holi_feature_dict[n] ={"statistics":{
+            if len(holi_dict[n].keys()) == 2:
+                x = list(holi_dict[n].keys())[0]
+                y = list(holi_dict[n].keys())[1]
+                holi_feature_dict[n] ={"statistics":{
                 "day_related_statistics":{
                     "holiday":{
                         "label":[x, y],
                         "average":[holi_dict[n][x], holi_dict[n][y]]}
                     }}}
+            else:
+                x = list(holi_dict[n].keys())[0]
+                if list(holi_dict[n].keys())[0] == "notHoliday":
+                    y = "holiday"
+                else:
+                    y = "notHoliday"
+                holi_feature_dict[n] ={"statistics":{
+                    "day_related_statistics":{
+                        "holiday":{
+                            "label":[x, y],
+                            "average":[holi_dict[n][x], 0]}
+                        }}}
 
         if meta_holi != None:
             for n in holi_feature_dict:
@@ -158,6 +184,7 @@ class MetaDataUpdate():
 
         - 데이터에 휴일 정보가 없다면 휴일을 생성하는 transform_holiday_create 함수를 활용하여 휴일정보를 생성
         - 입력 working_start, working_end 범위 외의 시간과 휴일을 일하지 않는 시간으로 정의
+        - 데이터 시간 정보의 주기가 1시간 이하일때 사용
 
         Args:
             working_start: 일을 시작하는 시간
@@ -194,6 +221,7 @@ class MetaDataUpdate():
         
         work_feature_dict = {}
         for n in work_dict:
+            if len(work_dict[n].keys())== 2:
                 x = list(work_dict[n].keys())[0]
                 y = list(work_dict[n].keys())[1]
                 work_feature_dict[n] ={"statistics":{
@@ -201,6 +229,18 @@ class MetaDataUpdate():
                         "work":{
                             "label":[x, y],
                             "average":[work_dict[n][x], work_dict[n][y]]}
+                    }}}
+            else:
+                x = list(work_dict[n].keys())[0]
+                if list(work_dict[n].keys())[0] == "working":
+                    y = "notWorking"
+                else:
+                    y = "working"
+                work_feature_dict[n] ={"statistics":{
+                    "time_related_statistics":{
+                        "work":{
+                            "label":[x, y],
+                            "average":[work_dict[n][x], 0]}
                     }}}
 
         if meta_work != None:
