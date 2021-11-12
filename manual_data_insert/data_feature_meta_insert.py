@@ -522,23 +522,8 @@ if __name__ == "__main__":
 #         print(count)
 
     ## ----------------------TimeStep Meta Create&Insert----------------------
-#     domain="air"
-#     subdomain="indoor_초등학교"
-#  #   ms = "ICL1L2000283"
-#     dirname = "/home/hwangjisoo/바탕화면/케이웨더 데이터 2차/{}/{}".format(subdomain.split("_")[0], subdomain.split("_")[1])
-#     mss = os.listdir(dirname)
-#     count = 0
-#     for ms in mss:
-#         ms = ms.split(".")[0]
-#         print(ms)
-#         only_timestep_meta = MetaDataUpdate(domain, subdomain, ms)
-#         timestep_meta_dict = only_timestep_meta.data_time_step_meta()
-#         only_timestep_meta.data_meta_basic_save_update_insert("save", timestep_meta_dict, "only_timestep")
-#         count+=1
-#         print(count)
-## -----------------------Describe Dict&Holiday&WorkinTime&TimeStep Meta Create&Insert----------------------
     domain="air"
-    subdomain="indoor_경로당"
+    subdomain="indoor_초등학교"
  #   ms = "ICL1L2000283"
  #   dirname = "/home/hwangjisoo/바탕화면/케이웨더 데이터 2차/{}/{}".format(subdomain.split("_")[0], subdomain.split("_")[1])
     dirname = "C:\\Users\\82102\Desktop\\케이웨더 데이터 2차\\{}\\{}".format(subdomain.split("_")[0], subdomain.split("_")[1])
@@ -547,10 +532,26 @@ if __name__ == "__main__":
     for ms in mss:
         ms = ms.split(".")[0]
         print(ms)
-        total04_meta = MetaDataUpdate(domain, subdomain, ms)
-        total04_meta.data_describe_holiday_working_timestep_meta_insert("save", "statistics_all")
+        only_timestep_meta = MetaDataUpdate(domain, subdomain, ms)
+        timestep_meta_dict = only_timestep_meta.data_time_step_meta()
+        only_timestep_meta.data_meta_basic_save_update_insert("save", timestep_meta_dict, "only_timestep")
         count+=1
         print(count)
+## -----------------------Describe Dict&Holiday&WorkinTime&TimeStep Meta Create&Insert----------------------
+#     domain="air"
+#     subdomain="indoor_고등학교"
+#  #   ms = "ICL1L2000283"
+#  #   dirname = "/home/hwangjisoo/바탕화면/케이웨더 데이터 2차/{}/{}".format(subdomain.split("_")[0], subdomain.split("_")[1])
+#     dirname = "C:\\Users\\82102\Desktop\\케이웨더 데이터 2차\\{}\\{}".format(subdomain.split("_")[0], subdomain.split("_")[1])
+#     mss = os.listdir(dirname)
+#     count = 0
+#     for ms in mss:
+#         ms = ms.split(".")[0]
+#         print(ms)
+#         total04_meta = MetaDataUpdate(domain, subdomain, ms)
+#         total04_meta.data_describe_holiday_working_timestep_meta_insert("save", "statistics_all")
+#         count+=1
+#         print(count)
 
         """
             # Data Holiday Create
