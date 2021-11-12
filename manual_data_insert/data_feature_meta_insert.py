@@ -311,7 +311,6 @@ class MetaDataUpdate():
                                                      {"time_step":{
                                                          "label":label,
                                                          "average":average}}}}
-        print(timestep_feature_dict)
 
         if meta_timestep != None:
             for n in timestep_feature_dict:
@@ -416,8 +415,9 @@ class MetaDataUpdate():
 
             print(table_info_doc["feature_information"][self.columns[0]].keys())
             print(table_info_doc["feature_information"][self.columns[0]]["statistics"].keys())
-            pprint(table_info_doc)
-            #table_doc.post_database_collection_document(mode, table_info_doc)
+            print(table_info_doc["feature_information"][self.columns[0]]["statistics"]["time_related_statistics"].keys())
+            
+            table_doc.post_database_collection_document(mode, table_info_doc)
 
         elif (mode == "update") | (mode == "insert"):
             table_doc.post_database_collection_document(mode, meta_basic)
@@ -538,7 +538,7 @@ if __name__ == "__main__":
 #         print(count)
 ## -----------------------Describe Dict&Holiday&WorkinTime&TimeStep Meta Create&Insert----------------------
     domain="air"
-    subdomain="indoor_요양원"
+    subdomain="indoor_경로당"
  #   ms = "ICL1L2000283"
  #   dirname = "/home/hwangjisoo/바탕화면/케이웨더 데이터 2차/{}/{}".format(subdomain.split("_")[0], subdomain.split("_")[1])
     dirname = "C:\\Users\\82102\Desktop\\케이웨더 데이터 2차\\{}\\{}".format(subdomain.split("_")[0], subdomain.split("_")[1])
