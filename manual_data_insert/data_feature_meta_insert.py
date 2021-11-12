@@ -538,9 +538,10 @@ if __name__ == "__main__":
 #         print(count)
 ## -----------------------Describe Dict&Holiday&WorkinTime&TimeStep Meta Create&Insert----------------------
     domain="air"
-    subdomain="indoor_경로당"
+    subdomain="indoor_요양원"
  #   ms = "ICL1L2000283"
-    dirname = "/home/hwangjisoo/바탕화면/케이웨더 데이터 2차/{}/{}".format(subdomain.split("_")[0], subdomain.split("_")[1])
+ #   dirname = "/home/hwangjisoo/바탕화면/케이웨더 데이터 2차/{}/{}".format(subdomain.split("_")[0], subdomain.split("_")[1])
+    dirname = "C:\\Users\\82102\Desktop\\케이웨더 데이터 2차\\{}\\{}".format(subdomain.split("_")[0], subdomain.split("_")[1])
     mss = os.listdir(dirname)
     count = 0
     for ms in mss:
