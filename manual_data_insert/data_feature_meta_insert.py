@@ -41,7 +41,20 @@ class MetaDataUpdate():
 
             self.columns = list(self.data.columns)
 
-    def data_describe_holiday_working_meta_insert(self, mode):
+    def data_describe_holiday_working_timestep_meta_insert(self, mode, meta_name):
+        """
+        데이터의 통계적 값과 휴일, 일하는 시간, Time Step 에 따른 분석 결과를 한번에 Meta 데이터로 생성하는 함수
+
+        - 데이터 시간 정보의 주기가 Hour, Minute, Second 일때 사용
+        """
+        describe_meta = self.data_describe_meta()
+        holiday_meta = self.data_holiday_notholiday_meta(describe_meta)
+        working_meta = self.data_working_notworking_meta(holiday_meta)
+        timestep_meta = self.data_time_step_meta(meta_timestep=working_meta)
+
+        self.data_meta_basic_save_update_insert(mode, timestep_meta, meta_name)
+    
+    def data_describe_holiday_working_meta_insert(self, mode, meta_name):
         """
         데이터의 통계적 값과 휴일, 일하는 시간에 따른 분석 결과를 한번에 Meta 데이터로 생성하는 함수
 
@@ -51,9 +64,9 @@ class MetaDataUpdate():
         holiday_meta = self.data_holiday_notholiday_meta(describe_meta)
         working_meta = self.data_working_notworking_meta(holiday_meta)
 
-        self.data_meta_basic_save_update_insert(mode, working_meta)
+        self.data_meta_basic_save_update_insert(mode, working_meta, meta_name)
 
-    def data_describe_holiday_meta_insert(self, mode):
+    def data_describe_holiday_meta_insert(self, mode, meta_name):
         """
         데이터의 통계적 값과 휴일에 따른 분석 결과를 한번에 Meta 데이터로 생성하는 함수
 
@@ -62,7 +75,7 @@ class MetaDataUpdate():
         describe_meta = self.data_describe_meta()
         holiday_meta = self.data_holiday_notholiday_meta(describe_meta)
 
-        self.data_meta_basic_save_update_insert(mode, holiday_meta)
+        self.data_meta_basic_save_update_insert(mode, holiday_meta, meta_name)
 
 
     # Data Feature Describe Create
@@ -135,7 +148,7 @@ class MetaDataUpdate():
         Holiday &Not Holiday 에 따른 데이터의 평균 값을 Meta 로 생성하는 함수
 
         - 휴일과 휴일이 아닌 날에 따른 분석을 위해 transform_holiday_create 함수로 추출한 "HoliDay" column을 활용
-        - Holiday Meta 를 생성한 후 병합하고 싶은 다른 Meta 가 있을시 Meta를 입력 받아 병합할 수 있으며 Holiday Meta 만 단독으로 생성하고 싶을 시 Meta 구조에 맞춰 단독 생성 가능
+        - Holiday Meta 를 생성한 후 병합하고 싶은 다른 Meta 가 있을시 meta_holi를 입력 받아 병합할 수 있으며 Holiday Meta 만 단독으로 생성하고 싶을 시 Meta 구조에 맞춰 단독 생성 가능
 
         Args:
             meta_holi: Holiday Meta 와 병합하고 싶은 다른 Meta
@@ -209,7 +222,7 @@ class MetaDataUpdate():
         Working Time&Not Working Time 에 따른 데이터의 평균 값을 Meta 로 생성하는 함수
 
         - 일하는 시간과 일하지 않는 시간에 따른 분석을 위해 data_working_notworking_create 함수로 추출한 "Working" column을 활용
-        - Working Meta 를 생성한 후 병합하고 싶은 다른 Meta 가 있을시 Meta를 입력 받아 병합하고 Working Meta 만 단독으로 생성하고 싶을 시 Meta 구조에 맞춰 단독 생성 가능
+        - Working Meta 를 생성한 후 병합하고 싶은 다른 Meta 가 있을시 meta_work를 입력 받아 병합하고 Working Meta 만 단독으로 생성하고 싶을 시 Meta 구조에 맞춰 단독 생성 가능
 
         Args:
             meta_work: Working Meta 와 병합하고 싶은 다른 Meta
@@ -250,6 +263,63 @@ class MetaDataUpdate():
         else:
             work_final_dict = {"table_name":self.tablename, "feature_information":work_feature_dict}
             return work_final_dict
+
+    # Data Time Step Create
+    def data_time_step_cut(self, timestep=[0, 6, 12, 17, 20, 24], timelabel=["dawn", "morning", "afternoon", "evening", "night"]):
+        """
+        입력 Time Step에 따라 구분된 Time Label 정보를 "TimeStep" column 에 추가하는 함수
+        
+        - Hour의 흐름에 따라 구분을 하는 함수로 데이터 시간 정보의 주기가 Hour, Minute, Second 일때 사용
+
+        Args:
+            timestep: 나누고 싶은 시간 범위를 입력
+            timelabel: 나눈 시간 범위에 따른 명칭 입력
+        Returns:
+            Time Step 에 따른 Time Label 정보를 포함한 데이터
+        """
+        self.data["TimeStep"] = 0
+        for n in range(len(timestep)-1):
+            self.data.loc[self.data[(self.data.index.hour >= timestep[n])&(self.data.index.hour < timestep[n+1])].index, "TimeStep"] = timelabel[n]
+        return self.data
+
+    # Data Time Step Meta Create 
+    def data_time_step_meta(self, timestep=[0, 6, 12, 17, 20, 24], timelabel=["dawn", "morning", "afternoon", "evening", "night"], meta_timestep=None):
+        """
+        입력 Time Step, Time Label 에 따른 데이터의 평균 값을 Meta 로 생성하는 함수
+
+        - Time Step 에 따른 Time Label 정보를 분헉하기 위해 data_time_step_cut 함수로 추출한 "TimeStep" column 을 활용
+        - Timestep Meta 를 생성한 후 병합하고 싶은 다른 Meta 가 있을시 meta_timestep 입력 받아 병합하고 Timestep Meta 만 단독으로 생성하고 싶을 시 Meta 구조에 맞춰 단독 생성 가능
+
+        Args:
+            timestep: 나누고 싶은 시간 범위를 입력
+            timelabel: 나눈 시간 범위에 따른 명칭 입력
+            meta_timestep: Timestep Meta 와 병합하고 싶은 다른 Meta
+        Returns:
+            Time Label 에 따른 평균 값을 포함한 Dictionary Meta
+        """
+        self.data = self.data_time_step_cut(timestep, timelabel)
+        timestep_dict = self.data.groupby("TimeStep").mean().to_dict()
+        
+        timestep_feature_dict = {}
+        for n in timestep_dict:
+            label = []
+            average = []
+            for x in timestep_dict[n].keys():
+                label.append(x)
+                average.append(timestep_dict[n][x])
+            timestep_feature_dict[n] ={"statistics":{"time_related_statistics":
+                                                     {"time_step":{
+                                                         "label":label,
+                                                         "average":average}}}}
+        print(timestep_feature_dict)
+
+        if meta_timestep != None:
+            for n in timestep_feature_dict:
+                meta_timestep["feature_information"][n]["statistics"]["time_related_statistics"]["time_step"] = timestep_feature_dict[n]["statistics"]["time_related_statistics"]["time_step"]
+            return meta_timestep
+        else:
+            timestep_final_dict = {"table_name":self.tablename, "feature_information":timestep_feature_dict}
+            return timestep_final_dict
 
     # KWeather DataBase Info Meta Insert or Save
     def kw_database_info_meta_insert_save(self, mode):
@@ -335,16 +405,19 @@ class MetaDataUpdate():
         
         if mode == "save":
             table_info_doc = table_doc.get_database_collection_document()
-            if meta_name != None:
+            if (meta_name != None)&(meta_name != "statistics_all")&(meta_name != "only_timestep"):
                 table_info_doc[meta_name] = meta_basic
-            else:
+            elif meta_name == "statistics_all":
                 for n in self.columns:
                     table_info_doc["feature_information"][n]["statistics"] = meta_basic["feature_information"][n]["statistics"]
+            elif meta_name == "only_timestep":
+                for n in self.columns:
+                    table_info_doc["feature_information"][n]["statistics"]["time_related_statistics"]["time_step"] = meta_basic["feature_information"][n]["statistics"]["time_related_statistics"]["time_step"]
 
-            print(table_info_doc["feature_information"]["in_voc"].keys())
-            print(table_info_doc["feature_information"]["in_voc"]["statistics"].keys())
-            
-            table_doc.post_database_collection_document(mode, table_info_doc)
+            print(table_info_doc["feature_information"][self.columns[0]].keys())
+            print(table_info_doc["feature_information"][self.columns[0]]["statistics"].keys())
+            pprint(table_info_doc)
+            #table_doc.post_database_collection_document(mode, table_info_doc)
 
         elif (mode == "update") | (mode == "insert"):
             table_doc.post_database_collection_document(mode, meta_basic)
@@ -434,8 +507,38 @@ if __name__ == "__main__":
 #         print(count)
 
     ## ----------------------Describe Dict&Holiday&WorkinTime Meta Create&Insert----------------------
+#     domain="air"
+#     subdomain="indoor_초등학교"
+#  #   ms = "ICL1L2000283"
+#     dirname = "/home/hwangjisoo/바탕화면/케이웨더 데이터 2차/{}/{}".format(subdomain.split("_")[0], subdomain.split("_")[1])
+#     mss = os.listdir(dirname)
+#     count = 0
+#     for ms in mss:
+#         ms = ms.split(".")[0]
+#         print(ms)
+#         total_meta = MetaDataUpdate(domain, subdomain, ms)
+#         total_meta.data_describe_holiday_working_meta_insert("save")
+#         count+=1
+#         print(count)
+
+    ## ----------------------TimeStep Meta Create&Insert----------------------
+#     domain="air"
+#     subdomain="indoor_초등학교"
+#  #   ms = "ICL1L2000283"
+#     dirname = "/home/hwangjisoo/바탕화면/케이웨더 데이터 2차/{}/{}".format(subdomain.split("_")[0], subdomain.split("_")[1])
+#     mss = os.listdir(dirname)
+#     count = 0
+#     for ms in mss:
+#         ms = ms.split(".")[0]
+#         print(ms)
+#         only_timestep_meta = MetaDataUpdate(domain, subdomain, ms)
+#         timestep_meta_dict = only_timestep_meta.data_time_step_meta()
+#         only_timestep_meta.data_meta_basic_save_update_insert("save", timestep_meta_dict, "only_timestep")
+#         count+=1
+#         print(count)
+## -----------------------Describe Dict&Holiday&WorkinTime&TimeStep Meta Create&Insert----------------------
     domain="air"
-    subdomain="indoor_초등학교"
+    subdomain="indoor_경로당"
  #   ms = "ICL1L2000283"
     dirname = "/home/hwangjisoo/바탕화면/케이웨더 데이터 2차/{}/{}".format(subdomain.split("_")[0], subdomain.split("_")[1])
     mss = os.listdir(dirname)
@@ -443,11 +546,10 @@ if __name__ == "__main__":
     for ms in mss:
         ms = ms.split(".")[0]
         print(ms)
-        total_meta = MetaDataUpdate(domain, subdomain, ms)
-        total_meta.data_describe_holiday_working_meta_insert("save")
+        total04_meta = MetaDataUpdate(domain, subdomain, ms)
+        total04_meta.data_describe_holiday_working_timestep_meta_insert("save", "statistics_all")
         count+=1
         print(count)
-    
 
         """
             # Data Holiday Create
