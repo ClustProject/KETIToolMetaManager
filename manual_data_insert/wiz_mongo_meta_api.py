@@ -2,6 +2,7 @@
 import requests
 import os
 import json
+from KETIPreDataIngestion.KETI_setting.influx_setting_KETI import wiz_url
 
 class WizApiMongoMeta():
     def __init__(self, domain, subdomain, tablename=None):
@@ -11,7 +12,7 @@ class WizApiMongoMeta():
 
     # get - database/collection/document?table_name - 지정 table name 출력
     def get_database_collection_document(self):
-        url = "http://localhost:5000/rest/1.0/mongodb/document/{}/{}?table_name={}".format(self.domain, self.subdomain, self.tablename)
+        url = wiz_url+"/rest/1.0/mongodb/document/{}/{}?table_name={}".format(self.domain, self.subdomain, self.tablename)
         response = requests.get(url)
         print(response.status_code)
         text = response.text
@@ -19,7 +20,7 @@ class WizApiMongoMeta():
         return json.loads(text)
     
     def get_database_collection_documents(self):
-        url = "http://localhost:5000/rest/1.0/mongodb/documents/{}/{}".format(self.domain, self.subdomain)
+        url = wiz_url+"/rest/1.0/mongodb/documents/{}/{}".format(self.domain, self.subdomain)
         response = requests.get(url)
         print(response.status_code)
         text = response.text
@@ -29,7 +30,7 @@ class WizApiMongoMeta():
     # post - database/collection/document insert, save
     def post_database_collection_document(self, mode, data):
 
-        url = "http://localhost:5000/rest/1.0/mongodb/document/{}/{}?mode={}".format(self.domain, self.subdomain, mode)
+        url = wiz_url+"/rest/1.0/mongodb/document/{}/{}?mode={}".format(self.domain, self.subdomain, mode)
         headers = {'Content-Type': 'application/json'}
         response = requests.post(url, data=json.dumps(data), headers=headers)
 
