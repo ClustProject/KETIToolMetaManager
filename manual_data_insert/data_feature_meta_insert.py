@@ -1,13 +1,11 @@
 import pandas as pd
-import datetime
+import numpy as np
+import json
 from pytimekr import pytimekr
 import sys
 import os
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))))
-from KETIToolMetaManager.manual_data_insert import meta_read_write as mrw
-import json
-import os
 from KETIToolMetaManager.manual_data_insert import wiz_mongo_meta_api as wiz
 from KETIPreDataIngestion.KETI_setting import influx_setting_KETI as ins
 from KETIPreDataIngestion.data_influx import influx_Client
@@ -163,11 +161,17 @@ class MetaDataUpdate():
             if len(holi_dict[n].keys()) == 2:
                 x = list(holi_dict[n].keys())[0]
                 y = list(holi_dict[n].keys())[1]
+                holi_average_x = holi_dict[n][x]
+                holi_average_y = holi_dict[n][y]
+                if np.isnan(holi_average_x):
+                    holi_average_x = 0
+                if np.isnan(holi_average_y):
+                    holi_average_y = 0
                 holi_feature_dict[n] ={"statistics":{
                 "day_related_statistics":{
                     "holiday":{
                         "label":[x, y],
-                        "average":[holi_dict[n][x], holi_dict[n][y]]}
+                        "average":[holi_average_x, holi_average_y]}
                     }}}
             else:
                 x = list(holi_dict[n].keys())[0]
@@ -237,11 +241,17 @@ class MetaDataUpdate():
             if len(work_dict[n].keys())== 2:
                 x = list(work_dict[n].keys())[0]
                 y = list(work_dict[n].keys())[1]
+                work_average_x = work_dict[n][x]
+                work_average_y = work_dict[n][y]
+                if np.isnan(work_average_x):
+                    work_average_x = 0
+                if np.isnan(work_average_y):
+                    work_average_y = 0
                 work_feature_dict[n] ={"statistics":{
                     "time_related_statistics":{
                         "work":{
                             "label":[x, y],
-                            "average":[work_dict[n][x], work_dict[n][y]]}
+                            "average":[work_average_x, work_average_y]}
                     }}}
             else:
                 x = list(work_dict[n].keys())[0]
@@ -303,10 +313,12 @@ class MetaDataUpdate():
         timestep_feature_dict = {}
         for n in timestep_dict:
             label = []
-            average = []
+            average_nan = []
             for x in timestep_dict[n].keys():
                 label.append(x)
-                average.append(timestep_dict[n][x])
+                average_nan.append(timestep_dict[n][x])
+            average = [0 if np.isnan(value) else value for value in average_nan ]
+                
             timestep_feature_dict[n] ={"statistics":{"time_related_statistics":
                                                      {"time_step":{
                                                          "label":label,
@@ -552,26 +564,4 @@ if __name__ == "__main__":
 #         total04_meta.data_describe_holiday_working_timestep_meta_insert("save", "statistics_all")
 #         count+=1
 #         print(count)
-
-        """
-            # Data Holiday Create
-            # def transform_holiday(self):
-            #     self.data = self.transform_day()
-            #     self.data = self.transform_public_holiday()
-                
-            #     sat_list = self.data.index[self.data.Day == "Sat"].tolist()
-            #     sun_list = self.data.index[self.data.Day == "Sun"].tolist()
-                
-            #     pd.set_option('mode.chained_assignment',  None)
-                
-            #     for sat in sat_list:
-            #         self.data["HoliDay"][sat] = "holiday"
-            #     for sun in sun_list:
-            #         self.data["HoliDay"][sun] = "holiday"
-                
-            #     return self.data
-
-            # Data Weekend, Weekday Meta Create & Insert (by Holiday column - transform_holiday)     
-        """
-
         
