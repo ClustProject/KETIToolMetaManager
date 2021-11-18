@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 import json
 import sys
 import os
@@ -95,18 +96,17 @@ class DbMetaCreateInsert():
         """
         total_meta_dict = self.total_statistics_meta_dictionary_create(timestep_labels)
         db_meta = {}
-        import statistics
         for column in self.columns:
-            holi_mean = statistics.mean(total_meta_dict[column]["holiday"])
-            notholi_mean = statistics.mean(total_meta_dict[column]["notHoliday"])
-            work_mean = statistics.mean(total_meta_dict[column]["working"])
-            notwork_mean = statistics.mean(total_meta_dict[column]["notWorking"])
-            min_mean = statistics.mean(total_meta_dict[column]["des_min"])
-            max_mean = statistics.mean(total_meta_dict[column]["des_max"])
-            mean_mean = statistics.mean(total_meta_dict[column]["des_mean"])
+            holi_mean = np.nanmean(total_meta_dict[column]["holiday"])
+            notholi_mean = np.nanmean(total_meta_dict[column]["notHoliday"])
+            work_mean = np.nanmean(total_meta_dict[column]["working"])
+            notwork_mean = np.nanmean(total_meta_dict[column]["notWorking"])
+            min_mean = np.nanmean(total_meta_dict[column]["des_min"])
+            max_mean = np.nanmean(total_meta_dict[column]["des_max"])
+            mean_mean = np.nanmean(total_meta_dict[column]["des_mean"])
             ts_dict = {}
             for x in range(len(timestep_labels)):
-                ts_dict[timestep_labels[x]] = statistics.mean(total_meta_dict[column][timestep_labels[x]])
+                ts_dict[timestep_labels[x]] = np.nanmean(total_meta_dict[column][timestep_labels[x]])
             
             db_meta[column] = {
                 "statistics":{
@@ -165,7 +165,8 @@ class DbMetaCreateInsert():
         print(table_info_doc["db_feature_information"][self.columns[0]]["statistics"].keys())
         print(table_info_doc["db_feature_information"][self.columns[0]]["statistics"]["time_related_statistics"].keys())
         
-        table_doc.post_database_collection_document("save", table_info_doc)
+        pprint(table_info_doc)
+        #table_doc.post_database_collection_document("save", table_info_doc)
 
 if __name__ == "__main__":
     ## ----------------------DataBase statistics Meta Create&Save----------------------

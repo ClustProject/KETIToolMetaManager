@@ -158,33 +158,18 @@ class MetaDataUpdate():
         
         holi_feature_dict = {}
         for n in holi_dict: # 먼저 holiday info dictionary를 만들어 둔다.
-            if len(holi_dict[n].keys()) == 2:
-                x = list(holi_dict[n].keys())[0]
-                y = list(holi_dict[n].keys())[1]
-                holi_average_x = holi_dict[n][x]
-                holi_average_y = holi_dict[n][y]
-                if np.isnan(holi_average_x):
-                    holi_average_x = 0
-                if np.isnan(holi_average_y):
-                    holi_average_y = 0
-                holi_feature_dict[n] ={"statistics":{
-                "day_related_statistics":{
-                    "holiday":{
-                        "label":[x, y],
-                        "average":[holi_average_x, holi_average_y]}
-                    }}}
-            else:
-                x = list(holi_dict[n].keys())[0]
-                if list(holi_dict[n].keys())[0] == "notHoliday":
-                    y = "holiday"
-                else:
-                    y = "notHoliday"
-                holi_feature_dict[n] ={"statistics":{
-                    "day_related_statistics":{
-                        "holiday":{
-                            "label":[x, y],
-                            "average":[holi_dict[n][x], 0]}
-                        }}}
+            holi_x = list(holi_dict[n].keys())[0]
+            holi_y = list(holi_dict[n].keys())[1]
+            holi_average_x = holi_dict[n][holi_x]
+            holi_average_y = holi_dict[n][holi_y]
+            
+            
+            holi_feature_dict[n] ={"statistics":{
+            "day_related_statistics":{
+                "holiday":{
+                    "label":[holi_x, holi_y],
+                    "average":[holi_average_x, holi_average_y]}
+                }}}
 
         if meta_holi != None:
             for n in holi_feature_dict:
@@ -238,33 +223,17 @@ class MetaDataUpdate():
         
         work_feature_dict = {}
         for n in work_dict:
-            if len(work_dict[n].keys())== 2:
-                x = list(work_dict[n].keys())[0]
-                y = list(work_dict[n].keys())[1]
-                work_average_x = work_dict[n][x]
-                work_average_y = work_dict[n][y]
-                if np.isnan(work_average_x):
-                    work_average_x = 0
-                if np.isnan(work_average_y):
-                    work_average_y = 0
-                work_feature_dict[n] ={"statistics":{
-                    "time_related_statistics":{
-                        "work":{
-                            "label":[x, y],
-                            "average":[work_average_x, work_average_y]}
-                    }}}
-            else:
-                x = list(work_dict[n].keys())[0]
-                if list(work_dict[n].keys())[0] == "working":
-                    y = "notWorking"
-                else:
-                    y = "working"
-                work_feature_dict[n] ={"statistics":{
-                    "time_related_statistics":{
-                        "work":{
-                            "label":[x, y],
-                            "average":[work_dict[n][x], 0]}
-                    }}}
+            work_x = list(work_dict[n].keys())[0]
+            work_y = list(work_dict[n].keys())[1]
+            work_average_x = work_dict[n][work_x]
+            work_average_y = work_dict[n][work_y]
+
+            work_feature_dict[n] ={"statistics":{
+                "time_related_statistics":{
+                    "work":{
+                        "label":[work_x, work_y],
+                        "average":[work_average_x, work_average_y]}
+                }}}
 
         if meta_work != None:
             for n in work_feature_dict:
@@ -287,7 +256,7 @@ class MetaDataUpdate():
         Returns:
             Time Step 에 따른 Time Label 정보를 포함한 데이터
         """
-        self.data["TimeStep"] = 0
+        self.data["TimeStep"] = np.array(None)
         for n in range(len(timestep)-1):
             self.data.loc[self.data[(self.data.index.hour >= timestep[n])&(self.data.index.hour < timestep[n+1])].index, "TimeStep"] = timelabel[n]
         return self.data
@@ -313,11 +282,10 @@ class MetaDataUpdate():
         timestep_feature_dict = {}
         for n in timestep_dict:
             label = []
-            average_nan = []
+            average = []
             for x in timestep_dict[n].keys():
                 label.append(x)
-                average_nan.append(timestep_dict[n][x])
-            average = [0 if np.isnan(value) else value for value in average_nan ]
+                average.append(timestep_dict[n][x])
                 
             timestep_feature_dict[n] ={"statistics":{"time_related_statistics":
                                                      {"time_step":{
@@ -534,24 +502,8 @@ if __name__ == "__main__":
 #         print(count)
 
     ## ----------------------TimeStep Meta Create&Insert----------------------
-    domain="air"
-    subdomain="indoor_초등학교"
- #   ms = "ICL1L2000283"
- #   dirname = "/home/hwangjisoo/바탕화면/케이웨더 데이터 2차/{}/{}".format(subdomain.split("_")[0], subdomain.split("_")[1])
-    dirname = "C:\\Users\\82102\Desktop\\케이웨더 데이터 2차\\{}\\{}".format(subdomain.split("_")[0], subdomain.split("_")[1])
-    mss = os.listdir(dirname)
-    count = 0
-    for ms in mss:
-        ms = ms.split(".")[0]
-        print(ms)
-        only_timestep_meta = MetaDataUpdate(domain, subdomain, ms)
-        timestep_meta_dict = only_timestep_meta.data_time_step_meta()
-        only_timestep_meta.data_meta_basic_save_update_insert("save", timestep_meta_dict, "only_timestep")
-        count+=1
-        print(count)
-## -----------------------Describe Dict&Holiday&WorkinTime&TimeStep Meta Create&Insert----------------------
 #     domain="air"
-#     subdomain="indoor_고등학교"
+#     subdomain="indoor_초등학교"
 #  #   ms = "ICL1L2000283"
 #  #   dirname = "/home/hwangjisoo/바탕화면/케이웨더 데이터 2차/{}/{}".format(subdomain.split("_")[0], subdomain.split("_")[1])
 #     dirname = "C:\\Users\\82102\Desktop\\케이웨더 데이터 2차\\{}\\{}".format(subdomain.split("_")[0], subdomain.split("_")[1])
@@ -560,8 +512,24 @@ if __name__ == "__main__":
 #     for ms in mss:
 #         ms = ms.split(".")[0]
 #         print(ms)
-#         total04_meta = MetaDataUpdate(domain, subdomain, ms)
-#         total04_meta.data_describe_holiday_working_timestep_meta_insert("save", "statistics_all")
+#         only_timestep_meta = MetaDataUpdate(domain, subdomain, ms)
+#         timestep_meta_dict = only_timestep_meta.data_time_step_meta()
+#         only_timestep_meta.data_meta_basic_save_update_insert("save", timestep_meta_dict, "only_timestep")
 #         count+=1
 #         print(count)
+## -----------------------Describe Dict&Holiday&WorkinTime&TimeStep Meta Create&Insert----------------------
+    domain="air"
+    subdomain="indoor_도서관"
+ #   ms = "ICL1L2000283"
+    dirname = "/home/hwangjisoo/바탕화면/케이웨더 데이터 2차/{}/{}".format(subdomain.split("_")[0], subdomain.split("_")[1])
+ #   dirname = "C:\\Users\\82102\Desktop\\케이웨더 데이터 2차\\{}\\{}".format(subdomain.split("_")[0], subdomain.split("_")[1])
+    mss = os.listdir(dirname)
+    count = 0
+    for ms in mss:
+        ms = ms.split(".")[0]
+        print(ms)
+        total04_meta = MetaDataUpdate(domain, subdomain, ms)
+        total04_meta.data_describe_holiday_working_timestep_meta_insert("save", "statistics_all")
+        count+=1
+        print(count)
         
