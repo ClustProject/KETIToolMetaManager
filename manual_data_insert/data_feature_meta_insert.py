@@ -432,8 +432,8 @@ class MetaDataUpdate():
             print(table_info_doc["feature_information"][self.columns[0]]["statistics"].keys())
             print(table_info_doc["feature_information"][self.columns[0]]["statistics"]["time_related_statistics"].keys())
             
-            pprint(table_info_doc)
-            #table_doc.post_database_collection_document(mode, table_info_doc)
+            #pprint(table_info_doc)
+            table_doc.post_database_collection_document(mode, table_info_doc)
 
         elif (mode == "update") | (mode == "insert"):
             table_doc.post_database_collection_document(mode, meta_basic)
@@ -555,10 +555,11 @@ if __name__ == "__main__":
 #         print(count)
 ## -----------------------Describe Dict&Holiday&WorkinTime&TimeStep Meta Create&Insert----------------------
     domain="air"
-    subdomain="indoor_아파트"
+    subdomain="outdoor"
  #   ms = "ICL1L2000283"
-    dirname = "/home/hwangjisoo/바탕화면/케이웨더 데이터 2차/{}/{}".format(subdomain.split("_")[0], subdomain.split("_")[1])
+ #   dirname = "/home/hwangjisoo/바탕화면/케이웨더 데이터 2차/{}/{}".format(subdomain.split("_")[0], subdomain.split("_")[1])
  #   dirname = "C:\\Users\\82102\Desktop\\케이웨더 데이터 2차\\{}\\{}".format(subdomain.split("_")[0], subdomain.split("_")[1])
+    dirname = "C:\\Users\\82102\\Desktop\\케이웨더 데이터 2차\\outdoor\\SDOT\\1"
     mss = os.listdir(dirname)
     count = 0
     for ms in mss:
