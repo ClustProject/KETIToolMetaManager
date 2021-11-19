@@ -2,6 +2,9 @@
 import requests
 import os
 import json
+import sys
+sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
+sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))))
 from KETIPreDataIngestion.KETI_setting.influx_setting_KETI import wiz_url
 
 class WizApiMongoMeta():
@@ -38,7 +41,7 @@ class WizApiMongoMeta():
 
 if __name__ == "__main__":
     from pprint import pprint
-    test = WizApiMongoMeta("air", "indoor_초등학교", "ICW0W2000031")
+    test = WizApiMongoMeta("air", "indoor_요양원", "IS70W2000849")
     doc = test.get_database_collection_document()
     
     print("======Data Collection Document======")
