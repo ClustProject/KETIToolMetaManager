@@ -217,14 +217,14 @@ class DbMetaCreateInsert():
         print(table_info_doc["db_feature_information"][self.columns[0]]["statistics"].keys())
         print(table_info_doc["db_feature_information"][self.columns[0]]["statistics"]["time_related_statistics"].keys())
         
-        pprint(table_info_doc)
-        #table_doc.post_database_collection_document("save", table_info_doc)
+        #pprint(table_info_doc)
+        table_doc.post_database_collection_document("save", table_info_doc)
 
 if __name__ == "__main__":
     ## ----------------------DataBase statistics Meta Create&Save----------------------
     domain = "air"
-    sub_domain = "indoor_도서관"
+    sub_domain = "indoor_경로당"
     db_meta_con = DbMetaCreateInsert(domain, sub_domain)
     db_meta_dict = db_meta_con.database_statistics_mean_meta_create()
-    pprint(db_meta_dict)
+    #pprint(db_meta_dict)
     db_meta_con.database_statistics_mean_meta_save(db_meta_dict)
