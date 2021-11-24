@@ -99,7 +99,10 @@ class MetaDataUpdate():
         """
         des_dict = self.data_feature_describe_create()
         des_feature_dict = {}
-        for n in des_dict: 
+        for n in des_dict:
+            for key in des_dict[n]:
+                if np.isnan(des_dict[n][key]): # nan -> "None"
+                    des_dict[n][key] = "None"
             des_feature_dict[n] = {"statistics":{"average":des_dict[n]}}
         des_final_dict = {"table_name":self.tablename, "feature_information":des_feature_dict}
         return des_final_dict
@@ -171,6 +174,7 @@ class MetaDataUpdate():
                         "label":[holi_x, holi_y],
                         "average":[holi_average_x, holi_average_y]}
                     }}}
+                holi_feature_dict[n]["statistics"]["day_related_statistics"]["holiday"]["average"] = ["None" if np.isnan(x) else x for x in holi_feature_dict[n]["statistics"]["day_related_statistics"]["holiday"]["average"]]    
             else:
                 holi_x = list(holi_dict[n].keys())[0]
                 holi_average_x = holi_dict[n][holi_x]
@@ -182,7 +186,7 @@ class MetaDataUpdate():
                     "day_related_statistics":{
                         "holiday":{
                             "label":[holi_x, holi_y],
-                            "average":[holi_average_x, np.nan]}
+                            "average":[holi_average_x, "None"]}
                         }}}
 
         if meta_holi != None:
@@ -249,6 +253,7 @@ class MetaDataUpdate():
                             "label":[work_x, work_y],
                             "average":[work_average_x, work_average_y]}
                     }}}
+                work_feature_dict[n]["statistics"]["time_related_statistics"]["work"]["average"] = ["None" if np.isnan(x) else x for x in work_feature_dict[n]["statistics"]["time_related_statistics"]["work"]["average"]]
             else:
                 work_x = list(work_dict[n].keys())[0]
                 work_average_x = work_dict[n][work_x]
@@ -260,7 +265,7 @@ class MetaDataUpdate():
                     "time_related_statistics":{
                         "work":{
                             "label":[work_x, work_y],
-                            "average":[work_average_x, np.nan]}
+                            "average":[work_average_x, "None"]}
                     }}}
 
         if meta_work != None:
@@ -315,18 +320,20 @@ class MetaDataUpdate():
             for x in timestep_dict[n].keys():
                 label.append(x)
                 average.append(timestep_dict[n][x])
+            
+            average = ["None" if np.isnan(x) else x for x in average]
                 
             if len(label) != len(timelabel):
                 count = len(label)
                 [label.append(x) for x in timelabel if x not in label]
                 for c in range(len(timelabel)-count):
-                    average.append(np.nan)
+                    average.append("None")
 
             timestep_feature_dict[n] ={"statistics":{"time_related_statistics":
                                                      {"time_step":{
                                                          "label":label,
                                                          "average":average}}}}
-
+            
         if meta_timestep != None:
             for n in timestep_feature_dict:
                 meta_timestep["feature_information"][n]["statistics"]["time_related_statistics"]["time_step"] = timestep_feature_dict[n]["statistics"]["time_related_statistics"]["time_step"]
@@ -555,7 +562,7 @@ if __name__ == "__main__":
 #         print(count)
 ## -----------------------Describe Dict&Holiday&WorkinTime&TimeStep Meta Create&Insert----------------------
     domain="air"
-    subdomain="indoor_아파트"
+    subdomain="indoor_어린이집"
  #   ms = "ICL1L2000283"
     dirname = "/home/hwangjisoo/바탕화면/케이웨더 데이터 2차/{}/{}".format(subdomain.split("_")[0], subdomain.split("_")[1])
  #   dirname = "C:\\Users\\82102\Desktop\\케이웨더 데이터 2차\\{}\\{}".format(subdomain.split("_")[0], subdomain.split("_")[1])
