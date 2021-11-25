@@ -198,6 +198,8 @@ class MetaDataUpdate():
                     holi_y = "holiday"
                 else:
                     holi_y = "notHoliday"
+                if np.isnan(holi_average_x):
+                    holi_average_x = "None"
                 holi_feature_dict[n] ={"statistics":{
                     "day_related_statistics":{
                         "holiday":{
@@ -277,6 +279,8 @@ class MetaDataUpdate():
                     work_y = "working"
                 else:
                     work_y = "notWorking"
+                if np.isnan(work_average_x):
+                    work_average_x = "None"
                 work_feature_dict[n] ={"statistics":{
                     "time_related_statistics":{
                         "work":{
@@ -578,11 +582,11 @@ if __name__ == "__main__":
 #         print(count)
 ## -----------------------Describe Dict&Holiday&WorkinTime&TimeStep Meta Create&Insert----------------------
     domain="air"
-    subdomain="indoor_어린이집"
+    subdomain="indoor_유치원"
  #   ms = "ICL1L2000283"
- #   dirname = "/home/hwangjisoo/바탕화면/케이웨더 데이터 2차/{}/{}".format(subdomain.split("_")[0], subdomain.split("_")[1])
+    dirname = "/home/hwangjisoo/바탕화면/케이웨더 데이터 2차/{}/{}".format(subdomain.split("_")[0], subdomain.split("_")[1])
  #   dirname = "C:\\Users\\82102\Desktop\\케이웨더 데이터 2차\\{}\\{}".format(subdomain.split("_")[0], subdomain.split("_")[1])
-    dirname = "C:\\Users\\82102\\Desktop\\케이웨더 데이터 2차\\outdoor\\SDOT\\1"
+ #   dirname = "C:\\Users\\82102\\Desktop\\케이웨더 데이터 2차\\outdoor\\SDOT\\1"
     mss = os.listdir(dirname)
     count = 0
     for ms in mss:
