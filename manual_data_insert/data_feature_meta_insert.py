@@ -32,9 +32,25 @@ class MetaDataUpdate():
 
             # preprocessing
             from KETIPrePartialDataPreprocessing import data_preprocessing
-            refine_param = {'removeDuplication':True, 'staticFrequency':True} 
-            outlier_param= {'certainOutlierToNaN':True, 'uncertainOutlierToNaN':True, 'data_type':'air'}
-            imputation_param ={ "imputation_method":[{"min":0,"max":5,"method":"linear"}],"totalNanLimit":30}
+            refine_param = {
+                "removeDuplication":{"flag":True},
+                "staticFrequency":{"flag":True}
+            }
+            outlier_param  = {
+                "certainOutlierToNaN":{"flag":True},
+                "uncertainOutlierToNaN":{
+                    "flag":False,
+                    "param":{"neighbor":[0.5,0.6]}
+                },
+                "data_type":"air"
+            }
+            imputation_param = {
+                "serialImputation":{
+                    "flag":True,
+                    "imputation_method":[{"min":0,"max":20,"method":"linear"}],
+                    "totalNanLimit":70
+                }
+            }
             self.data = data_preprocessing.ByAllMethod(self.data_nopreprocessing, refine_param, outlier_param, imputation_param)["imputed_data"]
 
             self.columns = list(self.data.columns)
