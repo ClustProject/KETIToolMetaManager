@@ -47,7 +47,7 @@ class MetaDataUpdate():
             imputation_param = {
                 "serialImputation":{
                     "flag":True,
-                    "imputation_method":[{"min":0,"max":20,"method":"linear"}],
+                    "imputation_method":[{"min":0,"max":20,"method":"linear" , "parameter":{}}],
                     "totalNanLimit":70
                 }
             }
