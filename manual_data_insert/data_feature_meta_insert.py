@@ -401,7 +401,7 @@ class MetaDataUpdate():
                                      bins=db_info_doc["db_feature_information"][feature]["label_information"]["level"],
                                     labels=db_info_doc["db_feature_information"][feature]["label_information"]["label"])
 
-                labelcount = dict(self.data_cut.groupby(feature).size())
+                labelcount = dict(self.data_cut.groupby(feature).count())
                 label_dict = {}
                 label_ls = []
                 
