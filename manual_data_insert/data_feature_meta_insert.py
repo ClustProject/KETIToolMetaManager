@@ -51,7 +51,9 @@ class MetaDataUpdate():
                     "totalNanLimit":70
                 }
             }
-            self.data = data_preprocessing.ByAllMethod(self.data_nopreprocessing, refine_param, outlier_param, imputation_param)["imputed_data"]
+            process_param = {'refine_param':refine_param, 'outlier_param':outlier_param, 'imputation_param':imputation_param}
+            partialP = data_preprocessing.packagedPartialProcessing(process_param)
+            self.data = partialP.allPartialProcessing(self.data_nopreprocessing)["imputed_data"]
 
             self.columns = list(self.data.columns)
 
