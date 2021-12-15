@@ -1,3 +1,5 @@
+.DS_Store
+
 ## setting file ##
 config.json
 influx_setting.py
