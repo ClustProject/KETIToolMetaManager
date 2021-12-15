@@ -29,12 +29,11 @@ class MetaDataUpdate():
         if self.data_nopreprocessing != "all":
             data_client = influx_Client.influxClient(ins)
             self.data_nopreprocessing = data_client.get_data(self.domain+"_"+self.subdomain, self.tablename)
-
             # preprocessing
             from KETIPrePartialDataPreprocessing import data_preprocessing
             refine_param = {
                 "removeDuplication":{"flag":True},
-                "staticFrequency":{"flag":True}
+                "staticFrequency":{"flag":True, "frequency":None}
             }
             outlier_param  = {
                 "certainOutlierToNaN":{"flag":True},
