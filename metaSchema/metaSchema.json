@@ -1,0 +1,167 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"type": "object",
+	"properties": {
+		"domain": {
+			"type": "string"
+		},
+		"sub_domain": {
+			"type": "string"
+		},
+		"table_name": {
+			"type": "string"
+		},
+		"start_time": {
+			"type": "string"
+		},
+		"end_time": {
+			"type": "string"
+		},
+		"fields": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"properties": {
+					"fieldKey": {
+						"type": "string"
+					},
+					"fieldType": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"fieldKey", "fieldType"
+				]
+			}
+		},
+		"number_of_columns": {
+			"type": "integer"
+		},
+		"location": {
+			"type": "object",
+			"properties": {
+				"lat": {
+					"type": "number"
+				},
+				"lng": {
+					"type": "number"
+				},
+				"syntax": {
+					"type": "string"
+				}
+			}
+		},
+		"description": {
+			"type": "string"
+		},
+		"tag": {
+			"type": "array",
+			"items": {
+				"type": "string"
+			}
+		},
+		"frequency": {
+			"type": "string"
+		},
+		"column_information": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"properties": {
+					"column_name": {
+						"type": "string"
+					},
+					"analysisResult": {
+						"type": "object",
+						"properties": {
+							"labelBasedResult": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"properties": {
+										"analysisName": {
+											"type": "string"
+										},
+										"characteristics": {
+											"enum": [
+												"mean", "count"
+											]
+										},
+										"result": {
+											"type": "array",
+											"items": {
+												"type": "object",
+												"properties": {
+													"labelList": {
+														"type": "array",
+														"items": {
+															"type": "string"
+														}
+													},
+													"labelValue": {
+														"type": "array",
+														"items": {
+															"type": "number"
+														}
+													}
+												},
+												"required": [
+													"labelList", "labelValue"
+												]
+											}
+										}
+									},
+									"required": [
+										"analysisName", "characteristics", "result"
+									]
+								}
+							},
+							"levellBasedResult": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"properties": {
+										"analysisName": {
+											"type": "string"
+										},
+										"characteristics": {
+											"enum": [
+												"mean", "count"
+											]
+										},
+										"result": {
+											"type": "array",
+											"items": {
+												"type": "object",
+												"properties": {
+													"levelValue": {
+														"type": "integer"
+													},
+													"levelName": {
+														"type": "string"
+													}
+												},
+												"required": [
+													"levelValue", "levelName"
+												]
+											}
+										}
+									},
+									"required": [
+										"analysisName", "characteristics", "result"
+									]
+								}
+							}
+						}
+					}
+				},
+				"required": [
+					"name"
+				]
+			}
+		}
+	},
+	"required": [
+		"domain", "sub_domain", "table_name"
+	]
+}

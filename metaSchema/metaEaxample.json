@@ -1,0 +1,111 @@
+{
+	"domain": "air",
+	"sub_domain": "indoor_____",
+	"table_name": "ICW0W2000635",
+	"start_time": "2020-07-07T16:39:00Z",
+	"end_time": "2020-07-08T08:57:00Z",
+	"fields": [
+		{
+			"fieldKey": "in_temp",
+			"fieldType": "float"
+		}
+	],
+	"number_of_columns": 20,
+	"location": {
+		"lat": 35.2080612998422,
+		"lng": 129.080749936401,
+		"syntax": "____ _____ ___ ___78__ 13-3"
+	},
+	"description": "This is weather data",
+	"tag": [
+		"wheather", "indoor", "air", "____"
+	],
+	"frequency": "0 days 00:01:00",
+	"column_information": [
+		{
+			"name": "in_temp",
+			"statistics_result": {
+				"labelBasedResult": [
+					{
+						"name": "statistics",
+						"characteristics": "average",
+						"result": [
+							{
+								"label": [
+									"count", "mean", "std", "min", "25%", "50%", "75%", "max"
+								],
+								"value": [
+									1, 2, 0, 3, 0.5, 0.2, 2.3, 2.3, 2.3, 3
+								]
+							}
+						]
+					}, {
+						"name": "feature_label",
+						"characteristics": "count",
+						"result": [
+							{
+								"value": 0,
+								"name": "____"
+							}, {
+								"value": 0,
+								"name": "__"
+							}, {
+								"value": 0,
+								"name": "__"
+							}, {
+								"value": 0,
+								"name": "__"
+							}, {
+								"value": 2,
+								"name": "__"
+							}, {
+								"value": 576,
+								"name": "__"
+							}, {
+								"value": 394,
+								"name": "____"
+							}
+						]
+					}, {
+						"name": "holiday",
+						"characteristics": "average",
+						"result": [
+							{
+								"value": 30,
+								"name": "notHoliday"
+							}, {
+								"value": "None",
+								"name": "Holiday"
+							}
+						]
+					}, {
+						"name": "working_time",
+						"characteristics": "average",
+						"result": [
+							{
+								"value": 29,
+								"name": "notWorking"
+							}, {
+								"value": 33,
+								"name": "working"
+							}
+						]
+					}, {
+						"name": "time_step",
+						"characteristics": "average",
+						"result": [
+							{
+								"label": [
+									"a", "b", "c"
+								],
+								"value": [
+									0, 3, 50
+								]
+							}
+						]
+					}
+				]
+			}
+		}
+	]
+}
