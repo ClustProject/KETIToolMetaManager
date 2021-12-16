@@ -2,32 +2,18 @@
 	"$schema": "http://json-schema.org/draft-04/schema#",
 	"type": "object",
 	"properties": {
-		"domain": {
-			"type": "string"
-		},
-		"sub_domain": {
-			"type": "string"
-		},
-		"table_name": {
-			"type": "string"
-		},
-		"start_time": {
-			"type": "string"
-		},
-		"end_time": {
-			"type": "string"
-		},
+		"domain": {"type": "string"},
+		"sub_domain": {"type": "string"},
+		"table_name": {"type": "string"},
+		"start_time": {"type": "string"},
+		"end_time": {"type": "string"},
 		"fields": {
 			"type": "array",
 			"items": {
 				"type": "object",
 				"properties": {
-					"fieldKey": {
-						"type": "string"
-					},
-					"fieldType": {
-						"type": "string"
-					}
+					"fieldKey": {"type": "string"},
+					"fieldType": {"type": "string"}
 				},
 				"required": [
 					"fieldKey", "fieldType"
@@ -40,37 +26,23 @@
 		"location": {
 			"type": "object",
 			"properties": {
-				"lat": {
-					"type": "number"
-				},
-				"lng": {
-					"type": "number"
-				},
-				"syntax": {
-					"type": "string"
-				}
+				"lat": {"type": "number"},
+				"lng": {"type": "number"},
+				"syntax": {"type": "string"}
 			}
 		},
-		"description": {
-			"type": "string"
-		},
+		"description": {"type": "string"},
 		"tag": {
 			"type": "array",
-			"items": {
-				"type": "string"
-			}
+			"items": {"type": "string"}
 		},
-		"frequency": {
-			"type": "string"
-		},
+		"frequency": {"type": "string"},
 		"column_information": {
 			"type": "array",
 			"items": {
 				"type": "object",
 				"properties": {
-					"column_name": {
-						"type": "string"
-					},
+					"column_name": {"type": "string"},
 					"analysisResult": {
 						"type": "object",
 						"properties": {
@@ -79,13 +51,9 @@
 								"items": {
 									"type": "object",
 									"properties": {
-										"analysisName": {
-											"type": "string"
-										},
+										"analysisName": {"type": "string"},
 										"characteristics": {
-											"enum": [
-												"mean", "count"
-											]
+											"enum": ["mean", "count"]
 										},
 										"result": {
 											"type": "array",
@@ -94,26 +62,18 @@
 												"properties": {
 													"labelList": {
 														"type": "array",
-														"items": {
-															"type": "string"
-														}
+														"items": {"type": "string"}
 													},
 													"labelValue": {
 														"type": "array",
-														"items": {
-															"type": "number"
-														}
+														"items": {"type": "number"}
 													}
 												},
-												"required": [
-													"labelList", "labelValue"
-												]
+												"required": ["labelList", "labelValue"]
 											}
 										}
 									},
-									"required": [
-										"analysisName", "characteristics", "result"
-									]
+									"required": ["analysisName", "characteristics", "result"]
 								}
 							},
 							"levellBasedResult": {
@@ -121,35 +81,23 @@
 								"items": {
 									"type": "object",
 									"properties": {
-										"analysisName": {
-											"type": "string"
-										},
+										"analysisName": {"type": "string"},
 										"characteristics": {
-											"enum": [
-												"mean", "count"
-											]
+											"enum": ["mean", "count"]
 										},
 										"result": {
 											"type": "array",
 											"items": {
 												"type": "object",
 												"properties": {
-													"levelValue": {
-														"type": "integer"
-													},
-													"levelName": {
-														"type": "string"
-													}
+													"levelValue": {"type": "integer"},
+													"levelName": {"type": "string"}
 												},
-												"required": [
-													"levelValue", "levelName"
-												]
+												"required": ["levelValue", "levelName"]
 											}
 										}
 									},
-									"required": [
-										"analysisName", "characteristics", "result"
-									]
+									"required": ["analysisName", "characteristics", "result"]
 								}
 							}
 						}
