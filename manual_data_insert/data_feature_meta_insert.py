@@ -4,6 +4,8 @@ import json
 from pytimekr import pytimekr
 import sys
 import os
+import sys
+import os
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))))
 from KETIToolMetaManager.manual_data_insert import wiz_mongo_meta_api as wiz
@@ -23,98 +25,107 @@ class MetaDataUpdate():
         self.data_nopreprocessing = data
         self.domain = domain
         self.subdomain = sub_domain
-        self.tablename = measurement
+        #self.tablename = measurement
         self.data_cut = pd.DataFrame()
-        
-        if self.data_nopreprocessing != "all":
-            data_client = influx_Client.influxClient(ins)
-            self.data_nopreprocessing = data_client.get_data(self.domain+"_"+self.subdomain, self.tablename)
-            # preprocessing
-            from KETIPrePartialDataPreprocessing import data_preprocessing
-            refine_param = {
-                "removeDuplication":{"flag":True},
-                "staticFrequency":{"flag":True, "frequency":None}
+        self.data_client = influx_Client.influxClient(ins)
+        self.ms_list = self.data_client.measurement_list(self.domain+"_"+self.subdomain)
+            
+    def get_preprocessing_data(self, tablename):        
+        #if self.data_nopreprocessing != "all":
+        self.data_nopreprocessing = self.data_client.get_data(self.domain+"_"+self.subdomain, tablename)
+        # preprocessing
+        from KETIPrePartialDataPreprocessing import data_preprocessing
+        refine_param = {
+            "removeDuplication":{"flag":True},
+            "staticFrequency":{"flag":True, "frequency":None}
+        }
+        outlier_param  = {
+            "certainOutlierToNaN":{"flag":True},
+            "uncertainOutlierToNaN":{
+                "flag":False,
+                "param":{"neighbor":[0.5,0.6]}
+            },
+            "data_type":"air"
+        }
+        imputation_param = {
+            "serialImputation":{
+                "flag":True,
+                "imputation_method":[{"min":0,"max":20,"method":"linear" , "parameter":{}}],
+                "totalNanLimit":70
             }
-            outlier_param  = {
-                "certainOutlierToNaN":{"flag":True},
-                "uncertainOutlierToNaN":{
-                    "flag":False,
-                    "param":{"neighbor":[0.5,0.6]}
-                },
-                "data_type":"air"
-            }
-            imputation_param = {
-                "serialImputation":{
-                    "flag":True,
-                    "imputation_method":[{"min":0,"max":20,"method":"linear" , "parameter":{}}],
-                    "totalNanLimit":70
-                }
-            }
-            process_param = {'refine_param':refine_param, 'outlier_param':outlier_param, 'imputation_param':imputation_param}
-            partialP = data_preprocessing.packagedPartialProcessing(process_param)
-            self.data = partialP.allPartialProcessing(self.data_nopreprocessing)["imputed_data"]
+        }
+        process_param = {'refine_param':refine_param, 'outlier_param':outlier_param, 'imputation_param':imputation_param}
+        partialP = data_preprocessing.packagedPartialProcessing(process_param)
+        self.data = partialP.allPartialProcessing(self.data_nopreprocessing)["imputed_data"]
 
-            self.columns = list(self.data.columns)
+        self.columns = list(self.data.columns)
 
-    def data_describe_holiday_working_timestep_meta_insert(self, mode, meta_name):
+
+    def data_statistics_result_holiday_working_timestep_meta_insert(self, mode, meta_name):
         """
         데이터의 통계적 값과 휴일, 일하는 시간, Time Step 에 따른 분석 결과를 한번에 Meta 데이터로 생성하는 함수
 
         - 데이터 시간 정보의 주기가 Hour, Minute, Second 일때 사용
         """
-        describe_meta = self.data_describe_meta()
-        holiday_meta = self.data_holiday_notholiday_meta(describe_meta)
-        working_meta = self.data_working_notworking_meta(holiday_meta)
-        timestep_meta = self.data_time_step_meta(meta_timestep=working_meta)
+        count = 0
+        for tablename in self.ms_list:
+            self.get_preprocessing_data(tablename)
+            statistics_result_meta = self.data_statistics_result_meta()
+            holiday_meta = self.data_holiday_notholiday_meta(statistics_result_meta)
+            working_meta = self.data_working_notworking_meta(holiday_meta)
+            timestep_meta = self.data_time_step_meta(meta_timestep=working_meta)
 
-        self.data_meta_basic_save_update_insert(mode, timestep_meta, meta_name)
+            self.data_meta_basic_save_update_insert(mode, timestep_meta, meta_name)
+            
+            count+=1
+            print(count)
     
-    def data_describe_holiday_working_meta_insert(self, mode, meta_name):
+    def data_statistics_result_holiday_working_meta_insert(self, mode, meta_name):
         """
         데이터의 통계적 값과 휴일, 일하는 시간에 따른 분석 결과를 한번에 Meta 데이터로 생성하는 함수
 
         - 데이터 시간 정보의 주기가 1시간 이하일 때 사용
         """
-        describe_meta = self.data_describe_meta()
-        holiday_meta = self.data_holiday_notholiday_meta(describe_meta)
+        statistics_result_meta = self.data_statistics_result_meta()
+        holiday_meta = self.data_holiday_notholiday_meta(statistics_result_meta)
         working_meta = self.data_working_notworking_meta(holiday_meta)
 
         self.data_meta_basic_save_update_insert(mode, working_meta, meta_name)
 
-    def data_describe_holiday_meta_insert(self, mode, meta_name):
+    def data_statistics_result_holiday_meta_insert(self, mode, meta_name):
         """
         데이터의 통계적 값과 휴일에 따른 분석 결과를 한번에 Meta 데이터로 생성하는 함수
 
         - 데이터 시간 정보의 주기가 일별일 때 사용
         """
-        describe_meta = self.data_describe_meta()
-        holiday_meta = self.data_holiday_notholiday_meta(describe_meta)
+        statistics_result_meta = self.data_statistics_result_meta()
+        holiday_meta = self.data_holiday_notholiday_meta(statistics_result_meta)
 
         self.data_meta_basic_save_update_insert(mode, holiday_meta, meta_name)
 
 
-    # Data Feature Describe Create
-    def data_feature_describe_create(self):
+    # Data Feature statistics result Create
+    def data_feature_statistics_result_create(self):
         """
         데이터의 통계적 분포 정보를 Dictionary로 생성하는 함수
 
         Returns:
             데이터의 통계적 분포 정보를 담고 있는 Dictionary
         """
-        describe_dict = self.data.describe().to_dict()
-        return describe_dict
+        statistics_result_dict = self.data.describe().to_dict()
+        return statistics_result_dict
 
-    # Data Feature Describe Insert
-    def data_describe_meta(self):
+    # Data Feature statistics_result Insert
+    def data_statistics_result_meta(self):
         """
         데이터의 통계적 분포 분석을 위해 데이터 통계 Meta 정해진 Meta 구조에 맞춰 생성하는 함수
 
-        - data_feature_describe_create 함수를 활용해 데이터의 통계적 정보를 추출
+        - data_feature_statistics_result_create 함수를 활용해 데이터의 통계적 정보를 추출
 
         Returns: 
             데이터의 통계 분포 결과인 Dictionary Meta
         """
-        des_dict = self.data_feature_describe_create()
+        des_dict = self.data_feature_statistics_result_create()
         des_feature_dict = {}
         for n in des_dict:
             for key in des_dict[n]:
@@ -461,11 +472,11 @@ class MetaDataUpdate():
             print(table_info_doc["feature_information"][self.columns[0]]["statistics"]["time_related_statistics"].keys())
             
             #pprint(table_info_doc)
-            table_doc.post_database_collection_document(mode, table_info_doc)
+            #table_doc.post_database_collection_document(mode, table_info_doc)
 
         elif (mode == "update") | (mode == "insert"):
-            table_doc.post_database_collection_document(mode, meta_basic)
-
+            #table_doc.post_database_collection_document(mode, meta_basic)
+            pass
         else:
             print("The mode is incorrect.")
 
@@ -473,11 +484,14 @@ class MetaDataUpdate():
 if __name__ == "__main__":
 
     from pprint import pprint
-    import sys
-    sys.path.append("/home/hwangjisoo/바탕화면/Clust")
-    #sys.path.append("C:\\Users\\wuk34\\바탕 화면\\Clust")
     from KETIPreDataIngestion.KETI_setting import influx_setting_KETI as ins
     from KETIPreDataIngestion.data_influx import influx_Client
+   
+    domain="air"
+    subdomain="indoor_초등학교"
+    meta_test = MetaDataUpdate(domain, subdomain)
+    meta_test.data_statistics_result_holiday_working_timestep_meta_insert("save", "statistics_all")
+    
     
     ## ----------------------Kweather DataBase Info Save----------------------
     # domain = "air"  
@@ -535,7 +549,7 @@ if __name__ == "__main__":
     # meta = MetaDataUpdate(domain = domain, sub_domain=sub_domain, measurement=measurement)
     # meta.data_meta_basic_save_update_insert("update", meta_json)
 
-    ## ----------------------Describe Dict Create----------------------
+    ## ----------------------Statistics_result Dict Create----------------------
 #     domain="air"
 #     subdomain="indoor_초등학교"
 #  #   ms = "ICL1L2000283"
@@ -545,12 +559,12 @@ if __name__ == "__main__":
 #     for ms in mss:
 #         ms = ms.split(".")[0]
 #         print(ms)
-#         average = MetaDataUpdate(domain, subdomain, ms)
-#         average.describe_meta_insert("update")
+#         statistics = MetaDataUpdate(domain, subdomain, ms)
+#         statistics_result = statistics.data_statistics_result_meta()
 #         count+=1
-#         print(count)
+#         print(statistics_result)
 
-    ## ----------------------Describe Dict&Holiday&WorkinTime Meta Create&Insert----------------------
+    ## ----------------------Statistics_result Dict&Holiday&WorkinTime Meta Create&Insert----------------------
 #     domain="air"
 #     subdomain="indoor_초등학교"
 #  #   ms = "ICL1L2000283"
@@ -561,7 +575,7 @@ if __name__ == "__main__":
 #         ms = ms.split(".")[0]
 #         print(ms)
 #         total_meta = MetaDataUpdate(domain, subdomain, ms)
-#         total_meta.data_describe_holiday_working_meta_insert("save")
+#         total_meta.data_statistics_result_holiday_working_meta_insert("save")
 #         count+=1
 #         print(count)
 
@@ -581,21 +595,21 @@ if __name__ == "__main__":
 #         only_timestep_meta.data_meta_basic_save_update_insert("save", timestep_meta_dict, "only_timestep")
 #         count+=1
 #         print(count)
-## -----------------------Describe Dict&Holiday&WorkinTime&TimeStep Meta Create&Insert----------------------
-    domain="air"
-    subdomain="outdoor"
- #   ms = "ICL1L2000283"
- #   dirname = "/home/hwangjisoo/바탕화면/케이웨더 데이터 2차/{}/{}".format(subdomain.split("_")[0], subdomain.split("_")[1])
- #   dirname = "C:\\Users\\82102\Desktop\\케이웨더 데이터 2차\\{}\\{}".format(subdomain.split("_")[0], subdomain.split("_")[1])
-    dirname = "C:\\Users\\82102\\Desktop\\케이웨더 데이터 2차\\outdoor\\SDOT\\4"
-    mss = os.listdir(dirname)
-    count = 0 
+## -----------------------Statistics_result Dict&Holiday&WorkinTime&TimeStep Meta Create&Insert----------------------
+#     domain="air"
+#     subdomain="outdoor"
+#  #   ms = "ICL1L2000283"
+#  #   dirname = "/home/hwangjisoo/바탕화면/케이웨더 데이터 2차/{}/{}".format(subdomain.split("_")[0], subdomain.split("_")[1])
+#  #   dirname = "C:\\Users\\82102\Desktop\\케이웨더 데이터 2차\\{}\\{}".format(subdomain.split("_")[0], subdomain.split("_")[1])
+#     dirname = "C:\\Users\\82102\\Desktop\\케이웨더 데이터 2차\\outdoor\\SDOT\\4"
+#     mss = os.listdir(dirname)
+#     count = 0 
 
-    for ms in mss:
-        ms = ms.split(".")[0]
-        print(ms)
-        total04_meta = MetaDataUpdate(domain, subdomain, ms)
-        total04_meta.data_describe_holiday_working_timestep_meta_insert("save", "statistics_all")
-        count+=1
-        print(count)
+#     for ms in mss:
+#         ms = ms.split(".")[0]
+#         print(ms)
+#         total04_meta = MetaDataUpdate(domain, subdomain, ms)
+#         total04_meta.data_statistics_result_holiday_working_timestep_meta_insert("save", "statistics_all")
+#         count+=1
+#         print(count)
         
