@@ -17,6 +17,12 @@
 		"end_time": {
 			"type": "string"
 		},
+		"tags":{
+			"type": "array",
+			"items": {
+				"type":"string"
+			}
+		},
 		"fields": {
 			"type": "array",
 			"items": {
@@ -74,7 +80,7 @@
 					"analysisResult": {
 						"type": "object",
 						"properties": {
-							"LIstlBasedResult": {
+							"ListBasedResult": {
 								"type": "array",
 								"items": {
 									"type": "object",
