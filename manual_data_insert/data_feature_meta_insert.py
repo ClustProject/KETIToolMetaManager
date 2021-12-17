@@ -70,6 +70,7 @@ class MetaDataUpdate():
         count = 0
         for tablename in self.ms_list:
             self.get_preprocessing_data(tablename)
+            self.tablename = tablename
             statistics_result_meta = self.data_statistics_result_meta()
             holiday_meta = self.data_holiday_notholiday_meta(statistics_result_meta)
             working_meta = self.data_working_notworking_meta(holiday_meta)
@@ -232,7 +233,7 @@ class MetaDataUpdate():
         """
         데이터 시간에 따라 일하는 시간과 일하지 않는 시간의 정보를 "Working" column에 추가하는 함수
 
-        - 데이터에 휴일 정보가 없다면 휴일을 생성하는 transform_holiday_create 함수를 활용하여 휴일정보를 생성
+        - 데이터에 휴일 정보가 없다면 휴일을 생성하는 transform_holiday_create 함수를 활용하여 휴일정보를 생성 # 데이터에 휴일정보가 있는지 없는지도 파라미터로 받기 or 스스로 알아내서 진행하기
         - 입력 working_start, working_end 범위 외의 시간과 휴일을 일하지 않는 시간으로 정의
         - 데이터 시간 정보의 주기가 1시간 이하일때 사용
 
@@ -242,7 +243,7 @@ class MetaDataUpdate():
         Returns:
             Working Feature 정보를 포함한 데이터
         """
-        if "HoliDay" not in self.data.columns:
+        if "HoliDay" not in self.data.columns: # 휴일 정보가 담긴 column은 이름을 HoliDay로 해야함 -> 사용자가 바꿔줘서 입력해야하낭? 어떻게 처리할것인지 고민하기
             self.data = self.transform_holiday_create()
 
         working_row = pd.Series("working", 
@@ -442,7 +443,6 @@ class MetaDataUpdate():
         else:
             print("The mode is incorrect.")
             
-
     # Data Label Information Meta Insert (by data_label_information_meta & 새롭게 Data Meta Document 를 생성할때 사용)
     def data_label_information_meta_insert(self, label_meta, mode = "insert"):
         feature_information = self.data_label_information_meta()
@@ -450,7 +450,6 @@ class MetaDataUpdate():
 
         label_meta["feature_information"] = feature_information
         table_doc.post_database_collection_document(mode, label_meta)
-
 
     # Meta Save or Update - Basic Method
     def data_meta_basic_save_update_insert(self, mode, meta_basic, meta_name=None):
@@ -492,6 +491,7 @@ if __name__ == "__main__":
     meta_test = MetaDataUpdate(domain, subdomain)
     meta_test.data_statistics_result_holiday_working_timestep_meta_insert("save", "statistics_all")
     
+    ## flag 를 활용해 상황별 입력 파라미터를 다르게 받아 편히 쓰게 하기 / 아래와 같이 주석으로 나열해서 사용하지 않고!!!
     
     ## ----------------------Kweather DataBase Info Save----------------------
     # domain = "air"  
