@@ -94,27 +94,24 @@
 											]
 										},
 										"result": {
-											"type": "array",
-											"items": {
-												"type": "object",
-												"properties": {
-													"labelNameList": {
-														"type": "array",
-														"items": {
-															"type": "string"
-														}
-													},
-													"labelValueList": {
-														"type": "array",
-														"items": {
-															"type": "number"
-														}
+											"type": "object",
+											"properties": {
+												"labelNameList": {
+													"type": "array",
+													"items": {
+														"type": "string"
 													}
 												},
-												"required": [
-													"labelNameList", "labelValueList"
-												]
-											}
+												"labelValueList": {
+													"type": "array",
+													"items": {
+														"type": "number"
+													}
+												}
+											},
+											"required": [
+												"labelNameList", "labelValueList"
+											]
 										}
 									},
 									"required": [
