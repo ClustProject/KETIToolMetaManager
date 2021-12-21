@@ -1,0 +1,117 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"type": "object",
+	"properties": {
+		"domain": {
+			"type": "string"
+		},
+		"sub_domain": {
+			"type": "string"
+		},
+		"table_name": {
+			"type": "string"
+		},
+		"description": {
+			"type": "string"
+		},
+		"column_information": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"properties": {
+					"column_name": {
+						"type": "string"
+					},
+					"description":{
+                        "type": "string"
+                    },
+                    "tag":{
+                        "type": "string"
+                    },
+                    "unit":{
+                        "type": "string"
+                    },
+                    "min":{
+                        "type": "string"
+                    },
+                    "max":{
+                        "type": "string"
+                    },
+                    "analysis_informatoin":{
+						"type": "object",
+						"properties": {
+							"criteria_information": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"properties": {
+										"criteriaName": {
+											"type": "string"
+										},
+                                        "criteria":{
+                                            "type":"array",
+                                            "items": {
+                                                "type":"object",
+                                                "properties": {
+                                                    "step":{
+                                                        "type":"array",
+                                                        "items": {
+                                                            "type":["number", "string"]
+                                                        }
+                                                    },
+                                                    "label":{
+                                                        "type":"array",
+                                                        "items": {
+                                                            "type":"string"
+                                                        }
+                                                    }
+                                                },
+                                                "required":[
+                                                    "label", "step"
+                                                ]
+                                            }
+                                        },
+                                        "criteriaResult":{
+                                            "type":"object",
+                                            "properties": {
+                                                "characteristics": {
+                                                    "enum": [
+                                                        "mean", "count"
+                                                    ]
+                                                },
+                                                "label":{
+                                                    "type":"array",
+                                                        "items": {
+                                                            "type":"string"
+                                                        }
+                                                },
+                                                "value":{
+                                                    "type":"array",
+                                                        "items": {
+                                                            "type":"number"
+                                                        }
+                                                }
+                                            },
+                                            "required":[
+                                                "label", "value", "characteristics"
+                                            ]
+                                        }
+									},
+									"required": [
+										"criteriaName"
+									]
+								}
+							}
+						}
+					}
+				},
+				"required": [
+					"column_name"
+				]
+			}
+		}
+	},
+	"required": [
+		"domain", "sub_domain", "table_name"
+	]
+}
