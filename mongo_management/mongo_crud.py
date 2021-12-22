@@ -57,26 +57,34 @@ class MongoCRUD:
         """
         self.db[collection].create_index(unique_col_name, unique=True)
 
-    # Get current's DB name
     def getDBName(self):
-        """Return db name
+        """Return current DB name
         """
         return self.db
     
-    # Read
     def getDBList(self):
+        """Return a list of all database names
+        """
         return self.conn.list_database_names()
 
     def getCollList(self):
+        """Return a list of all collection names on current database
+        """
         return self.db.list_collection_names()
 
     def getOneData(self, collection, condition=None):
+        """Get one row which is fit with condition on a collection 
+        """
         return self.db[collection].find_one(condition)
 
     def getManyData(self, collection, condition=None):
+        """Get all rows which is fit with condition on a collection 
+        """
         return self.db[collection].find(condition)
 
     def checkField(self, collection,table_name, field):
+        """Check whether the field name exists in the collection
+        """
         #{"field_to_check_for": {"$exists": True}}
         condition = {"table_name":table_name,field:{"$exists":True}} 
         res = list(self.db[collection].find(condition))
@@ -84,6 +92,8 @@ class MongoCRUD:
 
     # Insert
     def insertOne(self, collection, data, unique_col_name=None):
+        """Insert one row to the collection
+        """
         try:
             if unique_col_name==None:
                 return self.db[collection].insert_one(data)
@@ -94,6 +104,8 @@ class MongoCRUD:
             return e
     
     def insertMany(self, collection, data, unique_col_name=None):
+        """Insert many rows to the collection
+        """
         try:
             if unique_col_name==None:
                 return self.db[collection].insert_many(data)
