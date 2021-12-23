@@ -56,7 +56,7 @@ class MetaDataUpdate():
             "serialImputation":{
                 "flag":True,
                 "imputation_method":[{"min":0,"max":20,"method":"linear" , "parameter":{}}],
-                "totalNanLimit":70
+                "totalNonNanRatio":80
             }
         }
         process_param = {'refine_param':refine_param, 'outlier_param':outlier_param, 'imputation_param':imputation_param}

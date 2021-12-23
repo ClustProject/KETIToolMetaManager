@@ -1,17 +1,20 @@
-"""This module defines an customized MongoDB CRUD object.
 
-CRUD
-: Connect, Read, Update, Delete
-
-  Typical usage example:
-
-  mydb = MongoCRUD(db_info)
-  data = mydb.getCollList()
-"""
 import pymongo
 
 class MongoCRUD:
+    """This class defines an customized MongoDB CRUD object.
+
+    CRUD
+    : Connect, Read, Update, Delete
+
+    :param infoDict: local or remote database information
+    :type userId: dictionary
     
+    Typical usage example:
+    docstring::
+        mydb = MongoCRUD(db_info)
+        data = mydb.getCollList()
+    """
     def __init__(self, infoDict=None):
         if(infoDict is None):
             self.userId = "test"
@@ -28,11 +31,9 @@ class MongoCRUD:
             self.dbName = infoDict['DB_NAME']
             self.db = self.connectDB()
 
-    # Connect
     def connectDB(self):
-        # self.conn = pymongo.MongoClient("mongodb://"+self.userId+\
-        #     ":"+self.userPwd+"@"+self.host+\
-        #         ":"+str(self.port)+"/"+self.dbName)
+        """Connect a mongo db
+        """
         self.conn= pymongo.MongoClient(host=self.host,
                          port=int(self.port),
                          username=self.userId,
@@ -40,36 +41,50 @@ class MongoCRUD:
                         authSource="admin")
         return self.conn.get_database(self.dbName)
 
-    # Disconnect
     def close(self):
+        """Close a mongo db
+        """
         self.conn.close()
 
-    # Switch Database
     def switchDB(self,dbName):
+        """Switch Database
+        """
         self.dbName = dbName
         self.db = self.conn.get_database(self.dbName)
     
     def create_unique_index(self,collection, unique_col_name):
+        """Create unique index column of a collection
+        """
         self.db[collection].create_index(unique_col_name, unique=True)
 
-    # Get current's DB name
     def getDBName(self):
+        """Return current DB name
+        """
         return self.db
     
-    # Read
     def getDBList(self):
+        """Return a list of all database names
+        """
         return self.conn.list_database_names()
 
     def getCollList(self):
+        """Return a list of all collection names on current database
+        """
         return self.db.list_collection_names()
 
     def getOneData(self, collection, condition=None):
+        """Get one row which is fit with condition on a collection 
+        """
         return self.db[collection].find_one(condition)
 
     def getManyData(self, collection, condition=None):
+        """Get all rows which is fit with condition on a collection 
+        """
         return self.db[collection].find(condition)
 
     def checkField(self, collection,table_name, field):
+        """Check whether the field name exists in the collection
+        """
         #{"field_to_check_for": {"$exists": True}}
         condition = {"table_name":table_name,field:{"$exists":True}} 
         res = list(self.db[collection].find(condition))
@@ -77,6 +92,8 @@ class MongoCRUD:
 
     # Insert
     def insertOne(self, collection, data, unique_col_name=None):
+        """Insert one row to the collection
+        """
         try:
             if unique_col_name==None:
                 return self.db[collection].insert_one(data)
@@ -87,6 +104,8 @@ class MongoCRUD:
             return e
     
     def insertMany(self, collection, data, unique_col_name=None):
+        """Insert many rows to the collection
+        """
         try:
             if unique_col_name==None:
                 return self.db[collection].insert_many(data)
