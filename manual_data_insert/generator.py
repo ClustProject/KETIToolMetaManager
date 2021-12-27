@@ -25,14 +25,23 @@ class MetaGenerator():
             self.gmaps = googlemaps.Client(key=self.api_key)
             
     def geocoding(self,address):
+        """
+        convert address syntex into (latitude , longitude) 
+        """
         geocode_result = self.gmaps.geocode((address), language='ko')
         return geocode_result[0]['geometry']['location']
     
     def reverse_geocoding(self,pos):
+        """
+        convert (latitude , longitude) into address syntex
+        """
         reverse_geocode_result = self.gmaps.reverse_geocode((float(pos["lat"]), float(pos["lng"])),language='ko')
         return reverse_geocode_result[0]["formatted_address"]
     
     def get_table_freqeuncy(self,data,freq_check_length=5):
+        """
+        return time frequency from the data
+        """
         freq = to_offset(pd.infer_freq(data[:freq_check_length]["time"]))
         if(freq==None): 
             freq1 = data["time"][1]-data["time"][0]
@@ -42,6 +51,9 @@ class MetaGenerator():
         return str(freq_timedelta)
 
     def get_table_info(self, influxDB, db_name, measurement_name):
+        """
+        get table information
+        """
         exploration_df = pd.DataFrame()
         influxDB.switch_database(db_name)
         ms_list = influxDB.get_list_measurements()
