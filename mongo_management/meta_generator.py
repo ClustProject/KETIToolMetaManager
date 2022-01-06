@@ -1,8 +1,8 @@
 """
-generator
+generator (Test Code by Miseon)
 ===
 the modules 
-- generate metadata
+- generate metadata 
 
 """
 import hashlib

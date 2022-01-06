@@ -1,5 +1,5 @@
 """
-meta_read_write
+meta_read_write , Test Code by Miseon
 ===
 the modules 
 - generating metadata using CLUST rules 
