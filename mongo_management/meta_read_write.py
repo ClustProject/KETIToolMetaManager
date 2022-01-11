@@ -19,7 +19,7 @@ sys.path.append(".")
 
 import json
 from influxdb import InfluxDBClient
-from generator import MetaGenerator
+from mongo_management.meta_generator import MetaGenerator
 from mongo_management.mongo_crud import MongoCRUD
 from KETIPreDataIngestion.KETI_setting import influx_setting_KETI as ins
 
