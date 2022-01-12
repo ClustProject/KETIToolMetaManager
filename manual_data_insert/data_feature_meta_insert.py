@@ -45,8 +45,8 @@ class MetaDataUpdate():
             "staticFrequency":{"flag":True, "frequency":None}
         }
         outlier_param  = {
-            "certainOutlierToNaN":{"flag":True},
-            "uncertainOutlierToNaN":{
+            "certainErrorToNaN":{"flag":True},
+            "unCertainErrorToNaN":{
                 "flag":False,
                 "param":{"neighbor":[0.5,0.6]}
             },
