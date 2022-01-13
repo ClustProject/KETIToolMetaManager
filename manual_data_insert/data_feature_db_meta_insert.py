@@ -16,7 +16,7 @@ class DbMetaCreateInsert():
         self.domain = domain
         self.subdomain = subdomain
         
-        data_client = influx_Client.influxClient(ins)
+        data_client = influx_Client.influxClient(ins.CLUSTDataServer)
         self.ms_list = data_client.measurement_list(self.domain+"_"+self.subdomain)
         self.columns = data_client.get_fieldList(self.domain+"_"+self.subdomain, self.ms_list[0])
 

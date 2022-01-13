@@ -25,7 +25,7 @@ class MetaDataUpdate():
         self.subdomain = sub_domain
         #self.tablename = measurement
         self.data_cut = pd.DataFrame()
-        self.data_client = influx_Client.influxClient(ins)
+        self.data_client = influx_Client.influxClient(ins.CLUSTDataServer)
         self.ms_list = self.data_client.measurement_list(self.domain+"_"+self.subdomain)
             
     def get_preprocessing_data(self, tablename):
@@ -520,7 +520,7 @@ if __name__ == "__main__":
     # sub_domain = "indoor_경로당"
     # measurement = "ICL1L2000236"
     
-    # data_by_influxdb = influx_Client.influxClient(ins) # DataServer 에서 Meta 추가 코드에 넣어서 사용
+    # data_by_influxdb = influx_Client.influxClient(ins.CLUSTDataServer)# DataServer 에서 Meta 추가 코드에 넣어서 사용
     # data = data_by_influxdb.get_data(domain +"_"+sub_domain, measurement)
     # meta = MetaDataUpdate(domain = domain, sub_domain=sub_domain, measurement=measurement, data=data)
     # meta.data_label_information_meta_save("save")

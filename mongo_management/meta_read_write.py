@@ -32,10 +32,11 @@ try:
     gener = MetaGenerator(ins.GENERATOR_INFO)
 except AttributeError:
     gener = MetaGenerator()
-#ins = config['INFLUX_DB_INFO']
-#influxdb = InfluxDBClient(host=ins["host_"], port=ins["port_"], username=ins["user_"], password=ins["pass_"])
-influxdb = InfluxDBClient(host=ins.host_, port=ins.port_, username=ins.user_, password=ins.pass_)
-mydb = MongoCRUD(ins.DB_INFO)
+
+
+CLUSTDataServer= ins.CLUSTDataServer
+influxdb = InfluxDBClient(host=CLUSTDataServer.host, port=CLUSTDataServer.port, username=CLUSTDataServer.user, password=CLUSTDataServer.password)
+mydb = MongoCRUD(ins.CLUST_META_INFO)
 
 unique_index_name = "table_name"
 exclude_db = ["config","local","admin"]

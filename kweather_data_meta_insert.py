@@ -22,7 +22,7 @@ def kweather_data_read(sub_domain):
 
     for filename in filenames:
         table_name = filename.split(".")[0]
-        data_by_influxdb = influx_Client.influxClient(ins)
+        data_by_influxdb = influx_Client.influxClient(ins.CLUSTDataServer)
 
 
         data = data_by_influxdb.get_data(domain+"_"+subdomain, table_name)
