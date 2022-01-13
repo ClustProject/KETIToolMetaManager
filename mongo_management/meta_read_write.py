@@ -36,7 +36,7 @@ except AttributeError:
 
 CLUSTDataServer= ins.CLUSTDataServer
 influxdb = InfluxDBClient(host=CLUSTDataServer.host, port=CLUSTDataServer.port, username=CLUSTDataServer.user, password=CLUSTDataServer.password)
-mydb = MongoCRUD(ins.CLUST_META_INFO)
+mydb = MongoCRUD(ins.CLUSTMetaInfo)
 
 unique_index_name = "table_name"
 exclude_db = ["config","local","admin"]
