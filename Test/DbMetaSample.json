@@ -149,6 +149,300 @@
             }
         },
         {
+            "columnName": "in_pm25_raw",
+            "description": "Volatile Organic Compounds.",
+            "tag": [
+                "indoor",
+                "휘발성유기화합물",
+                "환경 오염 물질"
+              ],
+            "unit": "ppb",
+            "min": 0,
+            "max": 60000,
+            "analysisInformation":{
+                "criteriaInformation":[
+                    {
+                        "criteriaName": "CountByFeatureLabel",
+                        "criteria":[
+                            {
+                                "step":[
+                                    0,
+                                    15,
+                                    35,
+                                    75,
+                                    1000
+                                ],
+                                "label":[
+                                    "좋음",
+                                    "보통",
+                                    "나쁨",
+                                    "매우나쁨"
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "criteriaName": "StatisticsResult",
+                        "criteriaResult":{
+                            "characteristics": "mean",
+                            "label":[
+                                "mean",
+                                "min",
+                                "max"],
+                            "value":[
+                                2280.4667182746184, 
+                                0, 
+                                44925.36
+                            ]
+                        }
+                    },
+                    {
+                        "criteriaName": "MeanByHoliday",
+                        "criteriaResult":{
+                            "characteristics": "mean",
+                            "label":[
+                                "holiday",
+                                "notHoliday"
+                            ],
+                            "value":[
+                                2475.932558529038,
+                                2656.9365331831195
+                            ]
+                        },
+                        "criteria":[
+                            {
+                                "step":[
+                                    "Sat",
+                                    "Sun"
+                                ],
+                                "label":[
+                                    "Holiday"
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "criteriaName": "MeanByWorking",
+                        "criteriaResult":{
+                            "characteristics": "mean",
+                            "label":[
+                                "working",
+                                "notWorking"
+                            ],
+                            "value":[
+                                2467.6520073246047,
+                                1979.1728288798156
+                            ]
+                        },
+                        "criteria":[
+                            {
+                                "step":[
+                                    0,
+                                    9,
+                                    18,
+                                    24
+                                ],
+                                "label":[
+                                    "notWorking",
+                                    "working",
+                                    "notWorking"
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "criteriaName": "MeanByTimeStep",
+                        "criteriaResult":{
+                            "characteristics": "mean",
+                            "label":[
+                                "dawn",
+                                "morning",
+                                "afternoon",
+                                "evening",
+                                "night"
+                            ],
+                            "value":[
+                                1018.3953637613537,
+                                1622.1041736020402,
+                                2177.2700810084807,
+                                3458.4296400503304,
+                                3756.595502590152
+                            ]
+                        },
+                        "criteria":[
+                            {
+                                "step":[
+                                    0,
+                                    6,
+                                    12,
+                                    17,
+                                    20,
+                                    24
+                                ],
+                                "label":[
+                                    "dawn",
+                                    "morning",
+                                    "afternoon",
+                                    "evening",
+                                    "night"
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "columnName": "in_temp",
+            "description": "Volatile Organic Compounds.",
+            "tag": [
+                "indoor",
+                "휘발성유기화합물",
+                "환경 오염 물질"
+              ],
+            "unit": "ppb",
+            "min": 0,
+            "max": 60000,
+            "analysisInformation":{
+                "criteriaInformation":[
+                    {
+                        "criteriaName": "CountByFeatureLabel",
+                        "criteria":[
+                            {
+                                "step":[
+                                    -40,
+                                    14,
+                                    16,
+                                    18,
+                                    24,
+                                    27,
+                                    30,
+                                    80
+                                ],
+                                "label":[
+                                    "매우추움",
+                                    "추움",
+                                    "서늘",
+                                    "쾌적",
+                                    "따뜻",
+                                    "더움",
+                                    "매우더움"
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "criteriaName": "StatisticsResult",
+                        "criteriaResult":{
+                            "characteristics": "mean",
+                            "label":[
+                                "mean",
+                                "min",
+                                "max"],
+                            "value":[
+                                2280.4667182746184, 
+                                0, 
+                                44925.36
+                            ]
+                        }
+                    },
+                    {
+                        "criteriaName": "MeanByHoliday",
+                        "criteriaResult":{
+                            "characteristics": "mean",
+                            "label":[
+                                "holiday",
+                                "notHoliday"
+                            ],
+                            "value":[
+                                2475.932558529038,
+                                2656.9365331831195
+                            ]
+                        },
+                        "criteria":[
+                            {
+                                "step":[
+                                    "Sat",
+                                    "Sun"
+                                ],
+                                "label":[
+                                    "Holiday"
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "criteriaName": "MeanByWorking",
+                        "criteriaResult":{
+                            "characteristics": "mean",
+                            "label":[
+                                "working",
+                                "notWorking"
+                            ],
+                            "value":[
+                                2467.6520073246047,
+                                1979.1728288798156
+                            ]
+                        },
+                        "criteria":[
+                            {
+                                "step":[
+                                    0,
+                                    9,
+                                    18,
+                                    24
+                                ],
+                                "label":[
+                                    "notWorking",
+                                    "working",
+                                    "notWorking"
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "criteriaName": "MeanByTimeStep",
+                        "criteriaResult":{
+                            "characteristics": "mean",
+                            "label":[
+                                "dawn",
+                                "morning",
+                                "afternoon",
+                                "evening",
+                                "night"
+                            ],
+                            "value":[
+                                1018.3953637613537,
+                                1622.1041736020402,
+                                2177.2700810084807,
+                                3458.4296400503304,
+                                3756.595502590152
+                            ]
+                        },
+                        "criteria":[
+                            {
+                                "step":[
+                                    0,
+                                    6,
+                                    12,
+                                    17,
+                                    20,
+                                    24
+                                ],
+                                "label":[
+                                    "dawn",
+                                    "morning",
+                                    "afternoon",
+                                    "evening",
+                                    "night"
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
             "columnName": "in_pm01_raw",
             "description": "Original particulate matter 01",
             "tag": [
