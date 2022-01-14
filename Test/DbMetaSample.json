@@ -1,0 +1,277 @@
+{
+    "domain": "air",
+    "subDomain": "indoor_어린이집",
+    "tableName": "db_information",
+    "description": "This is Kweather Data",
+    "columnInformation": [
+        {
+            "columnName": "in_voc",
+            "description": "Volatile Organic Compounds.",
+            "tag": [
+                "indoor",
+                "휘발성유기화합물",
+                "환경 오염 물질"
+              ],
+            "unit": "ppb",
+            "min": 0,
+            "max": 60000,
+            "analysisInformation":{
+                "criteriaInformation":[
+                    {
+                        "criteriaName": "CountByFeatureLabel",
+                        "criteria":[
+                            {
+                                "step":[
+                                    0,
+                                    200,
+                                    400,
+                                    1000,
+                                    60000
+                                ],
+                                "label":[
+                                    "좋음",
+                                    "보통",
+                                    "나쁨",
+                                    "매우나쁨"
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "criteriaName": "StatisticsResult",
+                        "criteriaResult":{
+                            "characteristics": "mean",
+                            "label":[
+                                "mean",
+                                "min",
+                                "max"],
+                            "value":[
+                                2280.4667182746184, 
+                                0, 
+                                44925.36
+                            ]
+                        }
+                    },
+                    {
+                        "criteriaName": "MeanByHoliday",
+                        "criteriaResult":{
+                            "characteristics": "mean",
+                            "label":[
+                                "holiday",
+                                "notHoliday"
+                            ],
+                            "value":[
+                                2475.932558529038,
+                                2656.9365331831195
+                            ]
+                        },
+                        "criteria":[
+                            {
+                                "step":[
+                                    "Sat",
+                                    "Sun"
+                                ],
+                                "label":[
+                                    "Holiday"
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "criteriaName": "MeanByWorking",
+                        "criteriaResult":{
+                            "characteristics": "mean",
+                            "label":[
+                                "working",
+                                "notWorking"
+                            ],
+                            "value":[
+                                2467.6520073246047,
+                                1979.1728288798156
+                            ]
+                        },
+                        "criteria":[
+                            {
+                                "step":[
+                                    0,
+                                    9,
+                                    18,
+                                    24
+                                ],
+                                "label":[
+                                    "notWorking",
+                                    "working",
+                                    "notWorking"
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "criteriaName": "MeanByTimeStep",
+                        "criteriaResult":{
+                            "characteristics": "mean",
+                            "label":[
+                                "dawn",
+                                "morning",
+                                "afternoon",
+                                "evening",
+                                "night"
+                            ],
+                            "value":[
+                                1018.3953637613537,
+                                1622.1041736020402,
+                                2177.2700810084807,
+                                3458.4296400503304,
+                                3756.595502590152
+                            ]
+                        },
+                        "criteria":[
+                            {
+                                "step":[
+                                    0,
+                                    6,
+                                    12,
+                                    17,
+                                    20,
+                                    24
+                                ],
+                                "label":[
+                                    "dawn",
+                                    "morning",
+                                    "afternoon",
+                                    "evening",
+                                    "night"
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "columnName": "in_pm01_raw",
+            "description": "Original particulate matter 01",
+            "tag": [
+                "indoor",
+                "극초미세먼지",
+                "원본값",
+                "환경 오염 물질"
+              ],
+            "unit": "㎍/m³",
+            "min": 0,
+            "max": 1000,
+            "analysisInformation":{
+                "criteriaInformation":[
+                    {
+                        "criteriaName": "StatisticsResult",
+                        "result":{
+                            "characteristics": "mean",
+                            "label":[
+                                "mean",
+                                "min",
+                                "max"],
+                            "value":[
+                                20.534083852257385,
+                                4.346153846153846,
+                                234.19230769230768
+                            ]
+                        }
+                    },
+                    {
+                        "criteriaName": "MeanByHoliday",
+                        "criteriaResult":{
+                            "characteristics": "mean",
+                            "label":[
+                                "holiday",
+                                "notHoliday"
+                            ],
+                            "value":[
+                                16.48277234392776,
+                                20.55504786257979
+                            ]
+                        },
+                        "criteria":[
+                            {
+                                "step":[
+                                    "Sat",
+                                    "Sun"
+                                ],
+                                "label":[
+                                    "Holiday"
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "criteriaName": "MeanByWorking",
+                        "criteriaResult":{
+                            "characteristics": "mean",
+                            "label":[
+                                "working",
+                                "notWorking"
+                            ],
+                            "value":[
+                                18.600573977766945,
+                                19.879085633595846
+                            ]
+                        },
+                        "criteria":[
+                            {
+                                "step":[
+                                    0,
+                                    9,
+                                    18,
+                                    24
+                                ],
+                                "label":[
+                                    "notWorking",
+                                    "working",
+                                    "notWorking"
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "criteriaName": "MeanByTimeStep",
+                        "criteriaResult":{
+                            "characteristics": "mean",
+                            "label":[
+                                "dawn",
+                                "morning",
+                                "afternoon",
+                                "evening",
+                                "night"
+                            ],
+                            "value":[
+                                20.272958074444634,
+                                22.328572879122387,
+                                18.803570468749367,
+                                17.70332811596312,
+                                19.416017511673974
+                            ]
+                        },
+                        "criteria":[
+                            {
+                                "step":[
+                                    0,
+                                    6,
+                                    12,
+                                    17,
+                                    20,
+                                    24
+                                ],
+                                "label":[
+                                    "dawn",
+                                    "morning",
+                                    "afternoon",
+                                    "evening",
+                                    "night"
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
+    ]
+}
