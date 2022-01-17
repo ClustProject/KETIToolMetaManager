@@ -38,6 +38,14 @@ class WizApiMongoMeta():
         response = requests.post(url, data=json.dumps(data), headers=headers)
 
         print(response.status_code)
+        
+    def post_database_collection_documents(self, mode, data):
+    
+        url = wiz_url+"/rest/1.0/mongodb/documents/{}/{}?mode={}".format(self.domain, self.subdomain, mode)
+        headers = {'Content-Type': 'application/json'}
+        response = requests.post(url, data=json.dumps(data), headers=headers)
+
+        print(response.status_code)
 
 if __name__ == "__main__":
     from pprint import pprint
