@@ -8,22 +8,36 @@ sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(os.path.abspath(
 from KETIPreDataIngestion.KETI_setting.influx_setting_KETI import wiz_url
 
 class WizApiMongoMeta():
-    def __init__(self, domain, subdomain, tablename=None):
-        self.domain = domain
-        self.subdomain = subdomain
-        self.tablename = tablename
+    # get - database list
+    def get_database_list(self):
+        url = wiz_url+"/rest/1.0/mongodb/{}".format("databases")
+        header = {'accept': 'application/json'}
+        response = requests.get(url, headers=header)
+        print(response.status_code)
+        text = response.text
+
+        return json.loads(text)
+    
+    def get_collection_list(self, domain):
+        url = wiz_url+"/rest/1.0/mongodb/collections/{}".format(domain)
+        header = {'accept': 'application/json'}
+        response = requests.get(url, headers=header)
+        print(response.status_code)
+        text = response.text
+
+        return json.loads(text)
 
     # get - database/collection/document?table_name - 지정 table name 출력
-    def get_database_collection_document(self):
-        url = wiz_url+"/rest/1.0/mongodb/document/{}/{}?table_name={}".format(self.domain, self.subdomain, self.tablename)
+    def get_database_collection_document(self, domain, subdomain, tablename=None):
+        url = wiz_url+"/rest/1.0/mongodb/document/{}/{}?table_name={}".format(domain, subdomain, tablename)
         response = requests.get(url)
         print(response.status_code)
         text = response.text
 
         return json.loads(text)
     
-    def get_database_collection_documents(self):
-        url = wiz_url+"/rest/1.0/mongodb/documents/{}/{}".format(self.domain, self.subdomain)
+    def get_database_collection_documents(self, domain, subdomain):
+        url = wiz_url+"/rest/1.0/mongodb/documents/{}/{}".format(domain, subdomain)
         response = requests.get(url)
         print(response.status_code)
         text = response.text
@@ -31,17 +45,17 @@ class WizApiMongoMeta():
         return json.loads(text)
 
     # post - database/collection/document insert, save
-    def post_database_collection_document(self, mode, data):
+    def post_database_collection_document(self, mode, data, domain, subdomain):
 
-        url = wiz_url+"/rest/1.0/mongodb/document/{}/{}?mode={}".format(self.domain, self.subdomain, mode)
+        url = wiz_url+"/rest/1.0/mongodb/document/{}/{}?mode={}".format(domain, subdomain, mode)
         headers = {'Content-Type': 'application/json'}
         response = requests.post(url, data=json.dumps(data), headers=headers)
 
         print(response.status_code)
         
-    def post_database_collection_documents(self, mode, data):
+    def post_database_collection_documents(self, mode, data, domain, subdomain):
     
-        url = wiz_url+"/rest/1.0/mongodb/documents/{}/{}?mode={}".format(self.domain, self.subdomain, mode)
+        url = wiz_url+"/rest/1.0/mongodb/documents/{}/{}?mode={}".format(domain, subdomain, mode)
         headers = {'Content-Type': 'application/json'}
         response = requests.post(url, data=json.dumps(data), headers=headers)
 
@@ -49,15 +63,13 @@ class WizApiMongoMeta():
 
 if __name__ == "__main__":
     from pprint import pprint
-    test = WizApiMongoMeta("air", "indoor_요양원", "IS70W2000849")
-    doc = test.get_database_collection_document()
+    test = WizApiMongoMeta()
+    doc = test.get_collection_list("air")
     
     print("======Data Collection Document======")
     pprint(doc)
     
-    # print("======DataBase Collection Document======")
-    # pprint(doc)
-    #test.post_database_collection_document("insert")
+    #test.get_database_collection_document("air", "indoor_요양원", "IS70W2000849")
 
     '''
     get - database/collection/document - 첫번째 document 만 출력

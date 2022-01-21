@@ -15,5 +15,5 @@ class WriteData():
     def set_ms_meta(self):
         domain = self.db.split("_", maxsplit=1)[0]
         sub_domain = self.db.split("_", maxsplit=1)[1]
-        mongodb_c = wiz.WizApiMongoMeta(domain, sub_domain, self.tablename)
-        mongodb_c.post_database_collection_documents(self.mode, self.meta_data)
+        mongodb_c = wiz.WizApiMongoMeta()
+        mongodb_c.post_database_collection_documents(self.mode, self.meta_data, domain, sub_domain)

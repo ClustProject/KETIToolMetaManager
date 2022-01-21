@@ -41,8 +41,8 @@ class ReadData(): # GetInputSource / InputSourceCollector
     def get_db_meta(self):
         domain = self.db.split("_", maxsplit=1)[0]
         sub_domain = self.db.split("_", maxsplit=1)[1]
-        mongodb_c = wiz.WizApiMongoMeta(domain, sub_domain, "db_information")
-        base_meta = mongodb_c.get_database_collection_document()
+        mongodb_c = wiz.WizApiMongoMeta()
+        base_meta = mongodb_c.get_database_collection_document(domain, sub_domain, "db_information")
         
         return base_meta
     
