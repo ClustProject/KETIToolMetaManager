@@ -16,9 +16,10 @@ def get_meta_table():
 
     for db_name in db_list :
         if db_name in main_domian_list: 
-            colls = wiz_c.get_collection_list(db_name) 
+            colls = wiz_c.get_collection_list(db_name)
             for coll in colls:
-                items = wiz_c.get_database_collection_documents(db_name, colls)
+                print(db_name, coll)
+                items = wiz_c.get_database_collection_documents(db_name, coll)
                 for item in items:
                     try:
                         influx_db_name = item['domain']+"_"+item["sub_domain"]
@@ -30,7 +31,7 @@ def get_meta_table():
                         exploration_df = exploration_df.append([[influx_db_name, measurement_name, start_time, end_time, frequency, number_of_columns]])
                     except KeyError as e:
                         print("KeyError:", e)
-                    
+                
     exploration_df.columns = ['db_name', 'measurement_name', 'start_time', 'end_time', 'frequency', 'number_of_columns']
     exploration_df.reset_index(drop=True, inplace = True)
     exploration_js = exploration_df.to_json(orient = 'records')
@@ -60,5 +61,6 @@ if __name__=="__main__":
     import json
     from KETIPreDataIngestion.KETI_setting import influx_setting_KETI as isk
 
-    re = get_meta_some_tables({"air":{"indoor_경로당":['ICL1L2000234','ICL1L2000235']}})                    
-    print(re)
+    #re = get_meta_some_tables({"air":{"indoor_경로당":['ICL1L2000234','ICL1L2000235']}})                    
+    #print(re)
+    test_exploration_js = get_meta_table()
