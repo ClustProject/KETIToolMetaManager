@@ -39,7 +39,7 @@ class AnalysisInputControl(): # 얘가 data_collector한테 self.db 넘겨줘야
 class AnalysisMetaControl(AnalysisInputControl):
     def __init__(self, metasave_info):
         self.db = metasave_info["database"]
-        self.ms_list = metasave_info["measurement_list"]
+        self.ms_list = metasave_info["measurements"]
         self.function_list = metasave_info["function_list"]
         self.mode = metasave_info["mode"]
         
