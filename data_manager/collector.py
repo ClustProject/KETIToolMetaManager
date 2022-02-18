@@ -53,3 +53,11 @@ class ReadData(): # GetInputSource / InputSourceCollector
         dataframe = partialP.allPartialProcessing(data_nopreprocessing)["imputed_data"]
 
         return dataframe
+    
+    def get_ms_meta(self):
+        domain = self.db.split("_", maxsplit=1)[0]
+        sub_domain = self.db.split("_", maxsplit=1)[1]
+        mongodb_c = wiz.WizApiMongoMeta()
+        base_meta = mongodb_c.get_database_collection_document(domain, sub_domain, self.tablename)
+        
+        return base_meta
