@@ -64,12 +64,12 @@ class WizApiMongoMeta():
 if __name__ == "__main__":
     from pprint import pprint
     test = WizApiMongoMeta()
-    doc = test.get_collection_list("air")
+    import json
     
-    print("======Data Collection Document======")
-    pprint(doc)
-    
-    #test.get_database_collection_document("air", "indoor_요양원", "IS70W2000849")
+    with open('/home/hwangjisoo/바탕화면/Study/test.json', 'r') as f:
+        t = json.load(f)
+    #print(t)
+    test.post_database_collection_document("save", t, "air", "indoor_체육시설")
 
     '''
     get - database/collection/document - 첫번째 document 만 출력

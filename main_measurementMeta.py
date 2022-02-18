@@ -7,17 +7,19 @@ if __name__ == '__main__':
     from KETIToolMetaManager.measurementMeta.metaSetGenerator import AnalysisMetaControl
     from KETIToolMetaManager.data_manager.descriptor import WriteData
     
-    measurement_list = ["ICW0W2001042", "ICW0W2001043", "ICW0W2001044"]
-    function_list=["StatisticsResult", "MeanByHoliday"]
+    measurement_list = []
+    function_list=["StatisticsAnalyzer", "MeanByHoliday", "MeanByWorking", "MeanByTimeStep", "CountByFeatureLabel"]
     
     data_info = {
-    "database" : "air_indoor_체육시설",
+    "database" : "air_indoor_초등학교",
     "measurements" : measurement_list,
     "function_list" : function_list,
-    "mode" : "Update"
+    "mode" : "update"
     }
     
     meta_set = AnalysisMetaControl(data_info).get_metaset()
-    print(meta_set)
+    for n in range(len(meta_set)):
+        print(meta_set[n].keys())
+        print(meta_set[n]["AnalyzerResult"].keys())
     
     WriteData(data_info, meta_set).set_ms_meta()

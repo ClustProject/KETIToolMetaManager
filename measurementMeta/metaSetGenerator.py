@@ -15,8 +15,8 @@ class AnalysisInputControl(): # 얘가 data_collector한테 self.db 넘겨줘야
         self.function_list = function_list
         
     def get_input_source(self):
-        flist_data = ["StatisticsResult"] #Data
-        flist_data_meta = ["MeanByHoliday", "MeanByWorking", "MeanByTimeStep", "FeatureLabel"] #Additional Info, Data
+        flist_data = ["StatisticsAnalyzer", "MeanByHoliday", "MeanByWorking", "MeanByTimeStep"] #Data
+        flist_data_meta = ["CountByFeatureLabel"] #Additional Info, Data
         flist_meta = [] #Additional Info
         
         data_flag = any(function in flist_data for function in self.function_list)
@@ -62,6 +62,7 @@ class AnalysisMetaControl(AnalysisInputControl):
             bmmC = BMM(data, base_meta)
             bmmC.set_funclist(self.function_list)
             analysis_result_set = bmmC.get_result_set()
+            analysis_result_set["table_name"] = self.tablename
             self.meta_set.append(analysis_result_set)
         return self.meta_set
     
