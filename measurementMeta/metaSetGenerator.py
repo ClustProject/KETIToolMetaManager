@@ -25,14 +25,14 @@ class AnalysisInputControl(): # 얘가 data_collector한테 self.db 넘겨줘야
         
         if data_meta_flag:
             data = collector.ReadData(self.db, self.tablename).get_ms_data()
-            base_meta = collector.ReadData(self.db, self.tablename).get_db_meta()
+            base_meta = collector.ReadData(self.db).get_db_meta() # collector.ReadData(self.db, self.tablename).get_db_meta()
         else:
             if data_flag:
                 data = collector.ReadData(self.db, self.tablename).get_ms_data()
                 base_meta = None
             elif meta_flag:
                 data = None
-                base_meta = collector.ReadData(self.db, self.tablename).get_db_meta()
+                base_meta = collector.ReadData(self.db).get_db_meta()  #collector.ReadData(self.db, self.tablename).get_db_meta()
         
         return data, base_meta
 

@@ -22,12 +22,12 @@ def get_meta_table():
                 items = wiz_c.get_database_collection_documents(db_name, coll)
                 for item in items:
                     try:
-                        influx_db_name = item['domain']+"_"+item["sub_domain"]
+                        influx_db_name = item['domain']+"_"+item["subDomain"]
                         measurement_name = item['table_name']
-                        start_time = item['start_time']
-                        end_time = item['end_time']
+                        start_time = item['startTime']
+                        end_time = item['endTime']
                         frequency = item['frequency']
-                        number_of_columns = item['number_of_columns']
+                        number_of_columns = item['numberOfColumns']
                         exploration_df = exploration_df.append([[influx_db_name, measurement_name, start_time, end_time, frequency, number_of_columns]])
                     except KeyError as e:
                         print("KeyError:", e)
@@ -52,7 +52,7 @@ def get_meta_some_tables(db_ms_names):
             result[db][coll]={}
             for ms in db_ms_names[db][coll]:
                 data = wiz_c.get_database_collection_document(db, coll, ms)
-                data = {"start_time":data["start_time"],"end_time":data["end_time"]}
+                data = {"start_time":data["startTime"],"end_time":data["endTime"]}
                 result[db][coll][ms]=data
     return result
                 

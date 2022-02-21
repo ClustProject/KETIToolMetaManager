@@ -34,7 +34,7 @@ imputation_param = {
 process_param = {'refine_param':refine_param, 'outlier_param':outlier_param, 'imputation_param':imputation_param}
 
 class ReadData(): # GetInputSource / InputSourceCollector
-    def __init__(self, database, tablename):
+    def __init__(self, database, tablename=None):
         self.db = database
         self.tablename = tablename
     
