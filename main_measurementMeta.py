@@ -20,6 +20,6 @@ if __name__ == '__main__':
     meta_set = AnalysisMetaControl(data_info).get_metaset()
     for n in range(len(meta_set)):
         print(meta_set[n].keys())
-        print(meta_set[n]["AnalysisResult"].keys())
+        print(meta_set[n]["analysisResult"].keys())
     
     WriteData(data_info, meta_set).set_ms_meta()

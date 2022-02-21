@@ -11,26 +11,6 @@ from KETIToolMetaManager.data_manager.descriptor import WriteData
 from KETIPreDataIngestion.KETI_setting import influx_setting_KETI as ins
 from KETIPreDataIngestion.data_influx import influx_Client
 
-## measurement별(data별) analysis 후 생성된 db meta 를 저장
-## domain, sub domain 입력시 table list 갖고와서 table 별 ms meta 읽어옴
-"""
-    AnalysisResult : [
-        {
-            "columnName" : "in_voc",
-            "anlayzerName" : "MeanByHoliday",
-            "label":["holiday", "notHoliday"],
-            "resultValue" : [20, 30],
-            "characteristics" : "mean"
-        }
-        {
-            "columnName" : "in_voc",
-            "anlayzerName" : "MeanByWorking",
-            "label":["working", "notWorking"],
-            "resultValue" : [20, 30],
-            "characteristics" : "mean"
-        }
-    ]
-"""
 class AnalysisResultDbMeta():
     def __init__(self, metasave_info):
         self.metasave_info = metasave_info
@@ -103,48 +83,46 @@ class AnalysisResultDbMeta():
     def read_all_ms_result(self):
         ms_result_dict = self.make_result_dictionary()
         for ms in self.ms_list:
+            print(ms)
             ms_meta = collector.ReadData(self.db, ms).get_ms_meta()
             for analyzer in self.function_list:
                 for column in self.columns_list:
                     for label in self.labels[analyzer]:
-                        label_idx = list(ms_meta["AnalysisResult"][analyzer][column].keys()).index(label)
-                        ms_result_dict[column + "_"+ analyzer][label].append(list(ms_meta["AnalysisResult"][analyzer][column].values())[label_idx])
+                        label_idx = list(ms_meta["analysisResult"][analyzer][column].keys()).index(label)
+                        ms_result_dict[column + "_"+ analyzer][label].append(list(ms_meta["analysisResult"][analyzer][column].values())[label_idx])
         return ms_result_dict
     
     ## none -> nan 변경
-    ## np.nan 활용 평균 구하기
-    ## 구한 평균 정한 포맷에 맞춰 넣기
+    #pass
     
-    def test(self):       
-        for ms in self.ms_list:
-            analysis_result = []
-            ms_meta = collector.ReadData(self.db, ms).get_db_meta()
-            for analyzer in ms_meta["AnalysisResult"].keys():
-                for column in self.columns_list:
-                    analysis_result_bycolumn = {}
-                    analysis_result_bycolumn["columnName"] = column
-                    analysis_result_bycolumn["analyzerName"] = analyzer
-                    analysis_result_bycolumn["label"] = list(ms_meta["AnalysisResult"][analyzer][column].keys())
-                    analysis_result_bycolumn["resultValue"] = list(ms_meta["AnalysisResult"][analyzer][column].values())
-                    analysis_result.append(analysis_result_bycolumn)
+    def get_mean_analysis_result(self):
+        result_dict = self.read_all_ms_result()
+        analysis_result = []
+        for analysis_key in result_dict.keys():
+            analysis_result_bycolumn = {}
+            analysis_result_bycolumn["columnName"] = analysis_key.rpartition("_")[0]
+            analysis_result_bycolumn["analyzerName"] = analysis_key.rpartition("_")[2]
+            label = []
+            result_value = []
+            for label_key in result_dict[analysis_key].keys():
+                label.append(label_key)
+                result_value.append(np.nanmean(result_dict[analysis_key][label_key]))
+            analysis_result_bycolumn["label"] = label
+            analysis_result_bycolumn["resultValue"] = result_value
+            analysis_result.append(analysis_result_bycolumn)
+        print(analysis_result)
             
-            WriteData(self.metasave_info, {"AnalaysisResult":analysis_result}).set_ms_meta()
-            
-                    
-            
-        
+        WriteData(self.metasave_info, {"table_name":"db_information", "analysisResult":analysis_result}).set_db_meta()
         
 if __name__ == '__main__':
     
     function_list = ["StatisticsAnalyzer", "MeanByHoliday", "MeanByWorking", "MeanByTimeStep"]
-    measurement_list = []
     
     input_param = {
         "database" : "air_indoor_초등학교",
-        "measurements" : measurement_list,
         "function_list" : function_list,
         "mode" : "update"
     }
-    test = AnalysisResultDbMeta(input_param)
-    test_dict = test.read_all_ms_result()
-    print(test_dict)
+    save_db = AnalysisResultDbMeta(input_param)
+    save_db.get_mean_analysis_result()
+    print("--------------------")
