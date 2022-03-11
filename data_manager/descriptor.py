@@ -20,12 +20,15 @@ class WriteData():
         
         if len(self.ms_list) == 1:
             mongodb_c.post_database_collection_document(self.mode, self.meta_data, domain, sub_domain)
+            print("SUCCESS")
         else:
             mongodb_c.post_database_collection_documents(self.mode, self.meta_data, domain, sub_domain)
+            print("SUCCESS")
     
     def set_db_meta(self):
         domain = self.db.split("_", maxsplit=1)[0]
         sub_domain = self.db.split("_", maxsplit=1)[1]
         mongodb_c = wiz.WizApiMongoMeta()
         mongodb_c.post_database_collection_document(self.mode, self.meta_data, domain, sub_domain)
+        print("SUCCESS")
        

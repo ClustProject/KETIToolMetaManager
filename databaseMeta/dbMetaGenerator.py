@@ -64,7 +64,7 @@ class AnalysisResultDbMeta():
             value = "None"
         return value
     
-    def make_result_dictionary(self):
+    def create_result_form(self):
         """
         DataBase 의 Meta를 생성하기 앞서 Document의 statistics 값을 Column, Statistics 별로 저장하는 함수
 
@@ -80,8 +80,8 @@ class AnalysisResultDbMeta():
         
         return mean_dict
     
-    def read_all_ms_result(self):
-        ms_result_dict = self.make_result_dictionary()
+    def read_all_ms_meta(self):
+        ms_result_dict = self.create_result_form()
         for ms in self.ms_list:
             print(ms)
             ms_meta = collector.ReadData(self.db, ms).get_ms_meta()
@@ -110,19 +110,7 @@ class AnalysisResultDbMeta():
             analysis_result_bycolumn["label"] = label
             analysis_result_bycolumn["resultValue"] = result_value
             analysis_result.append(analysis_result_bycolumn)
-        print(analysis_result)
-            
-        WriteData(self.metasave_info, {"table_name":"db_information", "analysisResult":analysis_result}).set_db_meta()
+        #print(analysis_result)
         
-if __name__ == '__main__':
-    
-    function_list = ["StatisticsAnalyzer", "MeanByHoliday", "MeanByWorking", "MeanByTimeStep"]
-    
-    input_param = {
-        "database" : "air_indoor_초등학교",
-        "function_list" : function_list,
-        "mode" : "update"
-    }
-    save_db = AnalysisResultDbMeta(input_param)
-    save_db.get_mean_analysis_result()
-    print("--------------------")
+        return analysis_result
+        ##WriteData(self.metasave_info, {"table_name":"db_information", "analysisResult":analysis_result}).set_db_meta()
