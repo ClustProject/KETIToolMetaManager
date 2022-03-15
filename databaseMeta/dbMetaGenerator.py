@@ -96,7 +96,7 @@ class AnalysisResultDbMeta():
     #pass
     
     def get_mean_analysis_result(self):
-        result_dict = self.read_all_ms_result()
+        result_dict = self.read_all_ms_meta()
         analysis_result = []
         for analysis_key in result_dict.keys():
             analysis_result_bycolumn = {}
