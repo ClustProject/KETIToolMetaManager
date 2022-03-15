@@ -92,9 +92,6 @@ class AnalysisResultDbMeta():
                         ms_result_dict[column + "_"+ analyzer][label].append(list(ms_meta["analysisResult"][analyzer][column].values())[label_idx])
         return ms_result_dict
     
-    ## none -> nan 변경
-    #pass
-    
     def get_mean_analysis_result(self):
         result_dict = self.read_all_ms_meta()
         analysis_result = []
@@ -106,11 +103,12 @@ class AnalysisResultDbMeta():
             result_value = []
             for label_key in result_dict[analysis_key].keys():
                 label.append(label_key)
-                result_value.append(np.nanmean(result_dict[analysis_key][label_key]))
+                value = self.none_convert_nan(result_dict[analysis_key][label_key]) # none -> nan (계산을 위해)
+                result_value.append(np.nanmean(value))
+            result_value = list(map(self.nan_convert_none, result_value)) # nan -> None (UI를 위해)
             analysis_result_bycolumn["label"] = label
             analysis_result_bycolumn["resultValue"] = result_value
             analysis_result.append(analysis_result_bycolumn)
         #print(analysis_result)
         
         return analysis_result
-        ##WriteData(self.metasave_info, {"table_name":"db_information", "analysisResult":analysis_result}).set_db_meta()
