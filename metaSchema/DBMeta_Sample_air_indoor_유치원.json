@@ -1,0 +1,1650 @@
+{
+  "description": "This is Kweather Data",
+  "columnInformation": [
+    {
+      "columnName": "in_pm01_raw",
+      "description": "Original particulate matter 01",
+      "tag": [
+        "indoor",
+        "극초미세먼지",
+        "원본값",
+        "환경 오염 물질"
+      ],
+      "unit": "㎍/m³",
+      "min": 0,
+      "max": 1000
+    },
+    {
+      "columnName": "in_pm25_raw",
+      "description": "Original particulate matter 2.5",
+      "tag": [
+        "indoor",
+        "초미세먼지",
+        "원본값",
+        "환경 오염 물질"
+      ],
+      "columnLevelCriteria": {
+        "step": [
+          0,
+          15,
+          35,
+          75,
+          1000
+        ],
+        "label": [
+          "좋음",
+          "보통",
+          "나쁨",
+          "매우나쁨"
+        ]
+      },
+      "unit": "㎍/m³",
+      "min": 0,
+      "max": 1000
+    },
+    {
+      "columnName": "in_pm10_raw",
+      "description": "Original particulate matter 10",
+      "tag": [
+        "indoor",
+        "미세먼지",
+        "원본값",
+        "환경 오염 물질"
+      ],
+      "columnLevelCriteria": {
+        "step": [
+          0,
+          30,
+          80,
+          150,
+          1000
+        ],
+        "label": [
+          "좋음",
+          "보통",
+          "나쁨",
+          "매우나쁨"
+        ]
+      },
+      "unit": "㎍/m³",
+      "min": 0,
+      "max": 1000
+    },
+    {
+      "columnName": "in_temp",
+      "description": "Temperature",
+      "tag": [
+        "indoor",
+        "Temperature",
+        "온도"
+      ],
+      "columnLevelCriteria": {
+        "step": [
+          -40,
+          14,
+          16,
+          18,
+          24,
+          27,
+          30,
+          80
+        ],
+        "label": [
+          "매우추움",
+          "추움",
+          "서늘",
+          "쾌적",
+          "따뜻",
+          "더움",
+          "매우더움"
+        ]
+      },
+      "unit": "°C",
+      "min": -40,
+      "max": 80
+    },
+    {
+      "columnName": "in_humi",
+      "description": "Humidity",
+      "tag": [
+        "indoor",
+        "Humidity",
+        "습도"
+      ],
+      "columnLevelCriteria": {
+        "step": [
+          0,
+          20,
+          35,
+          40,
+          60,
+          75,
+          90,
+          100
+        ],
+        "label": [
+          "매우건조",
+          "건조",
+          "약간건조",
+          "쾌적",
+          "약간습합",
+          "습함",
+          "매우습함"
+        ]
+      },
+      "unit": "%",
+      "min": 0,
+      "max": 100
+    },
+    {
+      "columnName": "in_co2",
+      "description": "Carbon Dioxide",
+      "tag": [
+        "indoor",
+        "이산화탄소",
+        "환경 오염 물질"
+      ],
+      "columnLevelCriteria": {
+        "step": [
+          0,
+          500,
+          1000,
+          1500,
+          10000
+        ],
+        "label": [
+          "좋음",
+          "보통",
+          "나쁨",
+          "매우나쁨"
+        ]
+      },
+      "unit": "ppm",
+      "min": 0,
+      "max": 10000
+    },
+    {
+      "columnName": "in_voc",
+      "description": "Volatile Organic Compounds.",
+      "tag": [
+        "indoor",
+        "휘발성유기화합물",
+        "환경 오염 물질"
+      ],
+      "columnLevelCriteria": {
+        "step": [
+          0,
+          200,
+          400,
+          1000,
+          60000
+        ],
+        "label": [
+          "좋음",
+          "보통",
+          "나쁨",
+          "매우나쁨"
+        ]
+      },
+      "unit": "ppb",
+      "min": 0,
+      "max": 60000
+    },
+    {
+      "columnName": "in_noise",
+      "description": "Noise",
+      "tag": [
+        "indoor",
+        "소음"
+      ],
+      "columnLevelCriteria": {
+        "step": [
+          35,
+          40,
+          50,
+          60,
+          70,
+          80,
+          90
+        ],
+        "label": [
+          "속삭이는 소리",
+          "도서관",
+          "조용한 사무실",
+          "보통회화",
+          "시끄러운 사무실",
+          "지하철의 차내소음"
+        ]
+      },
+      "unit": "db",
+      "min": 35,
+      "max": 90
+    },
+    {
+      "columnName": "in_pm10",
+      "description": "Correction particulate matter 10",
+      "tag": [
+        "indoor",
+        "미세먼지",
+        "보정값",
+        "환경 오염 물질"
+      ],
+      "columnLevelCriteria": {
+        "step": [
+          0,
+          30,
+          80,
+          150,
+          1000
+        ],
+        "label": [
+          "좋음",
+          "보통",
+          "나쁨",
+          "매우나쁨"
+        ]
+      },
+      "unit": "㎍/m³",
+      "min": 0,
+      "max": 1000
+    },
+    {
+      "columnName": "in_pm25",
+      "description": "Correction particulate matter 2.5",
+      "tag": [
+        "indoor",
+        "초미세먼지",
+        "보정값",
+        "환경 오염 물질"
+      ],
+      "columnLevelCriteria": {
+        "step": [
+          0,
+          15,
+          35,
+          75,
+          1000
+        ],
+        "label": [
+          "좋음",
+          "보통",
+          "나쁨",
+          "매우나쁨"
+        ]
+      },
+      "unit": "㎍/m³",
+      "min": 0,
+      "max": 1000
+    },
+    {
+      "columnName": "in_pm01",
+      "description": "Correction particulate matter 01",
+      "tag": [
+        "indoor",
+        "극초미세먼지",
+        "보정값",
+        "환경 오염 물질"
+      ],
+      "unit": "㎍/m³",
+      "min": 0,
+      "max": 1000
+    },
+    {
+      "columnName": "in_cici_pm10",
+      "description": "Consolidation Indoor Comfort Index of PM10",
+      "tag": [
+        "indoor",
+        "통합실내쾌적지수",
+        "미세먼지"
+      ],
+      "columnLevelCriteria": {
+        "step": [
+          0,
+          50,
+          80,
+          90,
+          100
+        ],
+        "label": [
+          "매우나쁨",
+          "나쁨",
+          "보통",
+          "좋음"
+        ]
+      },
+      "min": 0,
+      "max": 100
+    },
+    {
+      "columnName": "in_cici_pm25",
+      "description": "Consolidation Indoor Comfort Index of PM2.5",
+      "tag": [
+        "indoor",
+        "통합실내쾌적지수",
+        "초미세먼지"
+      ],
+      "columnLevelCriteria": {
+        "step": [
+          0,
+          50,
+          80,
+          90,
+          100
+        ],
+        "label": [
+          "매우나쁨",
+          "나쁨",
+          "보통",
+          "좋음"
+        ]
+      },
+      "min": 0,
+      "max": 100
+    },
+    {
+      "columnName": "in_cici_co2",
+      "description": "Consolidation Indoor Comfort Index of CO2",
+      "tag": [
+        "indoor",
+        "통합실내쾌적지수",
+        "이산화탄소"
+      ],
+      "columnLevelCriteria": {
+        "step": [
+          0,
+          50,
+          80,
+          90,
+          100
+        ],
+        "label": [
+          "매우나쁨",
+          "나쁨",
+          "보통",
+          "좋음"
+        ]
+      },
+      "min": 0,
+      "max": 100
+    },
+    {
+      "columnName": "in_cici_voc",
+      "description": "Consolidation Indoor Comfort Index of VOC",
+      "tag": [
+        "indoor",
+        "통합실내쾌적지수",
+        "휘발성유기화합물"
+      ],
+      "columnLevelCriteria": {
+        "step": [
+          0,
+          50,
+          80,
+          90,
+          100
+        ],
+        "label": [
+          "매우나쁨",
+          "나쁨",
+          "보통",
+          "좋음"
+        ]
+      },
+      "min": 0,
+      "max": 100
+    },
+    {
+      "columnName": "in_cici_temp",
+      "description": "Consolidation Indoor Comfort Index of Temperature",
+      "tag": [
+        "indoor",
+        "통합실내쾌적지수",
+        "온도"
+      ],
+      "columnLevelCriteria": {
+        "step": [
+          0,
+          50,
+          80,
+          90,
+          100
+        ],
+        "label": [
+          "매우나쁨",
+          "나쁨",
+          "보통",
+          "좋음"
+        ]
+      },
+      "min": 0,
+      "max": 100
+    },
+    {
+      "columnName": "in_cici_humi",
+      "description": "Consolidation Indoor Comfort Index of Humidity",
+      "tag": [
+        "indoor",
+        "통합실내쾌적지수",
+        "습도"
+      ],
+      "columnLevelCriteria": {
+        "step": [
+          0,
+          50,
+          80,
+          90,
+          100
+        ],
+        "label": [
+          "매우나쁨",
+          "나쁨",
+          "보통",
+          "좋음"
+        ]
+      },
+      "min": 0,
+      "max": 100
+    },
+    {
+      "columnName": "in_cici_noise",
+      "description": "Consolidation Indoor Comfort Index of Noise",
+      "tag": [
+        "indoor",
+        "통합실내쾌적지수",
+        "소음"
+      ],
+      "columnLevelCriteria": {
+        "step": [
+          0,
+          50,
+          80,
+          90,
+          100
+        ],
+        "label": [
+          "매우나쁨",
+          "나쁨",
+          "보통",
+          "좋음"
+        ]
+      },
+      "min": 0,
+      "max": 100
+    },
+    {
+      "columnName": "in_cici",
+      "description": "Consolidation Indoor Comfort Index",
+      "tag": [
+        "indoor",
+        "통합실내쾌적지수"
+      ],
+      "columnLevelCriteria": {
+        "step": [
+          0,
+          50,
+          80,
+          90,
+          100
+        ],
+        "label": [
+          "매우나쁨",
+          "나쁨",
+          "보통",
+          "좋음"
+        ]
+      },
+      "min": 0,
+      "max": 100
+    },
+    {
+      "columnName": "in_ciai",
+      "description": "Consolidation Indoor Air pollution Index",
+      "tag": [
+        "indoor",
+        "통합실내공기오염지수"
+      ],
+      "columnLevelCriteria": {
+        "step": [
+          0,
+          50,
+          80,
+          90,
+          100
+        ],
+        "label": [
+          "매우나쁨",
+          "나쁨",
+          "보통",
+          "좋음"
+        ]
+      },
+      "min": 0,
+      "max": 100
+    }
+  ],
+  "table_name": "db_information",
+  "domain": "air",
+  "subDomain": "indoor_유치원",
+  "analysisResult": [
+    {
+      "columnName": "in_ciai",
+      "analyzerName": "StatisticsAnalyzer",
+      "label": [
+        "min",
+        "max",
+        "mean"
+      ],
+      "resultValue": [
+        53.31578947368421,
+        96.63157894736842,
+        85.71703193686525
+      ]
+    },
+    {
+      "columnName": "in_ciai",
+      "analyzerName": "MeanByHoliday",
+      "label": [
+        "holiday",
+        "notHoliday"
+      ],
+      "resultValue": [
+        84.69754615736207,
+        85.91698681537268
+      ]
+    },
+    {
+      "columnName": "in_ciai",
+      "analyzerName": "MeanByWorking",
+      "label": [
+        "working",
+        "notWorking"
+      ],
+      "resultValue": [
+        86.89199304317641,
+        84.52130061759883
+      ]
+    },
+    {
+      "columnName": "in_ciai",
+      "analyzerName": "MeanByTimeStep",
+      "label": [
+        "dawn",
+        "morning",
+        "afternoon",
+        "evening",
+        "night"
+      ],
+      "resultValue": [
+        84.7549621749989,
+        85.94377741557197,
+        86.65797087302144,
+        84.57514667259595,
+        83.76630758420129
+      ]
+    },
+    {
+      "columnName": "in_cici",
+      "analyzerName": "StatisticsAnalyzer",
+      "label": [
+        "min",
+        "max",
+        "mean"
+      ],
+      "resultValue": [
+        52.05263157894737,
+        99.3157894736842,
+        85.8055898820455
+      ]
+    },
+    {
+      "columnName": "in_cici",
+      "analyzerName": "MeanByHoliday",
+      "label": [
+        "holiday",
+        "notHoliday"
+      ],
+      "resultValue": [
+        86.23784526759788,
+        86.15136444736845
+      ]
+    },
+    {
+      "columnName": "in_cici",
+      "analyzerName": "MeanByWorking",
+      "label": [
+        "working",
+        "notWorking"
+      ],
+      "resultValue": [
+        87.4584818929233,
+        86.35452779487053
+      ]
+    },
+    {
+      "columnName": "in_cici",
+      "analyzerName": "MeanByTimeStep",
+      "label": [
+        "dawn",
+        "morning",
+        "afternoon",
+        "evening",
+        "night"
+      ],
+      "resultValue": [
+        86.77239770874745,
+        85.92332489492286,
+        87.15541680965207,
+        86.01278787955575,
+        85.6036553223985
+      ]
+    },
+    {
+      "columnName": "in_cici_co2",
+      "analyzerName": "StatisticsAnalyzer",
+      "label": [
+        "min",
+        "max",
+        "mean"
+      ],
+      "resultValue": [
+        65.27777777777777,
+        92.66666666666667,
+        89.17182679074492
+      ]
+    },
+    {
+      "columnName": "in_cici_co2",
+      "analyzerName": "MeanByHoliday",
+      "label": [
+        "holiday",
+        "notHoliday"
+      ],
+      "resultValue": [
+        91.24589878775984,
+        88.85044627852271
+      ]
+    },
+    {
+      "columnName": "in_cici_co2",
+      "analyzerName": "MeanByWorking",
+      "label": [
+        "working",
+        "notWorking"
+      ],
+      "resultValue": [
+        87.86004920046297,
+        90.51174863523732
+      ]
+    },
+    {
+      "columnName": "in_cici_co2",
+      "analyzerName": "MeanByTimeStep",
+      "label": [
+        "dawn",
+        "morning",
+        "afternoon",
+        "evening",
+        "night"
+      ],
+      "resultValue": [
+        90.52312782773681,
+        88.7239643412881,
+        88.51795803620517,
+        89.9209423706834,
+        90.41590851307102
+      ]
+    },
+    {
+      "columnName": "in_cici_humi",
+      "analyzerName": "StatisticsAnalyzer",
+      "label": [
+        "min",
+        "max",
+        "mean"
+      ],
+      "resultValue": [
+        39.74210526315789,
+        90.10526315789474,
+        75.41597973501518
+      ]
+    },
+    {
+      "columnName": "in_cici_humi",
+      "analyzerName": "MeanByHoliday",
+      "label": [
+        "holiday",
+        "notHoliday"
+      ],
+      "resultValue": [
+        89.36468885215909,
+        74.78440282546933
+      ]
+    },
+    {
+      "columnName": "in_cici_humi",
+      "analyzerName": "MeanByWorking",
+      "label": [
+        "working",
+        "notWorking"
+      ],
+      "resultValue": [
+        73.42925665434296,
+        88.47303296238212
+      ]
+    },
+    {
+      "columnName": "in_cici_humi",
+      "analyzerName": "MeanByTimeStep",
+      "label": [
+        "dawn",
+        "morning",
+        "afternoon",
+        "evening",
+        "night"
+      ],
+      "resultValue": [
+        88.93109600759189,
+        78.17139277670415,
+        72.34864262685268,
+        85.99165338539207,
+        88.27118914370136
+      ]
+    },
+    {
+      "columnName": "in_cici_noise",
+      "analyzerName": "StatisticsAnalyzer",
+      "label": [
+        "min",
+        "max",
+        "mean"
+      ],
+      "resultValue": [
+        43.89421052631579,
+        84.02631578947368,
+        80.72475991883827
+      ]
+    },
+    {
+      "columnName": "in_cici_noise",
+      "analyzerName": "MeanByHoliday",
+      "label": [
+        "holiday",
+        "notHoliday"
+      ],
+      "resultValue": [
+        80.96062941491674,
+        80.64915753692016
+      ]
+    },
+    {
+      "columnName": "in_cici_noise",
+      "analyzerName": "MeanByWorking",
+      "label": [
+        "working",
+        "notWorking"
+      ],
+      "resultValue": [
+        79.82739936335327,
+        80.91071734628973
+      ]
+    },
+    {
+      "columnName": "in_cici_noise",
+      "analyzerName": "MeanByTimeStep",
+      "label": [
+        "dawn",
+        "morning",
+        "afternoon",
+        "evening",
+        "night"
+      ],
+      "resultValue": [
+        80.9370197320664,
+        80.29429104633164,
+        79.95124431668876,
+        80.93066253803792,
+        81.00702178733317
+      ]
+    },
+    {
+      "columnName": "in_cici_pm10",
+      "analyzerName": "StatisticsAnalyzer",
+      "label": [
+        "min",
+        "max",
+        "mean"
+      ],
+      "resultValue": [
+        41.82105263157895,
+        99.40526315789474,
+        94.39104938204007
+      ]
+    },
+    {
+      "columnName": "in_cici_pm10",
+      "analyzerName": "MeanByHoliday",
+      "label": [
+        "holiday",
+        "notHoliday"
+      ],
+      "resultValue": [
+        94.77154820641688,
+        94.35548518568238
+      ]
+    },
+    {
+      "columnName": "in_cici_pm10",
+      "analyzerName": "MeanByWorking",
+      "label": [
+        "working",
+        "notWorking"
+      ],
+      "resultValue": [
+        93.77567973849736,
+        94.79325150100291
+      ]
+    },
+    {
+      "columnName": "in_cici_pm10",
+      "analyzerName": "MeanByTimeStep",
+      "label": [
+        "dawn",
+        "morning",
+        "afternoon",
+        "evening",
+        "night"
+      ],
+      "resultValue": [
+        94.84462498707533,
+        93.42829051962745,
+        94.36018372152034,
+        94.90424667309155,
+        95.11295550415481
+      ]
+    },
+    {
+      "columnName": "in_cici_pm25",
+      "analyzerName": "StatisticsAnalyzer",
+      "label": [
+        "min",
+        "max",
+        "mean"
+      ],
+      "resultValue": [
+        46.71526315789474,
+        98.78947368421052,
+        92.8761388425088
+      ]
+    },
+    {
+      "columnName": "in_cici_pm25",
+      "analyzerName": "MeanByHoliday",
+      "label": [
+        "holiday",
+        "notHoliday"
+      ],
+      "resultValue": [
+        94.05773060963845,
+        92.84995008361825
+      ]
+    },
+    {
+      "columnName": "in_cici_pm25",
+      "analyzerName": "MeanByWorking",
+      "label": [
+        "working",
+        "notWorking"
+      ],
+      "resultValue": [
+        92.32631440015142,
+        94.12467424430676
+      ]
+    },
+    {
+      "columnName": "in_cici_pm25",
+      "analyzerName": "MeanByTimeStep",
+      "label": [
+        "dawn",
+        "morning",
+        "afternoon",
+        "evening",
+        "night"
+      ],
+      "resultValue": [
+        94.1556689248783,
+        91.56894328989361,
+        93.07462996893167,
+        94.42763181516435,
+        94.53204875300311
+      ]
+    },
+    {
+      "columnName": "in_cici_temp",
+      "analyzerName": "StatisticsAnalyzer",
+      "label": [
+        "min",
+        "max",
+        "mean"
+      ],
+      "resultValue": [
+        11.778947368421052,
+        97.21052631578948,
+        63.62496857526351
+      ]
+    },
+    {
+      "columnName": "in_cici_temp",
+      "analyzerName": "MeanByHoliday",
+      "label": [
+        "holiday",
+        "notHoliday"
+      ],
+      "resultValue": [
+        60.23892960851478,
+        65.40920278226933
+      ]
+    },
+    {
+      "columnName": "in_cici_temp",
+      "analyzerName": "MeanByWorking",
+      "label": [
+        "working",
+        "notWorking"
+      ],
+      "resultValue": [
+        67.57497102455793,
+        64.59134894044021
+      ]
+    },
+    {
+      "columnName": "in_cici_temp",
+      "analyzerName": "MeanByTimeStep",
+      "label": [
+        "dawn",
+        "morning",
+        "afternoon",
+        "evening",
+        "night"
+      ],
+      "resultValue": [
+        65.69789801537893,
+        60.07277906233905,
+        67.83903866257462,
+        64.81800660939054,
+        65.11878058733757
+      ]
+    },
+    {
+      "columnName": "in_cici_voc",
+      "analyzerName": "StatisticsAnalyzer",
+      "label": [
+        "min",
+        "max",
+        "mean"
+      ],
+      "resultValue": [
+        24.38888888888889,
+        95.55555555555556,
+        74.99152118712965
+      ]
+    },
+    {
+      "columnName": "in_cici_voc",
+      "analyzerName": "MeanByHoliday",
+      "label": [
+        "holiday",
+        "notHoliday"
+      ],
+      "resultValue": [
+        69.39435428526048,
+        75.70815706745215
+      ]
+    },
+    {
+      "columnName": "in_cici_voc",
+      "analyzerName": "MeanByWorking",
+      "label": [
+        "working",
+        "notWorking"
+      ],
+      "resultValue": [
+        79.34466273784516,
+        69.19077737750554
+      ]
+    },
+    {
+      "columnName": "in_cici_voc",
+      "analyzerName": "MeanByTimeStep",
+      "label": [
+        "dawn",
+        "morning",
+        "afternoon",
+        "evening",
+        "night"
+      ],
+      "resultValue": [
+        69.84529644472667,
+        77.38838833882683,
+        77.5084792699721,
+        69.1834451292257,
+        66.41932007531467
+      ]
+    },
+    {
+      "columnName": "in_co2",
+      "analyzerName": "StatisticsAnalyzer",
+      "label": [
+        "min",
+        "max",
+        "mean"
+      ],
+      "resultValue": [
+        358,
+        1262.0555555555557,
+        519.8739052011016
+      ]
+    },
+    {
+      "columnName": "in_co2",
+      "analyzerName": "MeanByHoliday",
+      "label": [
+        "holiday",
+        "notHoliday"
+      ],
+      "resultValue": [
+        433.8227114297307,
+        532.9339749631456
+      ]
+    },
+    {
+      "columnName": "in_co2",
+      "analyzerName": "MeanByWorking",
+      "label": [
+        "working",
+        "notWorking"
+      ],
+      "resultValue": [
+        576.7423197053381,
+        462.0225941549518
+      ]
+    },
+    {
+      "columnName": "in_co2",
+      "analyzerName": "MeanByTimeStep",
+      "label": [
+        "dawn",
+        "morning",
+        "afternoon",
+        "evening",
+        "night"
+      ],
+      "resultValue": [
+        461.2934589188763,
+        540.8619561279723,
+        548.4312658443282,
+        485.9969247244347,
+        465.3491542825328
+      ]
+    },
+    {
+      "columnName": "in_humi",
+      "analyzerName": "StatisticsAnalyzer",
+      "label": [
+        "min",
+        "max",
+        "mean"
+      ],
+      "resultValue": [
+        16.31578947368421,
+        59.05263157894737,
+        36.466797690028066
+      ]
+    },
+    {
+      "columnName": "in_humi",
+      "analyzerName": "MeanByHoliday",
+      "label": [
+        "holiday",
+        "notHoliday"
+      ],
+      "resultValue": [
+        43.63926697115059,
+        36.32479595980792
+      ]
+    },
+    {
+      "columnName": "in_humi",
+      "analyzerName": "MeanByWorking",
+      "label": [
+        "working",
+        "notWorking"
+      ],
+      "resultValue": [
+        35.46059467592533,
+        43.459648649829674
+      ]
+    },
+    {
+      "columnName": "in_humi",
+      "analyzerName": "MeanByTimeStep",
+      "label": [
+        "dawn",
+        "morning",
+        "afternoon",
+        "evening",
+        "night"
+      ],
+      "resultValue": [
+        44.09211480534399,
+        37.92961720316798,
+        34.7486624908352,
+        41.37335926862011,
+        43.207459623280556
+      ]
+    },
+    {
+      "columnName": "in_noise",
+      "analyzerName": "StatisticsAnalyzer",
+      "label": [
+        "min",
+        "max",
+        "mean"
+      ],
+      "resultValue": [
+        41.63157894736842,
+        68.42105263157895,
+        47.02518390254899
+      ]
+    },
+    {
+      "columnName": "in_noise",
+      "analyzerName": "MeanByHoliday",
+      "label": [
+        "holiday",
+        "notHoliday"
+      ],
+      "resultValue": [
+        46.11080911254023,
+        47.09860538283444
+      ]
+    },
+    {
+      "columnName": "in_noise",
+      "analyzerName": "MeanByWorking",
+      "label": [
+        "working",
+        "notWorking"
+      ],
+      "resultValue": [
+        47.82750633235472,
+        46.19439534796844
+      ]
+    },
+    {
+      "columnName": "in_noise",
+      "analyzerName": "MeanByTimeStep",
+      "label": [
+        "dawn",
+        "morning",
+        "afternoon",
+        "evening",
+        "night"
+      ],
+      "resultValue": [
+        46.17253669117021,
+        47.350625920998574,
+        47.7534680070223,
+        46.165377580887494,
+        46.08461745902585
+      ]
+    },
+    {
+      "columnName": "in_pm01",
+      "analyzerName": "StatisticsAnalyzer",
+      "label": [
+        "min",
+        "max",
+        "mean"
+      ],
+      "resultValue": [
+        1.7894736842105263,
+        207.8421052631579,
+        15.367913303562842
+      ]
+    },
+    {
+      "columnName": "in_pm01",
+      "analyzerName": "MeanByHoliday",
+      "label": [
+        "holiday",
+        "notHoliday"
+      ],
+      "resultValue": [
+        14.638678626644616,
+        15.363540924249522
+      ]
+    },
+    {
+      "columnName": "in_pm01",
+      "analyzerName": "MeanByWorking",
+      "label": [
+        "working",
+        "notWorking"
+      ],
+      "resultValue": [
+        16.230289215526277,
+        14.632492684308238
+      ]
+    },
+    {
+      "columnName": "in_pm01",
+      "analyzerName": "MeanByTimeStep",
+      "label": [
+        "dawn",
+        "morning",
+        "afternoon",
+        "evening",
+        "night"
+      ],
+      "resultValue": [
+        14.747951784210027,
+        18.144063574626642,
+        14.739504953531567,
+        13.559943599626914,
+        13.598492147627157
+      ]
+    },
+    {
+      "columnName": "in_pm01_raw",
+      "analyzerName": "StatisticsAnalyzer",
+      "label": [
+        "min",
+        "max",
+        "mean"
+      ],
+      "resultValue": [
+        1.7894736842105263,
+        207.8421052631579,
+        15.367913303562842
+      ]
+    },
+    {
+      "columnName": "in_pm01_raw",
+      "analyzerName": "MeanByHoliday",
+      "label": [
+        "holiday",
+        "notHoliday"
+      ],
+      "resultValue": [
+        14.638678626644616,
+        15.363540924249522
+      ]
+    },
+    {
+      "columnName": "in_pm01_raw",
+      "analyzerName": "MeanByWorking",
+      "label": [
+        "working",
+        "notWorking"
+      ],
+      "resultValue": [
+        16.230289215526277,
+        14.632492684308238
+      ]
+    },
+    {
+      "columnName": "in_pm01_raw",
+      "analyzerName": "MeanByTimeStep",
+      "label": [
+        "dawn",
+        "morning",
+        "afternoon",
+        "evening",
+        "night"
+      ],
+      "resultValue": [
+        14.747951784210027,
+        18.144063574626642,
+        14.739504953531567,
+        13.559943599626914,
+        13.598492147627157
+      ]
+    },
+    {
+      "columnName": "in_pm10",
+      "analyzerName": "StatisticsAnalyzer",
+      "label": [
+        "min",
+        "max",
+        "mean"
+      ],
+      "resultValue": [
+        1.8421052631578947,
+        415.3157894736842,
+        17.722264580029783
+      ]
+    },
+    {
+      "columnName": "in_pm10",
+      "analyzerName": "MeanByHoliday",
+      "label": [
+        "holiday",
+        "notHoliday"
+      ],
+      "resultValue": [
+        16.77487210254038,
+        17.84240941170465
+      ]
+    },
+    {
+      "columnName": "in_pm10",
+      "analyzerName": "MeanByWorking",
+      "label": [
+        "working",
+        "notWorking"
+      ],
+      "resultValue": [
+        19.6948825602252,
+        16.664772108326783
+      ]
+    },
+    {
+      "columnName": "in_pm10",
+      "analyzerName": "MeanByTimeStep",
+      "label": [
+        "dawn",
+        "morning",
+        "afternoon",
+        "evening",
+        "night"
+      ],
+      "resultValue": [
+        16.584130562528745,
+        21.070366466251077,
+        17.73146406213907,
+        16.004037230160677,
+        15.344033605772076
+      ]
+    },
+    {
+      "columnName": "in_pm10_raw",
+      "analyzerName": "StatisticsAnalyzer",
+      "label": [
+        "min",
+        "max",
+        "mean"
+      ],
+      "resultValue": [
+        1.8421052631578947,
+        310.1578947368421,
+        17.718377672652316
+      ]
+    },
+    {
+      "columnName": "in_pm10_raw",
+      "analyzerName": "MeanByHoliday",
+      "label": [
+        "holiday",
+        "notHoliday"
+      ],
+      "resultValue": [
+        16.761301818107327,
+        17.8406731237226
+      ]
+    },
+    {
+      "columnName": "in_pm10_raw",
+      "analyzerName": "MeanByWorking",
+      "label": [
+        "working",
+        "notWorking"
+      ],
+      "resultValue": [
+        19.69159938880239,
+        16.6595054573101
+      ]
+    },
+    {
+      "columnName": "in_pm10_raw",
+      "analyzerName": "MeanByTimeStep",
+      "label": [
+        "dawn",
+        "morning",
+        "afternoon",
+        "evening",
+        "night"
+      ],
+      "resultValue": [
+        16.568767897281663,
+        21.06745590879296,
+        17.730178631728588,
+        16.004037230160677,
+        15.344033605772076
+      ]
+    },
+    {
+      "columnName": "in_pm25",
+      "analyzerName": "StatisticsAnalyzer",
+      "label": [
+        "min",
+        "max",
+        "mean"
+      ],
+      "resultValue": [
+        1.736842105263158,
+        262.1578947368421,
+        11.201971510660552
+      ]
+    },
+    {
+      "columnName": "in_pm25",
+      "analyzerName": "MeanByHoliday",
+      "label": [
+        "holiday",
+        "notHoliday"
+      ],
+      "resultValue": [
+        9.42652994278523,
+        11.216622688485034
+      ]
+    },
+    {
+      "columnName": "in_pm25",
+      "analyzerName": "MeanByWorking",
+      "label": [
+        "working",
+        "notWorking"
+      ],
+      "resultValue": [
+        12.030431047862557,
+        9.289996500094082
+      ]
+    },
+    {
+      "columnName": "in_pm25",
+      "analyzerName": "MeanByTimeStep",
+      "label": [
+        "dawn",
+        "morning",
+        "afternoon",
+        "evening",
+        "night"
+      ],
+      "resultValue": [
+        9.222998545598234,
+        13.40090619022305,
+        10.812270763371128,
+        8.762387112529986,
+        8.585004139432856
+      ]
+    },
+    {
+      "columnName": "in_pm25_raw",
+      "analyzerName": "StatisticsAnalyzer",
+      "label": [
+        "min",
+        "max",
+        "mean"
+      ],
+      "resultValue": [
+        1.736842105263158,
+        213.31578947368422,
+        11.198015012254228
+      ]
+    },
+    {
+      "columnName": "in_pm25_raw",
+      "analyzerName": "MeanByHoliday",
+      "label": [
+        "holiday",
+        "notHoliday"
+      ],
+      "resultValue": [
+        9.42652994278523,
+        11.211432047690558
+      ]
+    },
+    {
+      "columnName": "in_pm25_raw",
+      "analyzerName": "MeanByWorking",
+      "label": [
+        "working",
+        "notWorking"
+      ],
+      "resultValue": [
+        12.030431047862557,
+        9.282764568037344
+      ]
+    },
+    {
+      "columnName": "in_pm25_raw",
+      "analyzerName": "MeanByTimeStep",
+      "label": [
+        "dawn",
+        "morning",
+        "afternoon",
+        "evening",
+        "night"
+      ],
+      "resultValue": [
+        9.222998545598234,
+        13.390631173277697,
+        10.812270763371128,
+        8.762387112529986,
+        8.573888087640112
+      ]
+    },
+    {
+      "columnName": "in_temp",
+      "analyzerName": "StatisticsAnalyzer",
+      "label": [
+        "min",
+        "max",
+        "mean"
+      ],
+      "resultValue": [
+        10.628947368421054,
+        30.47631578947368,
+        21.70679049842332
+      ]
+    },
+    {
+      "columnName": "in_temp",
+      "analyzerName": "MeanByHoliday",
+      "label": [
+        "holiday",
+        "notHoliday"
+      ],
+      "resultValue": [
+        23.97582009912414,
+        21.920042934362
+      ]
+    },
+    {
+      "columnName": "in_temp",
+      "analyzerName": "MeanByWorking",
+      "label": [
+        "working",
+        "notWorking"
+      ],
+      "resultValue": [
+        22.064648198242363,
+        24.035865631891095
+      ]
+    },
+    {
+      "columnName": "in_temp",
+      "analyzerName": "MeanByTimeStep",
+      "label": [
+        "dawn",
+        "morning",
+        "afternoon",
+        "evening",
+        "night"
+      ],
+      "resultValue": [
+        23.91481804361317,
+        20.687212586323767,
+        22.481595392867888,
+        24.567232395018028,
+        24.116312257434483
+      ]
+    },
+    {
+      "columnName": "in_voc",
+      "analyzerName": "StatisticsAnalyzer",
+      "label": [
+        "min",
+        "max",
+        "mean"
+      ],
+      "resultValue": [
+        0,
+        41925.357142857145,
+        1195.2821816130302
+      ]
+    },
+    {
+      "columnName": "in_voc",
+      "analyzerName": "MeanByHoliday",
+      "label": [
+        "holiday",
+        "notHoliday"
+      ],
+      "resultValue": [
+        1290.7740660948925,
+        1193.2391118418232
+      ]
+    },
+    {
+      "columnName": "in_voc",
+      "analyzerName": "MeanByWorking",
+      "label": [
+        "working",
+        "notWorking"
+      ],
+      "resultValue": [
+        1245.666713731704,
+        1268.4864131425925
+      ]
+    },
+    {
+      "columnName": "in_voc",
+      "analyzerName": "MeanByTimeStep",
+      "label": [
+        "dawn",
+        "morning",
+        "afternoon",
+        "evening",
+        "night"
+      ],
+      "resultValue": [
+        1224.315109533731,
+        966.9753776451424,
+        1402.0482851119582,
+        1360.149029977663,
+        1417.2155127821568
+      ]
+    }
+  ]
+}
