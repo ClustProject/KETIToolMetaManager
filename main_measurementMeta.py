@@ -11,15 +11,11 @@ if __name__ == '__main__':
     function_list=["StatisticsAnalyzer", "MeanByHoliday", "MeanByWorking", "MeanByTimeStep", "CountByFeatureLabel"]
     
     data_info = {
-    "database" : "air_indoor_요양원",
+    "database" : "air_indoor_아파트",
     "measurements" : measurement_list,
     "function_list" : function_list,
     "mode" : "update"
     }
     
     meta_set = AnalysisMetaControl(data_info).get_metaset()
-    for n in range(len(meta_set)):
-        print(meta_set[n].keys())
-        print(meta_set[n]["analysisResult"].keys())
-    
     WriteData(data_info, meta_set).set_ms_meta()

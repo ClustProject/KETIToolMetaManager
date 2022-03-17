@@ -1,9 +1,0 @@
-{
-    "MONGO_DB_INFO":{
-        "USER_ID":"",
-        "USER_PWD":"",
-        "HOST_ADDR":"",
-        "HOST_PORT":"",
-        "DB_NAME":""
-    }
-}
