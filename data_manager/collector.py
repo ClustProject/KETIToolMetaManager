@@ -19,7 +19,7 @@ outlier_param  = {
     "certainErrorToNaN":{"flag":True},
     "unCertainErrorToNaN":{
         "flag":False,
-        "param":{"neighbor":[0.5,0.6]}
+        "param":{"neighbor":0.5}
     },
     "data_type":"air"
 }
