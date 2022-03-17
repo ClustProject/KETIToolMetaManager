@@ -13,11 +13,12 @@ if __name__ == '__main__':
     function_list = ["StatisticsAnalyzer", "MeanByHoliday", "MeanByWorking", "MeanByTimeStep"]
     
     input_param = {
-        "database" : "air_indoor_유치원",
+        "database" : "air_indoor_요양원",
         "function_list" : function_list,
         "mode" : "update"
     }
     save_db = AnalysisResultDbMeta(input_param)
     analysis_result_meta = save_db.get_mean_analysis_result()
+    print(analysis_result_meta)
     WriteData(input_param, {"table_name":"db_information", "analysisResult":analysis_result_meta}).set_db_meta()
     print("--------------------")

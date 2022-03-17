@@ -15,7 +15,6 @@ class AnalysisResultDbMeta():
     def __init__(self, metasave_info):
         self.metasave_info = metasave_info
         self.db = metasave_info["database"]
-        self.mode = metasave_info["mode"]
         self.function_list = metasave_info["function_list"]
         
         self.ms_list = influx_Client.influxClient(ins.CLUSTDataServer).measurement_list(self.db)
@@ -83,7 +82,6 @@ class AnalysisResultDbMeta():
     def read_all_ms_meta(self):
         ms_result_dict = self.create_result_form()
         for ms in self.ms_list:
-            print(ms)
             ms_meta = collector.ReadData(self.db, ms).get_ms_meta()
             for analyzer in self.function_list:
                 for column in self.columns_list:
@@ -103,12 +101,11 @@ class AnalysisResultDbMeta():
             result_value = []
             for label_key in result_dict[analysis_key].keys():
                 label.append(label_key)
-                value = self.none_convert_nan(result_dict[analysis_key][label_key]) # none -> nan (계산을 위해)
+                value = list(map(self.none_convert_nan, result_dict[analysis_key][label_key])) # none -> nan (계산을 위해)
                 result_value.append(np.nanmean(value))
             result_value = list(map(self.nan_convert_none, result_value)) # nan -> None (UI를 위해)
             analysis_result_bycolumn["label"] = label
             analysis_result_bycolumn["resultValue"] = result_value
             analysis_result.append(analysis_result_bycolumn)
-        #print(analysis_result)
         
         return analysis_result

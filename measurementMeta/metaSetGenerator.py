@@ -41,7 +41,6 @@ class AnalysisMetaControl(AnalysisInputControl):
         self.db = metasave_info["database"]
         self.ms_list = metasave_info["measurements"]
         self.function_list = metasave_info["function_list"]
-        self.mode = metasave_info["mode"]
         
     def get_metaset(self): # measurement 조건별 생성한 metaset Output을 결정하는 아이
         if self.ms_list == []: # measurement 를 all 로 기입
