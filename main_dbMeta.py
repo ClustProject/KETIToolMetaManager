@@ -13,7 +13,7 @@ if __name__ == '__main__':
     function_list = ["StatisticsAnalyzer", "MeanByHoliday", "MeanByWorking", "MeanByTimeStep"]
     
     input_param = {
-        "database" : "air_indoor_아파트",
+        "database" : "air_indoor_고등학교",
         "function_list" : function_list,
         "mode" : "update"
     }

@@ -11,7 +11,7 @@ if __name__ == '__main__':
     function_list=["StatisticsAnalyzer", "MeanByHoliday", "MeanByWorking", "MeanByTimeStep", "CountByFeatureLabel"]
     
     data_info = {
-    "database" : "air_indoor_아파트",
+    "database" : "air_indoor_고등학교",
     "measurements" : measurement_list,
     "function_list" : function_list,
     "mode" : "update"

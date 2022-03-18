@@ -66,11 +66,8 @@ if __name__ == "__main__":
     test = WizApiMongoMeta()
     import json
     
-    with open('/home/hwangjisoo/바탕화면/Study/test.json', 'r') as f:
-        t = json.load(f)
-    #print(t)
-    test.post_database_collection_document("save", t, "air", "indoor_체육시설")
-
+    meta = test.get_database_collection_document("air", "indoor_유치원", "ICW0W2000132")
+    print(meta)
     '''
     get - database/collection/document - 첫번째 document 만 출력
     get - database/collection/documents 는 head 5개만 출력 -> 갯수 변경하고 싶을 시 limit 수정하면 가능
