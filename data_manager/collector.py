@@ -37,6 +37,10 @@ class ReadData(): # GetInputSource / InputSourceCollector
     def __init__(self, database, tablename=None):
         self.db = database
         self.tablename = tablename
+        
+    def set_process_param(self, new_process_param):
+        global process_param
+        process_param = new_process_param
     
     def get_db_meta(self):
         domain = self.db.split("_", maxsplit=1)[0]
