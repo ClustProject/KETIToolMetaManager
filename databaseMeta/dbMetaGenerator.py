@@ -18,7 +18,7 @@ class AnalysisResultDbMeta():
         self.function_list = metasave_info["function_list"]
         
         self.ms_list = influx_Client.influxClient(ins.CLUSTDataServer).measurement_list(self.db)
-        self.columns_list = influx_Client.influxClient(ins.CLUSTDataServer).get_fieldList(self.db, self.ms_list[0], True)
+        self.columns_list = influx_Client.influxClient(ins.CLUSTDataServer).get_fieldList(self.db, self.ms_list[0])
         
         self.labels = {
             "StatisticsAnalyzer" : ["min", "max", "mean"],
