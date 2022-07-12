@@ -4,8 +4,6 @@ sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))))
 
 from KETIToolMetaManager.data_manager import wizMongoDbApi as wiz
-from KETIPreDataIngestion.KETI_setting import influx_setting_KETI as ins
-from KETIPreDataIngestion.data_influx import influx_Client
 from KETIPrePartialDataPreprocessing import data_preprocessing
 
 # packcage : InputSourceController
@@ -34,9 +32,10 @@ imputation_param = {
 process_param = {'refine_param':refine_param, 'outlier_param':outlier_param, 'imputation_param':imputation_param}
 
 class ReadData(): # GetInputSource / InputSourceCollector
-    def __init__(self, database, tablename=None):
+    def __init__(self, influx_instance, database, tablename=None):
         self.db = database
         self.tablename = tablename
+        self.influx_instance = influx_instance
         
     def set_process_param(self, new_process_param):
         global process_param
@@ -51,7 +50,7 @@ class ReadData(): # GetInputSource / InputSourceCollector
         return base_meta
     
     def get_ms_data(self):
-        data_nopreprocessing = influx_Client.influxClient(ins.CLUSTDataServer).get_data(self.db, self.tablename)
+        data_nopreprocessing = self.influx_instance.get_data(self.db, self.tablename)
         # preprocessing
         partialP = data_preprocessing.packagedPartialProcessing(process_param)
         dataframe = partialP.allPartialProcessing(data_nopreprocessing)["imputed_data"]

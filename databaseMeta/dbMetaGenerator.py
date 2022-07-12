@@ -7,18 +7,19 @@ sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))))
 
 from KETIToolMetaManager.data_manager import collector
-from KETIToolMetaManager.data_manager.descriptor import WriteData
-from KETIPreDataIngestion.KETI_setting import influx_setting_KETI as ins
-from KETIPreDataIngestion.data_influx import influx_Client
 
 class AnalysisResultDbMeta():
-    def __init__(self, metasave_info):
+    def __init__(self, metasave_info, influx_instance):
         self.metasave_info = metasave_info
         self.db = metasave_info["database"]
         self.function_list = metasave_info["function_list"]
+        self.influx_instance = influx_instance
         
-        self.ms_list = influx_Client.influxClient(ins.CLUSTDataServer).measurement_list(self.db)
-        self.columns_list = influx_Client.influxClient(ins.CLUSTDataServer).get_fieldList(self.db, self.ms_list[0])
+        # self.ms_list = influx_Client.influxClient(ins.CLUSTDataServer).measurement_list(self.db)
+        # self.columns_list = influx_Client.influxClient(ins.CLUSTDataServer).get_fieldList(self.db, self.ms_list[0])
+        
+        self.ms_list = self.influx_instance.measurement_list(self.db)
+        self.columns_list = self.influx_instance.get_fieldList(self.db, self.ms_list[0])
         
         self.labels = {
             "StatisticsAnalyzer" : ["min", "max", "mean"],
@@ -82,7 +83,7 @@ class AnalysisResultDbMeta():
     def read_all_ms_meta(self):
         ms_result_dict = self.create_result_form()
         for ms in self.ms_list:
-            ms_meta = collector.ReadData(self.db, ms).get_ms_meta()
+            ms_meta = collector.ReadData(self.influx_instance, self.db, ms).get_ms_meta()
             for analyzer in self.function_list:
                 for column in self.columns_list:
                     for label in self.labels[analyzer]:
