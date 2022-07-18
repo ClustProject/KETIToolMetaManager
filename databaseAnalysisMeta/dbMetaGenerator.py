@@ -6,13 +6,13 @@ import os
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))))
 
-from KETIToolMetaManager.data_manager import collector
+from KETIToolMetaManager.metaDataManager import collector
 
 class AnalysisResultDbMeta():
     def __init__(self, metasave_info, influx_instance):
         self.metasave_info = metasave_info
-        self.db = metasave_info["database"]
-        self.function_list = metasave_info["function_list"]
+        self.db = metasave_info["databaseName"]
+        self.function_list = metasave_info["functionList"]
         self.influx_instance = influx_instance
         
         # self.ms_list = influx_Client.influxClient(ins.CLUSTDataServer).measurement_list(self.db)

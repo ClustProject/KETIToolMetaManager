@@ -3,7 +3,7 @@ import os
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))))
 
-from KETIToolMetaManager.data_manager import collector
+from KETIToolMetaManager.metaDataManager import collector
 from KETIToolAnalyzer.batchMetaMaker import BatchMetaMaker as BMM
 
 class AnalysisInputControl(): 
@@ -57,9 +57,9 @@ class AnalysisInputControl():
 
 class AnalysisMetaControl(AnalysisInputControl):
     def __init__(self, metasave_info, influx_instance):
-        self.db = metasave_info["database"]
-        self.ms_list = metasave_info["measurements"]
-        self.function_list = metasave_info["function_list"]
+        self.db = metasave_info["databaseName"]
+        self.ms_list = metasave_info["measurementsName"]
+        self.function_list = metasave_info["functionList"]
         self.influx_instance = influx_instance
         
     def get_metaset(self): # measurement 조건별 생성한 metaset Output을 결정하는 아이

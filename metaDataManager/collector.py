@@ -3,7 +3,7 @@ import os
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))))
 
-from KETIToolMetaManager.data_manager import wizMongoDbApi as wiz
+from KETIToolMetaManager.metaDataManager import wizMongoDbApi as wiz
 from KETIPrePartialDataPreprocessing import data_preprocessing
 
 # packcage : InputSourceController
