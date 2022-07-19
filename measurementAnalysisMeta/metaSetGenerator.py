@@ -43,11 +43,11 @@ class AnalysisInputControl():
         collect_read = collector.ReadData(self.influx_instance, self.db, self.tablename)
         
         if data_meta_flag:
-            data = collect_read.get_ms_data()
+            data = collect_read.get_ms_data_by_days()
             base_meta = collect_read.get_db_meta() # collector.ReadData(self.db, self.tablename).get_db_meta()
         else:
             if data_flag:
-                data = collect_read.get_ms_data()
+                data = collect_read.get_ms_data_by_days()
                 base_meta = None
             elif meta_flag:
                 data = None

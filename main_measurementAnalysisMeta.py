@@ -13,9 +13,9 @@ if __name__ == '__main__':
     
     measurement_list = []
     function_list=["StatisticsAnalyzer", "MeanByHoliday", "MeanByWorking", "MeanByTimeStep", "CountByFeatureLabel"]
-    #indoor_ls = ["유치원", "요양원", "어린이집", "아파트", "도서관", "경로당", "고등학교", "초등학교"]
+    #indoor_ls = ["요양원", "어린이집", "아파트", "도서관", "경로당", "고등학교", "초등학교"]
     data_info = {
-    "databaseName" : "air_indoor_중학교",
+    "databaseName" : "air_indoor_유치원",
     "measurementsName" : measurement_list,
     "functionList" : function_list,
     "mode" : "update"

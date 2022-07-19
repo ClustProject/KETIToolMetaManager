@@ -49,6 +49,16 @@ class ReadData(): # GetInputSource / InputSourceCollector
         
         return base_meta
     
+    def get_ms_data_by_days(self):
+        days = 365
+        end_time = self.influx_instance.get_last_time(self.db, self.tablename)
+        data_nopreprocessing = self.influx_instance.get_data_by_days(end_time, days, self.db, self.tablename)
+        # preprocessing
+        partialP = data_preprocessing.packagedPartialProcessing(process_param)
+        dataframe = partialP.allPartialProcessing(data_nopreprocessing)["imputed_data"]
+
+        return dataframe
+    
     def get_ms_data(self):
         data_nopreprocessing = self.influx_instance.get_data(self.db, self.tablename)
         # preprocessing
