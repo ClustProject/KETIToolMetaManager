@@ -19,11 +19,12 @@ if __name__ == '__main__':
     #indoor_ls = ["유치원", "요양원", "어린이집", "아파트", "도서관", "경로당", "고등학교", "체육시설", "초등학교"]
     input_param = {
         "databaseName" : "air_indoor_체육시설",
+        "measurementsName" : "db_information",
         "function_list" : function_list,
         "mode" : "update"
     }
     save_db = AnalysisResultDbMeta(input_param, db_client)
     analysis_result_meta = save_db.get_mean_analysis_result()
     print(analysis_result_meta)
-    WriteData(input_param, {"table_name":"db_information", "analysisResult":analysis_result_meta}).set_db_meta()
+    WriteData(input_param, {"table_name":"db_information", "analysisResult":analysis_result_meta}).set_meta()
     print("--------------------")

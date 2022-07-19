@@ -22,4 +22,4 @@ if __name__ == '__main__':
     }
     
     meta_set = AnalysisMetaControl(data_info, db_client).get_metaset()
-    WriteData(data_info, meta_set).set_ms_meta()
+    WriteData(data_info, meta_set).set_meta()
