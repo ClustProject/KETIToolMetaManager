@@ -41,7 +41,6 @@ class AnalysisInputControl():
         meta_flag = any(function in flist_meta for function in self.function_list)
         
         collect_read = collector.ReadData(self.influx_instance, self.db, self.tablename)
-        
         if data_meta_flag:
             data = collect_read.get_ms_data_by_days()
             base_meta = collect_read.get_db_meta() # collector.ReadData(self.db, self.tablename).get_db_meta()
@@ -52,7 +51,6 @@ class AnalysisInputControl():
             elif meta_flag:
                 data = None
                 base_meta = collect_read.get_db_meta()  #collector.ReadData(self.db, self.tablename).get_db_meta()
-        
         return data, base_meta
 
 class AnalysisMetaControl(AnalysisInputControl):
@@ -68,8 +66,8 @@ class AnalysisMetaControl(AnalysisInputControl):
             all_ms_list = self.influx_instance.measurement_list(self.db)
             self.meta_set = self.get_analyzed_meta(all_ms_list)
         else:
-            if len(self.ms_list) == 1: # measurement 한개 기입
-                self.meta_set = self.get_analyzed_meta(self.ms_list)[0]
+            if type(self.ms_list) == str: # measurement 한개 기입
+                self.meta_set = self.get_analyzed_meta([self.ms_list])[0]
             else: # measurement 를 여러개 기입
                 self.meta_set = self.get_analyzed_meta(self.ms_list)
                 

@@ -51,6 +51,7 @@ class ReadData(): # GetInputSource / InputSourceCollector
     
     def get_ms_data_by_days(self):
         days = 365
+        print(self.db, self.tablename)
         end_time = self.influx_instance.get_last_time(self.db, self.tablename)
         data_nopreprocessing = self.influx_instance.get_data_by_days(end_time, days, self.db, self.tablename)
         # preprocessing

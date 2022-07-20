@@ -16,7 +16,7 @@ class WriteData():
         domain = self.db.split("_", maxsplit=1)[0]
         sub_domain = self.db.split("_", maxsplit=1)[1]
         mongodb_c = wiz.WizApiMongoMeta()
-        
+        print(self.ms_list)
         if type(self.ms_list) == str:
             mongodb_c.post_database_collection_document(self.mode, self.meta_data, domain, sub_domain)
             print("SUCCESS")

@@ -16,12 +16,13 @@ if __name__ == '__main__':
     
     function_list = ["StatisticsAnalyzer", "MeanByHoliday", "MeanByWorking", "MeanByTimeStep"]
     
-    #indoor_ls = ["유치원", "요양원", "어린이집", "아파트", "도서관", "경로당", "고등학교", "체육시설", "초등학교"]
+    #indoor_ls = ["요양원", "어린이집", "아파트", "도서관", "경로당", "고등학교",  "초등학교"]
     input_param = {
-        "databaseName" : "air_indoor_체육시설",
+        "databaseName" : "air_indoor_유치원",
         "measurementsName" : "db_information",
-        "function_list" : function_list,
-        "mode" : "update"
+        "functionList" : function_list,
+        "mode" : "update",
+        "columnSameByMS" : True
     }
     save_db = AnalysisResultDbMeta(input_param, db_client)
     analysis_result_meta = save_db.get_mean_analysis_result()
