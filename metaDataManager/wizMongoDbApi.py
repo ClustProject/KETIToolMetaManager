@@ -27,11 +27,20 @@ class WizApiMongoMeta():
 
         return json.loads(text)
 
+    def get_tableName_list(self, domain, subdomain):
+        url = wiz_url + "/rest/1.0/mongodb/tableNames/{}/{}".format(domain, subdomain)
+        header = {'accept': 'application/json'}
+        response = requests.get(url, headers=header)
+        #print(response.status_code)
+        text = response.text
+
+        return json.loads(text)
+
     # get - database/collection/document?table_name - 지정 table name 출력
     def get_database_collection_document(self, domain, subdomain, tablename=None):
         url = wiz_url+"/rest/1.0/mongodb/document/{}/{}?table_name={}".format(domain, subdomain, tablename)
         response = requests.get(url)
-        print(response.status_code)
+        #print(response.status_code)
         text = response.text
 
         return json.loads(text)
