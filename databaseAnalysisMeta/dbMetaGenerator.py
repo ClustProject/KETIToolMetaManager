@@ -64,9 +64,11 @@ class AnalysisResultDbMeta():
     
     def create_total_column_list(self):
         column_list = []
+        print("ms list : ", self.ms_list)
         for ms in self.ms_list:
             column_list.extend(self.influx_instance.get_fieldList(self.db, ms))
         self.total_columns_list = list(set(column_list))
+        print("total columns list : ", self.total_columns_list)
     
     def create_result_form(self):
         """
@@ -95,6 +97,7 @@ class AnalysisResultDbMeta():
     def read_all_ms_meta(self):
         self.ms_result_dict = self.create_result_form()
         for ms in self.ms_list:
+            print("ms : ", ms)
             self.ms_meta = collector.ReadData(self.influx_instance, self.db, ms).get_ms_meta()
             if self.column_same_by_ms:
                 self.collect_analysis_result(self.total_columns_list)
