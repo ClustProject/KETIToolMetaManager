@@ -6,9 +6,9 @@
          "description":"Original particulate matter 01",
          "tag":[
             "indoor",
-            "극초미세먼지",
-            "원본값",
-            "환경 오염 물질"
+            "ultra fine dust",
+            "original value",
+            "environmental pollutants"
          ],
          "unit":"㎍/m³",
          "min":0,
@@ -19,9 +19,9 @@
          "description":"Original particulate matter 2.5",
          "tag":[
             "indoor",
-            "초미세먼지",
-            "원본값",
-            "환경 오염 물질"
+            "ultra fine dust",
+            "original value",
+            "environmental pollutants"
          ],
          "columnLevelCriteria":{
             "step":[
@@ -32,10 +32,10 @@
                1000
             ],
             "label":[
-               "좋음",
-               "보통",
-               "나쁨",
-               "매우나쁨"
+               "Good",
+               "Normal",
+               "Bad",
+               "Danger"
             ]
          },
          "unit":"㎍/m³",
@@ -47,9 +47,9 @@
          "description":"Original particulate matter 10",
          "tag":[
             "indoor",
-            "미세먼지",
-            "원본값",
-            "환경 오염 물질"
+            "fine dust",
+            "original value",
+            "environmental pollutants"
          ],
          "columnLevelCriteria":{
             "step":[
@@ -60,10 +60,10 @@
                1000
             ],
             "label":[
-               "좋음",
-               "보통",
-               "나쁨",
-               "매우나쁨"
+               "Good",
+               "Normal",
+               "Bad",
+               "Danger"
             ]
          },
          "unit":"㎍/m³",
@@ -75,8 +75,7 @@
          "description":"Temperature",
          "tag":[
             "indoor",
-            "Temperature",
-            "온도"
+            "Temperature"
          ],
          "columnLevelCriteria":{
             "step":[
@@ -90,13 +89,13 @@
                80
             ],
             "label":[
-               "매우추움",
-               "추움",
-               "서늘",
-               "쾌적",
-               "따뜻",
-               "더움",
-               "매우더움"
+               "Supercold",
+               "Cold",
+               "Cool",
+               "Pleasant",
+               "Warm",
+               "Heat",
+               "Vary Hot"
             ]
          },
          "unit":"°C",
@@ -108,8 +107,7 @@
          "description":"Humidity",
          "tag":[
             "indoor",
-            "Humidity",
-            "습도"
+            "Humidity"
          ],
          "columnLevelCriteria":{
             "step":[
@@ -123,13 +121,13 @@
                100
             ],
             "label":[
-               "매우건조",
-               "건조",
-               "약간건조",
-               "쾌적",
-               "약간습합",
-               "습함",
-               "매우습함"
+               "Very Dry",
+               "Dry",
+               "slightly Dry",
+               "Pleasant",
+               "A Little Wet",
+               "Wet",
+               "Very Humid"
             ]
          },
          "unit":"%",
@@ -141,8 +139,8 @@
          "description":"Carbon Dioxide",
          "tag":[
             "indoor",
-            "이산화탄소",
-            "환경 오염 물질"
+            "carbon dioxide",
+            "environmental pollutants"
          ],
          "columnLevelCriteria":{
             "step":[
@@ -153,10 +151,10 @@
                10000
             ],
             "label":[
-               "좋음",
-               "보통",
-               "나쁨",
-               "매우나쁨"
+               "Good",
+               "Normal",
+               "Bad",
+               "Danger"
             ]
          },
          "unit":"ppm",
@@ -168,8 +166,8 @@
          "description":"Volatile Organic Compounds.",
          "tag":[
             "indoor",
-            "휘발성유기화합물",
-            "환경 오염 물질"
+            "volatile organic compounds",
+            "environmental pollutants"
          ],
          "columnLevelCriteria":{
             "step":[
@@ -180,10 +178,10 @@
                60000
             ],
             "label":[
-               "좋음",
-               "보통",
-               "나쁨",
-               "매우나쁨"
+               "Good",
+               "Normal",
+               "Bad",
+               "Danger"
             ]
          },
          "unit":"ppb",
@@ -195,7 +193,7 @@
          "description":"Noise",
          "tag":[
             "indoor",
-            "소음"
+            "noise"
          ],
          "columnLevelCriteria":{
             "step":[
@@ -208,12 +206,12 @@
                90
             ],
             "label":[
-               "속삭이는 소리",
-               "도서관",
-               "조용한 사무실",
-               "보통회화",
-               "시끄러운 사무실",
-               "지하철의 차내소음"
+               "Whisper",
+               "Library",
+               "Quiet Office",
+               "Normal Conversation",
+               "Noisy Office",
+               "The noise in the subway car"
             ]
          },
          "unit":"db",
@@ -225,9 +223,9 @@
          "description":"Correction particulate matter 10",
          "tag":[
             "indoor",
-            "미세먼지",
-            "보정값",
-            "환경 오염 물질"
+            "fine dust",
+            "correction value",
+            "environmental pollutants"
          ],
          "columnLevelCriteria":{
             "step":[
@@ -238,10 +236,10 @@
                1000
             ],
             "label":[
-               "좋음",
-               "보통",
-               "나쁨",
-               "매우나쁨"
+               "Good",
+               "Normal",
+               "Bad",
+               "Danger"
             ]
          },
          "unit":"㎍/m³",
@@ -253,9 +251,9 @@
          "description": "Correction particulate matter 2.5",
          "tag":[
             "indoor",
-            "초미세먼지",
-            "보정값",
-            "환경 오염 물질"
+            "ultra fine dust",
+            "correction value",
+            "environmental pollutants"
          ],
          "columnLevelCriteria":{
             "step":[
@@ -266,10 +264,10 @@
                1000
             ],
             "label":[
-               "좋음",
-               "보통",
-               "나쁨",
-               "매우나쁨"
+               "Good",
+               "Normal",
+               "Bad",
+               "Danger"
             ]
          },
          "unit":"㎍/m³",
@@ -281,9 +279,9 @@
          "description":"Correction particulate matter 01",
          "tag":[
             "indoor",
-            "극초미세먼지",
-            "보정값",
-            "환경 오염 물질"
+            "ultra fine dust",
+            "correction value",
+            "environmental pollutants"
          ],
          "unit":"㎍/m³",
          "min":0,
@@ -294,8 +292,8 @@
          "description":"Consolidation Indoor Comfort Index of PM10",
          "tag":[
             "indoor",
-            "통합실내쾌적지수",
-            "미세먼지"
+            "Integrated indoor comfort index",
+            "fine dust"
          ],
          "columnLevelCriteria":{
             "step":[
@@ -306,10 +304,10 @@
                100
             ],
             "label":[
-               "매우나쁨",
-               "나쁨",
-               "보통",
-               "좋음"
+               "Danger",
+               "Bad",
+               "Normal",
+               "Good"
             ]
          },
          "min":0,
@@ -320,8 +318,8 @@
          "description":"Consolidation Indoor Comfort Index of PM2.5",
          "tag":[
             "indoor",
-            "통합실내쾌적지수",
-            "초미세먼지"
+            "Integrated indoor comfort index",
+            "ultra fine dust"
          ],
          "columnLevelCriteria":{
             "step":[
@@ -332,10 +330,10 @@
                100
             ],
             "label":[
-               "매우나쁨",
-               "나쁨",
-               "보통",
-               "좋음"
+               "Danger",
+               "Bad",
+               "Normal",
+               "Good"
             ]
          },
          "min":0,
@@ -346,8 +344,8 @@
          "description":"Consolidation Indoor Comfort Index of CO2",
          "tag":[
             "indoor",
-            "통합실내쾌적지수",
-            "이산화탄소"
+            "Integrated indoor comfort index",
+            "carbon dioxide"
          ],
          "columnLevelCriteria":{
             "step":[
@@ -358,10 +356,10 @@
                100
             ],
             "label":[
-               "매우나쁨",
-               "나쁨",
-               "보통",
-               "좋음"
+               "Danger",
+               "Bad",
+               "Normal",
+               "Good"
             ]
          },
          "min":0,
@@ -372,8 +370,8 @@
          "description":"Consolidation Indoor Comfort Index of VOC",
          "tag":[
             "indoor",
-            "통합실내쾌적지수",
-            "휘발성유기화합물"
+            "Integrated indoor comfort index",
+            "volatile organic compounds"
          ],
          "columnLevelCriteria":{
             "step":[
@@ -384,10 +382,10 @@
                100
             ],
             "label":[
-               "매우나쁨",
-               "나쁨",
-               "보통",
-               "좋음"
+               "Danger",
+               "Bad",
+               "Normal",
+               "Good"
             ]
          },
          "min":0,
@@ -398,8 +396,8 @@
          "description":"Consolidation Indoor Comfort Index of Temperature",
          "tag":[
             "indoor",
-            "통합실내쾌적지수",
-            "온도"
+            "Integrated indoor comfort index",
+            "Temperature"
          ],
          "columnLevelCriteria":{
             "step":[
@@ -410,10 +408,10 @@
                100
             ],
             "label":[
-               "매우나쁨",
-               "나쁨",
-               "보통",
-               "좋음"
+               "Danger",
+               "Bad",
+               "Normal",
+               "Good"
             ]
          },
          "min":0,
@@ -424,8 +422,8 @@
          "description":"Consolidation Indoor Comfort Index of Humidity",
          "tag":[
             "indoor",
-            "통합실내쾌적지수",
-            "습도"
+            "Integrated indoor comfort index",
+            "Humidity"
          ],
          "columnLevelCriteria":{
             "step":[
@@ -436,10 +434,10 @@
                100
             ],
             "label":[
-               "매우나쁨",
-               "나쁨",
-               "보통",
-               "좋음"
+               "Danger",
+               "Bad",
+               "Normal",
+               "Good"
             ]
          },
          "min":0,
@@ -450,8 +448,8 @@
          "description":"Consolidation Indoor Comfort Index of Noise",
          "tag":[
             "indoor",
-            "통합실내쾌적지수",
-            "소음"
+            "Integrated indoor comfort index",
+            "Noise"
          ],
          "columnLevelCriteria":{
             "step":[
@@ -462,10 +460,10 @@
                100
             ],
             "label":[
-               "매우나쁨",
-               "나쁨",
-               "보통",
-               "좋음"
+               "Danger",
+               "Bad",
+               "Normal",
+               "Good"
             ]
          },
          "min":0,
@@ -476,7 +474,7 @@
          "description":"Consolidation Indoor Comfort Index",
          "tag":[
             "indoor",
-            "통합실내쾌적지수"
+            "Integrated indoor comfort index"
          ],
          "columnLevelCriteria":{
             "step":[
@@ -487,10 +485,10 @@
                100
             ],
             "label":[
-               "매우나쁨",
-               "나쁨",
-               "보통",
-               "좋음"
+               "Danger",
+               "Bad",
+               "Normal",
+               "Good"
             ]
          },
          "min":0,
@@ -501,7 +499,7 @@
          "description":"Consolidation Indoor Air pollution Index",
          "tag":[
             "indoor",
-            "통합실내공기오염지수"
+            "Integrated Indoor Air Pollution Index"
          ],
          "columnLevelCriteria":{
             "step":[
@@ -512,10 +510,10 @@
                100
             ],
             "label":[
-               "매우나쁨",
-               "나쁨",
-               "보통",
-               "좋음"
+               "Danger",
+               "Bad",
+               "Normal",
+               "Good"
             ]
          },
          "min":0,
