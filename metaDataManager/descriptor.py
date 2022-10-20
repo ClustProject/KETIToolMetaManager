@@ -8,7 +8,7 @@ from KETIToolMetaManager.metaDataManager import wizMongoDbApi as wiz
 class WriteData():
     def __init__(self, metasave_info, meta_data):
         self.db = metasave_info["databaseName"]
-        self.mode = metasave_info["mode"]
+        self.mode = metasave_info["writeMode"]
         self.meta_data = meta_data
         self.ms_list = metasave_info["measurementsName"]
     
