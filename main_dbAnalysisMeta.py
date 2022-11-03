@@ -8,7 +8,7 @@ sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(os.path.abspath(
 
 if __name__ == '__main__':
     from KETIToolMetaManager.databaseAnalysisMeta.dbMetaGenerator import AnalysisResultDbMeta
-    from KETIToolMetaManager.metaDataManager.descriptor import WriteData
+    from KETIToolMetaManager.metaDataManager import descriptor
     from KETIPreDataIngestion.KETI_setting.influx_setting_KETI import CLUSTDataServer2 as ins
     from KETIPreDataIngestion.data_influx import influx_Client_v2 as iC
     
@@ -27,5 +27,5 @@ if __name__ == '__main__':
     save_db = AnalysisResultDbMeta(input_param, db_client)
     analysis_result_meta = save_db.get_mean_analysis_result()
     print(analysis_result_meta)
-    WriteData(input_param, {"table_name":"db_information", "analysisResult":analysis_result_meta}).set_meta()
+    descriptor.write_data(input_param, {"table_name":"db_information", "analysisResult":analysis_result_meta})
     print("--------------------")

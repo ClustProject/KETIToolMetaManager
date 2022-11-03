@@ -5,7 +5,7 @@ sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(os.path.abspath(
 
 if __name__ == '__main__':
     from KETIToolMetaManager.measurementAnalysisMeta.metaSetGenerator import AnalysisMetaControl
-    from KETIToolMetaManager.metaDataManager.descriptor import WriteData
+    from KETIToolMetaManager.metaDataManager import descriptor
     from KETIPreDataIngestion.KETI_setting.influx_setting_KETI import CLUSTDataServer2 as ins
     from KETIPreDataIngestion.data_influx import influx_Client_v2 as iC
     
@@ -22,4 +22,4 @@ if __name__ == '__main__':
     }
     
     meta_set = AnalysisMetaControl(data_info, db_client).get_metaset()
-    WriteData(data_info, meta_set).set_meta()
+    descriptor.write_data(data_info, meta_set)
