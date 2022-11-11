@@ -15,10 +15,11 @@ if __name__ == '__main__':
     function_list=["StatisticsAnalyzer", "MeanByHoliday", "MeanByWorking", "MeanByTimeStep", "CountByFeatureLabel"]
     #indoor_ls = ["요양원", "어린이집", "아파트", "도서관", "경로당", "고등학교", "초등학교"]
     data_info = {
-    "databaseName" : "air_indoor_유치원",
-    "measurementsName" : measurement_list,
-    "functionList" : function_list,
-    "mode" : "update"
+        "dbName":"air",
+        "collectionName":"indoor_유치원",
+        "measurementsName" : measurement_list,
+        "functionList" : function_list,
+        "mode" : "update"
     }
     
     meta_set = AnalysisMetaControl(data_info, db_client).get_metaset()

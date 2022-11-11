@@ -11,7 +11,8 @@ from KETIToolMetaManager.metaDataManager import collector
 class AnalysisResultDbMeta():
     def __init__(self, metasave_info, influx_instance):
         self.metasave_info = metasave_info
-        self.db = metasave_info["databaseName"]
+        self.db = metasave_info["dbName"]+'_'+metasave_info["collectionName"]
+
         self.function_list = metasave_info["functionList"]
         self.column_same_by_ms = metasave_info["columnSameByMS"]
         self.influx_instance = influx_instance

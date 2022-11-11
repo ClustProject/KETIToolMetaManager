@@ -18,7 +18,8 @@ if __name__ == '__main__':
     
     #indoor_ls = ["요양원", "어린이집", "아파트", "도서관", "경로당", "고등학교",  "초등학교"]
     input_param = {
-        "databaseName" : "air_indoor_유치원",
+        "dbName":"air",
+        "collectionName":"indoor_유치원",
         "measurementsName" : "db_information",
         "functionList" : function_list,
         "mode" : "update",

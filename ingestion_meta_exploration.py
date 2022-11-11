@@ -19,7 +19,7 @@ def get_meta_table():
             colls = wiz_c.get_collection_list(db_name)
             for coll in colls:
                 print(db_name, coll)
-                items = wiz_c.get_database_collection_documents(db_name, coll)
+                items = wiz_c.call_mongodb_document_get_api(db_name, coll)
                 for item in items:
                     try:
                         influx_db_name = item['domain']+"_"+item["subDomain"]
@@ -51,7 +51,7 @@ def get_meta_some_tables(db_ms_names):
         for coll in db_ms_names[db].keys():
             result[db][coll]={}
             for ms in db_ms_names[db][coll]:
-                data = wiz_c.get_database_collection_document(db, coll, ms)
+                data = wiz_c.call_mongodb_document_get_api(db, coll, ms)
                 data = {"start_time":data["startTime"],"end_time":data["endTime"]}
                 result[db][coll][ms]=data
     return result

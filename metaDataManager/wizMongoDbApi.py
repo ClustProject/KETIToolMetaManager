@@ -37,45 +37,38 @@ class WizApiMongoMeta():
         return json.loads(text)
 
     # get - database/collection/document?table_name - 지정 table name 출력
-    def get_database_collection_document(self, domain, subdomain, tablename=None):
-        url = wiz_url+"/rest/1.0/mongodb/document/{}/{}?table_name={}".format(domain, subdomain, tablename)
-        response = requests.get(url)
-        #print(response.status_code)
-        text = response.text
+    def call_mongodb_document_get_api(self, domain, subdomain, tableName=None):
+        if tableName: #one document
+            url = wiz_url+"/rest/1.0/mongodb/document/{}/{}?table_name={}".format(domain, subdomain, tableName)
+        else: #all documents
+            url = wiz_url+"/rest/1.0/mongodb/documents/{}/{}".format(domain, subdomain)
 
-        return json.loads(text)
-    
-    def get_database_collection_documents(self, domain, subdomain):
-        url = wiz_url+"/rest/1.0/mongodb/documents/{}/{}".format(domain, subdomain)
         response = requests.get(url)
         print(response.status_code)
         text = response.text
 
         return json.loads(text)
+
 
     # post - database/collection/document insert, save
-    def post_database_collection_document(self, mode, data, domain, subdomain):
+    def call_mongodb_document_post_api(self, mode, data, domain, subdomain, tableName=None):
+        if tableName: #one document
+            url = wiz_url+"/rest/1.0/mongodb/document/{}/{}?mode={}".format(domain, subdomain, mode)
+        else: #all documents
+            url = wiz_url+"/rest/1.0/mongodb/documents/{}/{}?mode={}".format(domain, subdomain, mode)
 
-        url = wiz_url+"/rest/1.0/mongodb/document/{}/{}?mode={}".format(domain, subdomain, mode)
         headers = {'Content-Type': 'application/json'}
         response = requests.post(url, data=json.dumps(data), headers=headers)
 
         print(response.status_code)
-        
-    def post_database_collection_documents(self, mode, data, domain, subdomain):
-    
-        url = wiz_url+"/rest/1.0/mongodb/documents/{}/{}?mode={}".format(domain, subdomain, mode)
-        headers = {'Content-Type': 'application/json'}
-        response = requests.post(url, data=json.dumps(data), headers=headers)
 
-        print(response.status_code)
 
 if __name__ == "__main__":
     from pprint import pprint
     test = WizApiMongoMeta()
     import json
     
-    meta = test.get_database_collection_document("air", "indoor_유치원", "ICW0W2000132")
+    meta = test.call_mongodb_document_get_api("air", "indoor_유치원", "ICW0W2000132")
     print(meta)
     '''
     get - database/collection/document - 첫번째 document 만 출력

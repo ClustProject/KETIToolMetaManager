@@ -55,7 +55,7 @@ class AnalysisInputControl():
 
 class AnalysisMetaControl(AnalysisInputControl):
     def __init__(self, metasave_info, influx_instance):
-        self.db = metasave_info["databaseName"]
+        self.db = metasave_info["dbName"]+'_'+metasave_info["collectionName"]
         self.ms_list = metasave_info["measurementsName"]
         self.function_list = metasave_info["functionList"]
         self.influx_instance = influx_instance
