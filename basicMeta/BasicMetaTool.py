@@ -10,7 +10,7 @@ def DBNameToDomainSubDomainName(dbname):
     return domain, sub_domain
 
 
-class metaGeneratorByMode():
+class metaGenerator():
     def __init__(self, metaUploadParam):
         self.path = metaUploadParam["filePath"]
         self.filename = metaUploadParam["fileName"]
