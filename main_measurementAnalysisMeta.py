@@ -17,7 +17,7 @@ if __name__ == '__main__':
     data_info = {
         "dbName":"air",
         "collectionName":"indoor_유치원",
-        "measurementsName" : measurement_list,
+        "tableName" : measurement_list,
         "functionList" : function_list,
         "mode" : "update"
     }

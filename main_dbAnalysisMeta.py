@@ -20,7 +20,7 @@ if __name__ == '__main__':
     input_param = {
         "dbName":"air",
         "collectionName":"indoor_유치원",
-        "measurementsName" : "db_information",
+        "tableName" : "db_information",
         "functionList" : function_list,
         "mode" : "update",
         "columnSameByMS" : True

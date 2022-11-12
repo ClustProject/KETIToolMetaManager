@@ -5,22 +5,20 @@ sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(os.path.abspath(
 
 from KETIToolMetaManager.metaDataManager import wizMongoDbApi as wiz
 
-def write_data(metasave_info, meta_data):
-    dbName = metasave_info["dbName"]
-    collectionName = metasave_info["collectionName"]
-
-    write_mode = metasave_info["mode"]
-    ms_list = None
+def write_data(uploadParam, meta_data):
+    write_mode = uploadParam["mode"]
+    dbName = uploadParam["dbName"]
+    collectionName = uploadParam["collectionName"]
 
     mongodb_c = wiz.WizApiMongoMeta()
-    mongodb_c.call_mongodb_document_post_api(write_mode, meta_data, dbName, collectionName, ms_list)
+    mongodb_c.call_mongodb_document_post_api(write_mode, meta_data, dbName, collectionName)
     print("SUCCESS")
 
 """  
 def write_data(metasave_info, meta_data):
     db_name = metasave_info["databaseName"]
     write_mode = metasave_info["mode"]
-    ms_list = metasave_info["measurementsName"]
+    ms_list = metasave_info["tableName"]
     
     domain = db_name.split("_", maxsplit=1)[0]
     sub_domain = db_name.split("_", maxsplit=1)[1]

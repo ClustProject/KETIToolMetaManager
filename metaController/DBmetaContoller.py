@@ -9,7 +9,7 @@ class metaController():
     def __init__(self, metaUploadParam):
         self.path = metaUploadParam["filePath"]
         self.filename = metaUploadParam["fileName"]
-        self.ms_list = metaUploadParam["measurementsName"]
+        self.ms_list = metaUploadParam["tableName"]
         self.domain = self.upload_param["dbName"]
         self.sub_domain = self.upload_param["collectionName"]
 

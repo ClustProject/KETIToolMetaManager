@@ -49,14 +49,20 @@ class WizApiMongoMeta():
 
         return json.loads(text)
 
-
     # post - database/collection/document insert, save
-    def call_mongodb_document_post_api(self, mode, data, domain, subdomain, tableName=None):
+    def call_mongodb_document_post_api(self, mode, data, domain, subdomain):
+        if type(data) is dict: #one dictionary document
+            print("single document upload")
+            url = wiz_url+"/rest/1.0/mongodb/document/{}/{}?mode={}".format(domain, subdomain, mode)
+        elif isinstance(data, list): #multiple dictonary documents
+            print("multiple documents upload")
+            url = wiz_url+"/rest/1.0/mongodb/documents/{}/{}?mode={}".format(domain, subdomain, mode)
+        """
         if tableName: #one document
             url = wiz_url+"/rest/1.0/mongodb/document/{}/{}?mode={}".format(domain, subdomain, mode)
         else: #all documents
             url = wiz_url+"/rest/1.0/mongodb/documents/{}/{}?mode={}".format(domain, subdomain, mode)
-
+        """
         headers = {'Content-Type': 'application/json'}
         response = requests.post(url, data=json.dumps(data), headers=headers)
 
