@@ -1,4 +1,5 @@
 {
+    "table_name" :"farm_swine_air", 
     "description" : "This is Pig Farm Air Quality Data.",
     "columnInformation":[
        {
