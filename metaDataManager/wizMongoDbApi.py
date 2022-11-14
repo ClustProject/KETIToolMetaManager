@@ -37,32 +37,66 @@ class WizApiMongoMeta():
         return json.loads(text)
 
     # get - database/collection/document?table_name - 지정 table name 출력
-    def call_mongodb_document_get_api(self, domain, subdomain, tableName=None):
+    def read_mongodb_document_by_get(self, domain, subdomain, tableName=None):
+        # TODO 아래 주석 수정할 것
+        """
+        
+
+        :param domain: database
+        :type domain: string
+
+        :param subdomain: database
+        :type subdomain: string
+
+        :param tableName: database
+        :type tableName: string or None
+
+        - type(tableName) == string : 특정 table만 읽어옴
+        - tableName == None : domain/subdomain(Collection) 아래 모든 table을 읽어옴
+
+        :return: result
+        :rtype: dictionary (single) or array (multiple)
+
+        """
+
         if tableName: #one document
             url = wiz_url+"/rest/1.0/mongodb/document/{}/{}?table_name={}".format(domain, subdomain, tableName)
-        else: #all documents
+        else: #all documents under domain/subdomain/
             url = wiz_url+"/rest/1.0/mongodb/documents/{}/{}".format(domain, subdomain)
 
         response = requests.get(url)
         print(response.status_code)
         text = response.text
+        result = json.loads(text)
 
-        return json.loads(text)
+        return result
 
     # post - database/collection/document insert, save
-    def call_mongodb_document_post_api(self, mode, data, domain, subdomain):
+    def save_mongodb_document_by_post(self, mode, data, domain, subdomain):
+        # TODO 아래 주석 확인할 것
+        """
+        mongodb의 document를 post로 저장함
+
+        :param mode: data를 mongodb에 처리 하기 위한 방법 [update|insert|save]
+        :type mode: string
+
+        :param data: mongodb에 처리할 data
+        :type data: string
+
+        :param domain: domain, mongodb의 database 이름
+        :type domain: string
+
+        :param subdomain: subdomain, mongodb의 collection 이름
+        :type subdomain: string
+
+        """
         if type(data) is dict: #one dictionary document
             print("single document upload")
             url = wiz_url+"/rest/1.0/mongodb/document/{}/{}?mode={}".format(domain, subdomain, mode)
         elif isinstance(data, list): #multiple dictonary documents
             print("multiple documents upload")
             url = wiz_url+"/rest/1.0/mongodb/documents/{}/{}?mode={}".format(domain, subdomain, mode)
-        """
-        if tableName: #one document
-            url = wiz_url+"/rest/1.0/mongodb/document/{}/{}?mode={}".format(domain, subdomain, mode)
-        else: #all documents
-            url = wiz_url+"/rest/1.0/mongodb/documents/{}/{}?mode={}".format(domain, subdomain, mode)
-        """
+
         headers = {'Content-Type': 'application/json'}
         response = requests.post(url, data=json.dumps(data), headers=headers)
 
@@ -74,7 +108,7 @@ if __name__ == "__main__":
     test = WizApiMongoMeta()
     import json
     
-    meta = test.call_mongodb_document_get_api("air", "indoor_유치원", "ICW0W2000132")
+    meta = test.read_mongodb_document_by_get("air", "indoor_유치원", "ICW0W2000132")
     print(meta)
     '''
     get - database/collection/document - 첫번째 document 만 출력

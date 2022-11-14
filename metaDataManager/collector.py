@@ -45,7 +45,7 @@ class ReadData(): # GetInputSource / InputSourceCollector
         domain = self.db.split("_", maxsplit=1)[0]
         sub_domain = self.db.split("_", maxsplit=1)[1]
         mongodb_c = wiz.WizApiMongoMeta()
-        base_meta = mongodb_c.call_mongodb_document_get_api(domain, sub_domain, "db_information")
+        base_meta = mongodb_c.read_mongodb_document_by_get(domain, sub_domain, "db_information")
         
         return base_meta
     
@@ -72,6 +72,6 @@ class ReadData(): # GetInputSource / InputSourceCollector
         domain = self.db.split("_", maxsplit=1)[0]
         sub_domain = self.db.split("_", maxsplit=1)[1]
         mongodb_c = wiz.WizApiMongoMeta()
-        base_meta = mongodb_c.call_mongodb_document_get_api(domain, sub_domain, self.tablename)
+        base_meta = mongodb_c.read_mongodb_document_by_get(domain, sub_domain, self.tablename)
         
         return base_meta
