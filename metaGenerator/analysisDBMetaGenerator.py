@@ -8,7 +8,7 @@ sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(os.path.abspath(
 
 from KETIToolMetaManager.metaDataManager import collector
 
-class AnalysisResultDbMeta():
+class analysisDBMetaGenerator():
     def __init__(self, metasave_info, influx_instance):
         self.metasave_info = metasave_info
         self.db = metasave_info["dbName"]+'_'+metasave_info["collectionName"]
@@ -25,7 +25,29 @@ class AnalysisResultDbMeta():
             "MeanByHoliday" : ["holiday", "notHoliday"],
             "MeanByWorking" : ["working", "notWorking"],
             "MeanByTimeStep" : ["dawn", "morning", "afternoon", "evening", "night"]}
+    
+    def get_mean_analysis_result(self):
+        self.create_total_column_list()
+        #result_dict = self.read_all_ms_meta()
+        self.read_all_ms_meta()
+        analysis_result = []
+        for analysis_key in self.ms_result_dict.keys():
+            analysis_result_bycolumn = {}
+            analysis_result_bycolumn["columnName"] = analysis_key.rpartition("_")[0]
+            analysis_result_bycolumn["analyzerName"] = analysis_key.rpartition("_")[2]
+            label = []
+            result_value = []
+            for label_key in self.ms_result_dict[analysis_key].keys():
+                label.append(label_key)
+                value = list(map(self.none_convert_nan, self.ms_result_dict[analysis_key][label_key])) # none -> nan (계산을 위해)
+                result_value.append(np.nanmean(value))
+            result_value = list(map(self.nan_convert_none, result_value)) # nan -> None (UI를 위해)
+            analysis_result_bycolumn["label"] = label
+            analysis_result_bycolumn["resultValue"] = result_value
+            analysis_result.append(analysis_result_bycolumn)
         
+        return analysis_result
+
     def set_labels(self, labels): 
         self.labels = labels
     
@@ -88,7 +110,6 @@ class AnalysisResultDbMeta():
         return mean_dict
     
     def collect_analysis_result(self, columns_list):
-        
         for analyzer in self.function_list:
             for column in columns_list:
                 for label in self.labels[analyzer]:
@@ -107,24 +128,3 @@ class AnalysisResultDbMeta():
                 self.collect_analysis_result(columns_list)
 
     
-    def get_mean_analysis_result(self):
-        self.create_total_column_list()
-        #result_dict = self.read_all_ms_meta()
-        self.read_all_ms_meta()
-        analysis_result = []
-        for analysis_key in self.ms_result_dict.keys():
-            analysis_result_bycolumn = {}
-            analysis_result_bycolumn["columnName"] = analysis_key.rpartition("_")[0]
-            analysis_result_bycolumn["analyzerName"] = analysis_key.rpartition("_")[2]
-            label = []
-            result_value = []
-            for label_key in self.ms_result_dict[analysis_key].keys():
-                label.append(label_key)
-                value = list(map(self.none_convert_nan, self.ms_result_dict[analysis_key][label_key])) # none -> nan (계산을 위해)
-                result_value.append(np.nanmean(value))
-            result_value = list(map(self.nan_convert_none, result_value)) # nan -> None (UI를 위해)
-            analysis_result_bycolumn["label"] = label
-            analysis_result_bycolumn["resultValue"] = result_value
-            analysis_result.append(analysis_result_bycolumn)
-        
-        return analysis_result
