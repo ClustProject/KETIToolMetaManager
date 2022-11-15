@@ -25,27 +25,7 @@ def write_data(uploadParam, meta_data):
 
     write_mode = uploadParam["mode"]
     dbName = uploadParam["dbName"]
-    collectionName = uploadParam["collectionName"]
+    collectionName = uploadParam["collectionName"]  
 
     mongodb_c = wiz.WizApiMongoMeta()
     mongodb_c.save_mongodb_document_by_post(write_mode, meta_data, dbName, collectionName)
-    print("SUCCESS")
-
-"""  
-def write_data(metasave_info, meta_data):
-    db_name = metasave_info["databaseName"]
-    write_mode = metasave_info["mode"]
-    ms_list = metasave_info["tableName"]
-    
-    domain = db_name.split("_", maxsplit=1)[0]
-    sub_domain = db_name.split("_", maxsplit=1)[1]
-    mongodb_c = wiz.WizApiMongoMeta()
-    
-    print(ms_list)
-    if type(ms_list) == str:
-        mongodb_c.post_database_collection_document(write_mode, meta_data, domain, sub_domain)
-        print("SUCCESS")
-    else:
-        mongodb_c.post_database_collection_documents(write_mode, meta_data, domain, sub_domain)
-        print("SUCCESS")
-"""    

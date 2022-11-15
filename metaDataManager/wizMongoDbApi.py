@@ -40,8 +40,6 @@ class WizApiMongoMeta():
     def read_mongodb_document_by_get(self, domain, subdomain, tableName=None):
         # TODO 아래 주석 수정할 것
         """
-        
-
         :param domain: database
         :type domain: string
 
@@ -73,9 +71,34 @@ class WizApiMongoMeta():
 
     # post - database/collection/document insert, save
     def save_mongodb_document_by_post(self, mode, data, domain, subdomain):
-        # TODO 아래 주석 확인할 것
         """
         mongodb의 document를 post로 저장함
+
+        :param mode: data를 mongodb에 처리 하기 위한 방법 [update|insert|save]
+        :type mode: string
+
+        :param data: mongodb에 처리할 data
+        :type data: dictionary or array[dictionaries]
+
+        :param domain: domain, mongodb의 database 이름
+        :type domain: string
+
+        :param subdomain: subdomain, mongodb의 collection 이름
+        :type subdomain: string
+
+        """
+        if type(data) is dict: #one dictionary document
+            print("single document upload")
+            print(data)
+            self.updateDocumnetByTable(mode, data, domain, subdomain)
+        elif isinstance(data, list): #multiple dictonary documents
+            print("multiple documents upload")
+            for oneData in data:
+                self.updateDocumnetByTable(mode, oneData, domain, subdomain)
+
+    def updateDocumnetByTable(self, mode, data, domain, subdomain):
+        """
+        dictionary data 단위로 데이터 저장
 
         :param mode: data를 mongodb에 처리 하기 위한 방법 [update|insert|save]
         :type mode: string
@@ -90,17 +113,14 @@ class WizApiMongoMeta():
         :type subdomain: string
 
         """
-        if type(data) is dict: #one dictionary document
-            print("single document upload")
-            url = wiz_url+"/rest/1.0/mongodb/document/{}/{}?mode={}".format(domain, subdomain, mode)
-        elif isinstance(data, list): #multiple dictonary documents
-            print("multiple documents upload")
-            url = wiz_url+"/rest/1.0/mongodb/documents/{}/{}?mode={}".format(domain, subdomain, mode)
-
         headers = {'Content-Type': 'application/json'}
-        response = requests.post(url, data=json.dumps(data), headers=headers)
-
-        print(response.status_code)
+        
+        if "table_name" in data.keys():
+            url = wiz_url+"/rest/1.0/mongodb/document/{}/{}?mode={}".format(domain, subdomain, mode)
+            response = requests.post(url, data=json.dumps(data), headers=headers)
+            print("Success:", data['table_name'], response.status_code)
+        else:
+            print("This dictionary data does not have table_name.")
 
 
 if __name__ == "__main__":
