@@ -35,7 +35,7 @@ class metaController():
 
         """
         
-        descriptor.write_data(database_info_param, {}).set_meta()
+        descriptor.write_data(database_info_param, {}).set_meta() # 입력 파라미터 코드가 수정됨. mongoDB Instance 를 추가로 입력 받아야 함. -> 어떻게 입력 받아서 활용할지 수정해야함
 
 
     # JIAN end ####################################################################################
