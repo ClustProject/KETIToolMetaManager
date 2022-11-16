@@ -5,7 +5,7 @@ sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(os.path.abspath(
 
 from KETIToolMetaManager.metaDataManager import wizMongoDbApi as wiz
 
-def write_data(uploadParam, meta_data):
+def write_data(uploadParam, meta_data, mongo_instance):
     """
     mongoDB에 필요한 데이터를 writing
 
@@ -27,5 +27,5 @@ def write_data(uploadParam, meta_data):
     dbName = uploadParam["dbName"]
     collectionName = uploadParam["collectionName"]  
 
-    mongodb_c = wiz.WizApiMongoMeta()
+    mongodb_c = wiz.WizApiMongoMeta(mongo_instance)
     mongodb_c.save_mongodb_document_by_post(write_mode, meta_data, dbName, collectionName)

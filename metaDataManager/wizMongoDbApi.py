@@ -5,12 +5,32 @@ import json
 import sys
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))))
-from KETIPreDataIngestion.KETI_setting.influx_setting_KETI import wiz_url
 
 class WizApiMongoMeta():
+    """
+        MongoDB에서 메타 데이터를 읽기, 저장 등과 같은 메타 관리를 할 수 있는 Rest API
+        
+        - MongoDB에 저장된 데이터베이스 리스트 출력 가능
+        - MongoDB에 저장된 특정 데이터베이스의 Collection 리스트 출력 가능
+        - MongoDB에 저장된 특정 데이터베이스, Collection의 Table 리스트 출력 가능
+        - MongoDB에 메타 데이터 저장 가능
+            - 단 하나의 메타 데이터 저장 가능 (데이터베이스, Collectino, Table 지정)
+            - 특정 데이터베이스, Collection의 여러 메타 데이터 저장 가능
+        - MongoDB에 메타 데이터 읽기 가능
+            - 단 하나의 메타 데이터 읽기 가능 (데이터베이스, Collectino, Table 지정)
+            - 특정 데이터베이스, Collection의 여러 메타 데이터 읽기 가능
+    """
+    
+    def __init__(self, mongodb_instance_url):
+        """
+        :param mongodb_instance_url: MongoDB의 Instance 주소
+        :type mongodb_instance_url: string
+        """
+        self.mongodb_instance_url = mongodb_instance_url
+        
     # get - database list
     def get_database_list(self):
-        url = wiz_url+"/rest/1.0/mongodb/{}".format("databases")
+        url = self.mongodb_instance_url+"/rest/1.0/mongodb/{}".format("databases")
         header = {'accept': 'application/json'}
         response = requests.get(url, headers=header)
         print(response.status_code)
@@ -19,7 +39,7 @@ class WizApiMongoMeta():
         return json.loads(text)
     
     def get_collection_list(self, domain):
-        url = wiz_url+"/rest/1.0/mongodb/collections/{}".format(domain)
+        url = self.mongodb_instance_url+"/rest/1.0/mongodb/collections/{}".format(domain)
         header = {'accept': 'application/json'}
         response = requests.get(url, headers=header)
         print(response.status_code)
@@ -28,7 +48,7 @@ class WizApiMongoMeta():
         return json.loads(text)
 
     def get_tableName_list(self, domain, subdomain):
-        url = wiz_url + "/rest/1.0/mongodb/tableNames/{}/{}".format(domain, subdomain)
+        url = self.mongodb_instance_url + "/rest/1.0/mongodb/tableNames/{}/{}".format(domain, subdomain)
         header = {'accept': 'application/json'}
         response = requests.get(url, headers=header)
         #print(response.status_code)
@@ -58,9 +78,9 @@ class WizApiMongoMeta():
         """
 
         if tableName: #one document
-            url = wiz_url+"/rest/1.0/mongodb/document/{}/{}?table_name={}".format(domain, subdomain, tableName)
+            url = self.mongodb_instance_url+"/rest/1.0/mongodb/document/{}/{}?table_name={}".format(domain, subdomain, tableName)
         else: #all documents under domain/subdomain/
-            url = wiz_url+"/rest/1.0/mongodb/documents/{}/{}".format(domain, subdomain)
+            url = self.mongodb_instance_url+"/rest/1.0/mongodb/documents/{}/{}".format(domain, subdomain)
 
         response = requests.get(url)
         print(response.status_code)
@@ -116,7 +136,7 @@ class WizApiMongoMeta():
         headers = {'Content-Type': 'application/json'}
         
         if "table_name" in data.keys():
-            url = wiz_url+"/rest/1.0/mongodb/document/{}/{}?mode={}".format(domain, subdomain, mode)
+            url = self.mongodb_instance_url+"/rest/1.0/mongodb/document/{}/{}?mode={}".format(domain, subdomain, mode)
             response = requests.post(url, data=json.dumps(data), headers=headers)
             print("Success:", data['table_name'], response.status_code)
         else:
@@ -125,9 +145,11 @@ class WizApiMongoMeta():
 
 if __name__ == "__main__":
     from pprint import pprint
-    test = WizApiMongoMeta()
+    from KETIPreDataIngestion.KETI_setting import influx_setting_KETI as ins
     import json
     
+    mongo_instance = ins.wiz_url
+    test = WizApiMongoMeta(mongo_instance)
     meta = test.read_mongodb_document_by_get("air", "indoor_유치원", "ICW0W2000132")
     print(meta)
     '''

@@ -7,83 +7,82 @@ from KETIToolMetaManager.metaDataManager import collector
 from KETIToolAnalyzer.meanAnalyzer import holiday, timeStep, working
 from KETIToolAnalyzer.simpleAnalyzer import countAnalyzer, statisticsAnalyzer
 
-class AnalysisMSMetaGenerator():
+class analysisMSMetaGenerator():
     """
         MS-분석 A Meta를 생성하는 Generator
-        
-        Args:
-            :param database: database name
-            :type database: DataFrame
-            
-            :param tablename: measurement name (data name)
-            :type tablename: string
-            
-            :param fuction_list: Analyzed Method Name
-            :type function_list: list
-            
-            :param influx_instance: instance to get data from influx DB
-            :type influx_instance: instance of influxClient class
-        """
-
-
-    def __init__(self, bucket_name, measuremnet_list, influx_instance, mongo_instance):
+    """
+    def __init__(self, analysis_param, influx_instance, mongo_instance):
         """
         :param analysis_param: analysis를 위한 param
         :type analysis_param: dictionary
 
-        >>> analysis_param={
-            "bucket_name": ,
-            "measurement_list": 
+        >>> analysisParam = {
+            "dbName": "air",
+            "collectionName": "indoor_유치원",
+            "measurementList" : None, 
+            "functionList" : None
         }
+        >>>>>> functionList : Analyzed Method Name 으로 list type으로 받음
+        >>>>>>>>> functionList example : None or ["StatisticsAnalyzer", "MeanByHoliday", "MeanByWorking", "MeanByTimeStep", "CountByFeatureLabel"]
+        
+        :param influx_instance: instance to get data from influx DB
+        :type influx_instance: instance of influxClient class
 
-        :param measurement_list: 개별 MS 데이터
-        :type measurement_list: pd.DataFrame
+        :param mongo_instance: instance url to get meta data from mongo DB
+        :type mongo_instance: string
 
         :returns: meta_set : 각 테이블에 대한 분석 결과에 따른 테이블
         :rtype: array of dictionaries
 
         """
 
-        self.mongodb_db = self.bucketName././.
-        self.mongodb_collection =  self.bucketName././.
+        self.mongodb_db = analysis_param["dbName"]
+        self.mongodb_collection =  analysis_param["collectionName"]
         self.mongo_instance = mongo_instance
-        self.influx_measurementList = analysis_param["measurement_list"]
-        self.influxdb_bucketName = analysis_param['domain']
+        
+        self.influx_measurement_list = analysis_param["measurementList"]
+        self.influxdb_bucket_name = analysis_param["dbName"]+"_"+analysis_param["collectionName"]
         self.influx_instance = influx_instance
-        self.function_list = analysis_param["measurement_list"]
+        
+        self.function_list = analysis_param["functionList"]
         self.function_list = self.checkFunctionList(self.function_list)
 
     def checkFunctionList(self, function_list):
         """
+        분석 방법 리스트를 체크하는 기능 
+        - None으로 기입됐을 경우 5가지 모든 분석을 실행한다는 의미로 function_list 에 5가지 분석 방법을 입력
         
-        """
-        if function_list==None:
-            function_list = [ ]
+        :param function_list: Analyzed Method Name
+        :type function_list: list or None
 
+        :returns: function_list : function_list
+        :rtype: list
+        """
+        if function_list is None:
+            function_list = ["StatisticsAnalyzer", "MeanByHoliday", "MeanByWorking", "MeanByTimeStep", "CountByFeatureLabel"]
+        
+        return function_list
 
     def get_metaset(self):
         """
-        - 각 데이터 Measurement에 따른 분석 결과
+        - 각 데이터 Measurement에 따른 분석 결과를 기반으로 분석 메타 셋을 생성
 
-        :param measurement_list: 개별 MS 데이터
-        :type measurement_list: pd.DataFrame
-
-        :returns: meta_set : 각 테이블에 대한 분석 결과에 따른 테이블
+        :returns: analysis_meta_set : 각 테이블에 대한 분석 결과에 따른 테이블
         :rtype: array of dictionaries
-
         """
-        self.ms_list = self.check_ms_list(self.ms_list)
-        collect_read = collector.ReadData()
-        bucket_meta = collect_read.get_bucket_meta(self.mongodb_db, self.mongodb_collection, self.mongo_instance)
+        self.influx_measurement_list = self._check_ms_list(self.influx_measurement_list)
+        collect = collector.ReadData()
+        bucket_meta = collect.get_bucket_meta(self.mongodb_db, self.mongodb_collection, self.mongo_instance)
 
         self.analysis_meta_set = []
-        for measurement in self.ms_list:
+        for measurement in self.influx_measurement_list:
             print(f"====== Analyze Meta By {measurement}... ======")
-            data = collect_read.get_ms_data_by_days(bucket_name, measurement, self.influx_instance)
+            data = collect.get_ms_data_by_days(self.influxdb_bucket_name, measurement, self.influx_instance)
             analysis_result_set = self.get_result_set(data, bucket_meta, self.function_list)
             analysis_result_set["table_name"] = measurement
             self.analysis_meta_set.append(analysis_result_set)
             print(f"====== SUCCESS {measurement} ======")
+        
         return self.analysis_meta_set
 
     def _check_ms_list(self, ms_list): 
@@ -95,15 +94,14 @@ class AnalysisMSMetaGenerator():
 
         :returns: ms_list : 각 테이블에 대한 분석 결과에 따른 테이블
         :rtype: array of string
-
         """
 
         if ms_list is None:
-            ms_list = self.influx_instance.measurement_list(self.db)
+            ms_list = self.influx_instance.measurement_list(self.influxdb_bucket_name)
 
         return ms_list
     
-    def get_result_set(self, data, meta, function_list):# FL 에 있는 function들을 다 호출해서 output을 개별적으로 받아 set을 하나 만들어야함.
+    def get_result_set(self, data, meta, function_list):
         """
         - functionList에 의거하여 분석 결과를 생성함
 

@@ -5,9 +5,9 @@ sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(os.path.abspath(
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 from KETIToolMetaManager.metaDataManager.wizMongoDbApi import WizApiMongoMeta
 
-wiz_c = WizApiMongoMeta()
-
-def get_meta_table():
+def get_meta_table(mongodb_client):
+    wiz_c = WizApiMongoMeta(mongodb_client)
+    
     main_domian_list =  ['air', 'farm', 'factory', 'bio', 'life', 'energy',\
          'weather', 'city', 'traffic', 'culture', 'economy','INNER','OUTDOOR']
     
@@ -38,23 +38,23 @@ def get_meta_table():
     
     return exploration_js
 
-def get_meta_some_tables(db_ms_names):
-    '''{
-        db_name : {collection : [ms_names]}
-    }'''
-    db_list = wiz_c.get_database_list()
-    result = {}
-    for db in db_ms_names.keys():
-        if db not in db_list: 
-            continue
-        result[db]={}
-        for coll in db_ms_names[db].keys():
-            result[db][coll]={}
-            for ms in db_ms_names[db][coll]:
-                data = wiz_c.read_mongodb_document_by_get(db, coll, ms)
-                data = {"start_time":data["startTime"],"end_time":data["endTime"]}
-                result[db][coll][ms]=data
-    return result
+# def get_meta_some_tables(db_ms_names):
+#     '''{
+#         db_name : {collection : [ms_names]}
+#     }'''
+#     db_list = wiz_c.get_database_list()
+#     result = {}
+#     for db in db_ms_names.keys():
+#         if db not in db_list: 
+#             continue
+#         result[db]={}
+#         for coll in db_ms_names[db].keys():
+#             result[db][coll]={}
+#             for ms in db_ms_names[db][coll]:
+#                 data = wiz_c.read_mongodb_document_by_get(db, coll, ms)
+#                 data = {"start_time":data["startTime"],"end_time":data["endTime"]}
+#                 result[db][coll][ms]=data
+#     return result
                 
 
 if __name__=="__main__":
