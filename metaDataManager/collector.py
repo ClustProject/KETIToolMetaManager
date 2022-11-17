@@ -3,7 +3,7 @@ import os
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))))
 
-from KETIPrePartialDataPreprocessing import dataProcessing
+from Clust.clust.preprocessing import dataPreprocessing
 from KETIToolMetaManager.metaDataManager import wizMongoDbApi as wiz
 # packcage : InputSourceController
 # class : Collector
@@ -122,7 +122,7 @@ class ReadData():
         end_time = influx_instance.get_last_time(bucket_name, measurement_name)
         data_nopreprocessing = influx_instance.get_data_by_days(end_time, days, bucket_name, measurement_name)
         # preprocessing
-        partialP = DataPreprocessing.DataProcessing(self.process_param)
+        partialP = dataPreprocessing.DataProcessing(self.process_param)
         dataframe = partialP.all_preprocessing(data_nopreprocessing)["imputed_data"]
 
         return dataframe
@@ -146,7 +146,7 @@ class ReadData():
         """
         data_nopreprocessing = influx_instance.get_data(bucket_name, measurement_name)
         # preprocessing
-        partialP = DataPreprocessing.DataProcessing(self.process_param)
+        partialP = dataPreprocessing.DataProcessing(self.process_param)
         dataframe = partialP.all_preprocessing(data_nopreprocessing)["imputed_data"]
 
         return dataframe

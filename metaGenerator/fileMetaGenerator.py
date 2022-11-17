@@ -51,7 +51,7 @@ class FileMetaGenerator():
             "keyword": [
                 "kweather", "고등학교", "indoor","air", "co2", "pm10", "pm25", "voc", "temp", "humi", "pm01", "noise",
                 "실내", "공기질", "환경", "미세먼지", "날씨", "온도", "습도", "이산화탄소", "소음"
-                , "temperature", "humidity", "air quality.cycle., "high school", "fine dust"
+                , "temperature", "humidity", "air , "high school", "fine dust"
             ],
             "description" : "This is weather data",
             }
