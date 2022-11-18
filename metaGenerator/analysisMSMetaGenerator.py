@@ -30,10 +30,6 @@ class analysisMSMetaGenerator():
 
         :param mongo_instance: instance url to get meta data from mongo DB
         :type mongo_instance: string
-
-        :returns: meta_set : 각 테이블에 대한 분석 결과에 따른 테이블
-        :rtype: array of dictionaries
-
         """
 
         self.mongodb_db = analysis_param["dbName"]

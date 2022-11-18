@@ -98,33 +98,7 @@ class WizApiMongoMeta():
         :type mode: string
 
         :param data: mongodb에 처리할 data
-        :type data: dictionary or array[dictionaries]
-
-        :param domain: domain, mongodb의 database 이름
-        :type domain: string
-
-        :param subdomain: subdomain, mongodb의 collection 이름
-        :type subdomain: string
-
-        """
-        if type(data) is dict: #one dictionary document
-            print("single document upload")
-            print(data)
-            self.updateDocumnetByTable(mode, data, domain, subdomain)
-        elif isinstance(data, list): #multiple dictonary documents
-            print("multiple documents upload")
-            for oneData in data:
-                self.updateDocumnetByTable(mode, oneData, domain, subdomain)
-
-    def updateDocumnetByTable(self, mode, data, domain, subdomain):
-        """
-        dictionary data 단위로 데이터 저장
-
-        :param mode: data를 mongodb에 처리 하기 위한 방법 [update|insert|save]
-        :type mode: string
-
-        :param data: mongodb에 처리할 data
-        :type data: string
+        :type data: array[dictionaries]
 
         :param domain: domain, mongodb의 database 이름
         :type domain: string
@@ -135,13 +109,9 @@ class WizApiMongoMeta():
         """
         headers = {'Content-Type': 'application/json'}
         
-        if "table_name" in data.keys():
-            url = self.mongodb_instance_url+"/rest/1.0/mongodb/document/{}/{}?mode={}".format(domain, subdomain, mode)
-            response = requests.post(url, data=json.dumps(data), headers=headers)
-            print("Success:", data['table_name'], response.status_code)
-        else:
-            print("This dictionary data does not have table_name.")
-
+        url = self.mongodb_instance_url+"/rest/1.0/mongodb/documents/{}/{}?mode={}".format(domain, subdomain, mode)
+        response = requests.post(url, data=json.dumps(data), headers=headers)
+        print("Success:", response.status_code)
 
 if __name__ == "__main__":
     from pprint import pprint

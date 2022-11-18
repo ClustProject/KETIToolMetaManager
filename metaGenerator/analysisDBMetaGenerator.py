@@ -1,55 +1,139 @@
 import numpy as np
 import pandas as pd
-
 import sys
 import os
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))))
 
-from KETIToolMetaManager.metaDataManager import collector
+from KETIToolMetaManager.metaDataManager import wizMongoDbApi as wiz
 
 class analysisDBMetaGenerator():
-    def __init__(self, metasave_info, influx_instance):
-        self.metasave_info = metasave_info
-        self.db = metasave_info["dbName"]+'_'+metasave_info["collectionName"]
+    """
+        DB-분석 A Meta를 생성하는 Generator
+    """
+    def __init__(self, dbName, collectionName, labels, mongo_instance):
+        """
+        :param dbName: Mongo DB 에서 활용되는 dbName으로 특정 데이터베이스의 명칭
+        :type dbName: string
+        
+        :param collectionName: collectionName
+        :type collectionName: string
+        
+        :param labels: 특정 분석 방법의 결과 label 정보
+        :type labels: dictionary
 
-        self.function_list = metasave_info["functionList"]
-        self.column_same_by_ms = metasave_info["columnSameByMS"]
-        self.influx_instance = influx_instance
-        
-        self.ms_list = self.influx_instance.measurement_list(self.db)
-        #self.columns_list = self.influx_instance.get_fieldList(self.db, self.ms_list[0])
-        
-        self.labels = {
+        >>> labels = {
             "StatisticsAnalyzer" : ["min", "max", "mean"],
             "MeanByHoliday" : ["holiday", "notHoliday"],
             "MeanByWorking" : ["working", "notWorking"],
-            "MeanByTimeStep" : ["dawn", "morning", "afternoon", "evening", "night"]}
-    
-    def get_mean_analysis_result(self):
-        self.create_total_column_list()
-        #result_dict = self.read_all_ms_meta()
-        self.read_all_ms_meta()
-        analysis_result = []
-        for analysis_key in self.ms_result_dict.keys():
-            analysis_result_bycolumn = {}
-            analysis_result_bycolumn["columnName"] = analysis_key.rpartition("_")[0]
-            analysis_result_bycolumn["analyzerName"] = analysis_key.rpartition("_")[2]
-            label = []
-            result_value = []
-            for label_key in self.ms_result_dict[analysis_key].keys():
-                label.append(label_key)
-                value = list(map(self.none_convert_nan, self.ms_result_dict[analysis_key][label_key])) # none -> nan (계산을 위해)
-                result_value.append(np.nanmean(value))
-            result_value = list(map(self.nan_convert_none, result_value)) # nan -> None (UI를 위해)
-            analysis_result_bycolumn["label"] = label
-            analysis_result_bycolumn["resultValue"] = result_value
-            analysis_result.append(analysis_result_bycolumn)
+            "MeanByTimeStep" : ["dawn", "morning", "afternoon", "evening", "night"]
+        }
         
-        return analysis_result
-
-    def set_labels(self, labels): 
+        :param mongo_instance: instance url to get meta data from mongo DB
+        :type mongo_instance: string
+        """
+        
+        self.db_name = dbName
+        self.collection_name = collectionName
         self.labels = labels
+        self.mongo_instance = mongo_instance
+    
+    def get_bucketAnalysisMeta(self):
+        """
+        - 특정 bucket의 하위에 존재하는 각 MS-분석 A 정보들의 평균 값으로 bucket analysis meta 생성
+
+        :returns: bucket_meta : 각 테이블에 대한 분석 결과에 따른 테이블
+        :rtype: array of dictionary
+        """
+        print("=== start ===")
+        total_ms_analysis_meta, column_list = self.get_allMsAnalysisMeta(self.db_name, self.collection_name, self.mongo_instance)
+        bucket_analysis_meta = self.calculate_msMeta(total_ms_analysis_meta, column_list, self.labels)
+        
+        bucket_name = self.db_name+"_"+self.collection_name
+        bucket_meta = [{"table_name":bucket_name, "analysisResult":bucket_analysis_meta}]
+        
+        print("=== get bucket_analysis_meta by {} ===".format(bucket_name))
+        
+        return bucket_meta
+        
+    def get_allMsAnalysisMeta(self, dbName, collectionName, mongo_instance):
+        """
+        - bucket analysis meta 생성에 필요한 해당 bucket의 하위에 존재하는 모든 MS-분석 A 정보를 모으는 함수
+        
+        :param dbName: Mongo DB 에서 활용되는 dbName으로 특정 데이터베이스의 명칭
+        :type dbName: string
+        
+        :param collectionName: collectionName
+        :type collectionName: string
+        
+        :param mongo_instance: instance url to get meta data from mongo DB
+        :type mongo_instance: string
+        
+        :returns: total_ms_analysis_meta : 해당 bucket 하위의 모든 MS-분석 A 정보가 모인 Meta
+        :rtype: list of dictionary
+        
+        :returns: column_list : 해당 bucket 하위의 모든 MS의 Column List
+        :rtype: list of string
+        """
+        mongodb_c = wiz.WizApiMongoMeta(mongo_instance)
+        ms_list = mongodb_c.get_tableName_list(dbName, collectionName)[dbName][collectionName]
+        
+        ms_list.remove("db_information") # db_information 이전 완료하면 삭제하기
+        
+        total_ms_analysis_meta = []
+        column_list = []
+        for ms in ms_list:
+            ms_meta = mongodb_c.read_mongodb_document_by_get(dbName, collectionName, ms)
+            total_ms_analysis_meta.append(ms_meta["analysisResult"])
+            column_list.extend([field["fieldKey"] for field in ms_meta["fields"]])
+        
+        column_list = list(set(column_list))
+        
+        return total_ms_analysis_meta, column_list
+        
+    def calculate_msMeta(self, total_ms_analysis_meta, column_list, labels):
+        """
+        - 모은 MS-분석A 모든 Meta를 기반으로 분석 결과에 따른 평균 값 계산을 하여 최종 bucket_analysis_meta 생성
+        
+        :param total_ms_analysis_meta: 해당 bucket 하위의 모든 MS-분석 A 정보가 모인 Meta
+        :type total_ms_analysis_meta: list of dictionary
+        
+        :param column_list: 해당 bucket 하위의 모든 MS의 Column List
+        :type column_list: list of string
+        
+        :param labels: 특정 분석 방법의 결과 label 정보
+        :type labels: dictionary
+        
+        :returns: bucket_analysis_meta : 최종 bucket analysis meta
+        :rtype: dictionary
+        """
+        bucket_analysis_meta = []
+        
+        for analyzer_name in list(labels.keys()):
+            for column in column_list:
+                analysis_result_dict = {}
+                analysis_result_dict["analyzerName"] = analyzer_name
+                analysis_result_dict["columnName"] = column
+                
+                analysis_label = labels[analyzer_name]
+                mean_result_list = []
+                
+                for label in analysis_label:
+                    result_value_by_all_ms = []
+                    for analyzer_result in total_ms_analysis_meta:
+                        try:
+                            result_value_by_all_ms.append(analyzer_result[analyzer_name][column][label])
+                        except KeyError:
+                            continue
+                    value = list(map(self.none_convert_nan, result_value_by_all_ms)) # none -> nan (계산을 위해)
+                    mean_result_list.append(np.nanmean(value))
+                mean_result_list = list(map(self.nan_convert_none, mean_result_list)) # nan -> None (UI를 위해)
+                    
+                analysis_result_dict["label"] = analysis_label
+                analysis_result_dict["resultValue"] = mean_result_list
+                bucket_analysis_meta.append(analysis_result_dict)
+                
+        return bucket_analysis_meta
     
     def none_convert_nan(self,value):
         """
@@ -84,47 +168,3 @@ class analysisDBMetaGenerator():
         if np.isnan(value):
             value = "None"
         return value
-    
-    def create_total_column_list(self):
-        column_list = []
-        print("ms list : ", self.ms_list)
-        for ms in self.ms_list:
-            column_list.extend(self.influx_instance.get_fieldList(self.db, ms))
-        self.total_columns_list = list(set(column_list))
-        print("total columns list : ", self.total_columns_list)
-    
-    def create_result_form(self):
-        """
-        DataBase 의 Meta를 생성하기 앞서 Document의 statistics 값을 Column, Statistics 별로 저장하는 함수
-
-        Returns:
-            Document의 statistics 값이 Column, Statistics 별로 저장된 Dictionary
-        """
-        mean_dict = {}
-        for column in self.total_columns_list:
-            for key in self.labels.keys():
-                mean_dict[column + "_"+ key] = {}
-                for label in self.labels[key]:
-                    mean_dict[column + "_"+ key][label] = []
-        
-        return mean_dict
-    
-    def collect_analysis_result(self, columns_list):
-        for analyzer in self.function_list:
-            for column in columns_list:
-                for label in self.labels[analyzer]:
-                    label_idx = list(self.ms_meta["analysisResult"][analyzer][column].keys()).index(label)
-                    self.ms_result_dict[column + "_"+ analyzer][label].append(list(self.ms_meta["analysisResult"][analyzer][column].values())[label_idx])
-    
-    def read_all_ms_meta(self):
-        self.ms_result_dict = self.create_result_form()
-        for ms in self.ms_list:
-            print("ms : ", ms)
-            self.ms_meta = collector.ReadData(self.influx_instance, self.db, ms).get_ms_meta()
-            if self.column_same_by_ms:
-                self.collect_analysis_result(self.total_columns_list)
-            else:
-                columns_list = self.influx_instance.get_fieldList(self.db, ms)
-                self.collect_analysis_result(columns_list)
-
-    
