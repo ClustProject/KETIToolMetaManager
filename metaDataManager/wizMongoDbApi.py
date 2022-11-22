@@ -115,7 +115,7 @@ class WizApiMongoMeta():
 
 if __name__ == "__main__":
     from pprint import pprint
-    from KETIPreDataIngestion.KETI_setting import influx_setting_KETI as ins
+    from Clust.setting import influx_setting_KETI as ins
     import json
     
     mongo_instance = ins.wiz_url

@@ -59,7 +59,7 @@ def get_meta_table(mongodb_client):
 
 if __name__=="__main__":
     import json
-    from KETIPreDataIngestion.KETI_setting import influx_setting_KETI as isk
+    from Clust.setting import influx_setting_KETI as isk
 
     #re = get_meta_some_tables({"air":{"indoor_경로당":['ICL1L2000234','ICL1L2000235']}})                    
     #print(re)
