@@ -35,7 +35,7 @@ class FileMetaGenerator():
        :type fileMetaInfo: dictionary
 
         >>> file_meta_info = {
-            "filePath" : "../KETIToolMetaManager/metaSchema",
+            "filePath" : "../Clust/metaSchema",
             "fileName" : "MSLocationMeta_Air_Indoor_체육시설.json" }
         """
 

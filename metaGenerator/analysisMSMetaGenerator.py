@@ -3,7 +3,7 @@ import os
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))))
 
-from KETIToolMetaManager.metaDataManager import collector
+from Clust.clust.meta.metaDataManager import collector
 from Clust.clust.meta.analysisMeta.meanAnalyzer import holiday, timeStep, working
 from Clust.clust.meta.analysisMeta.simpleAnalyzer import countAnalyzer, statisticsAnalyzer
 

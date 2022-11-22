@@ -3,7 +3,7 @@ import pandas as pd
 from pymongo import collection
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))))
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
-from KETIToolMetaManager.metaDataManager.wizMongoDbApi import WizApiMongoMeta
+from Clust.clust.meta.metaDataManager.wizMongoDbApi import WizApiMongoMeta
 
 def get_meta_table(mongodb_client):
     wiz_c = WizApiMongoMeta(mongodb_client)
