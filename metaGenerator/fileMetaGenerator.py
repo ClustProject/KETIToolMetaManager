@@ -10,8 +10,11 @@ def DBNameToDomainSubDomainName(dbname):
     sub_domain = dbname.split("_", maxsplit=1)[1]
     return domain, sub_domain
 """
+
+
 class FileMetaGenerator():
     """
+    
     - fileMetaInfo에 따라서 file의 meta 정보를 읽고, meta 형식에 따라 additionalMeta가 있을 경우 추가하여 생성함
 
         1. get_file_meta()
